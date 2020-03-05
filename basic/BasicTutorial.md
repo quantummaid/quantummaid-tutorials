@@ -22,7 +22,7 @@ $ mvn -version
 ## Architecture
 
 In this guide, we create a straightforward application serving an *hello*-endpoint.
-The endpoint is bound to a so-called use case - a simple Java class that provides
+The endpoint is bound to a so-called **use case** - a simple Java class that provides
 the greeting functionality without caring about how it is displayed on the web.
 To demonstrate dependency injection, the endpoint uses a greeting logger.
 
@@ -107,7 +107,7 @@ public final class WebService {
 It’s a very simple configuration, binding the `GreetingUseCase` to requests to `/hello`, which will then be answered with `"hello"`.
 
 **Differences to other frameworks**:
-With QuantumMaid, there is no need to add JAX-RS annotations to your classes. Their usage decreases application start-up time dramatically and
+With QuantumMaid, there is no need to add JAX-RS annotations to your classes. Their usage drastically decreases application start-up time and
 promotes less-than-optimal architecture. When done architecturally sane, they tend to come along with significant amounts of boilerplate code.
 You can find an in-depth analysis of this problem [here](todo).
 

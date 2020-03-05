@@ -10,4 +10,4 @@
 
 [Creating a Docker container](todo) (~15 minutes)
 
-[Creating a WAR file](todo) (~ 10 minutes)
+[Creating a WAR file](todo) (~10 minutes)
