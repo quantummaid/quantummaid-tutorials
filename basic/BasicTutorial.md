@@ -14,7 +14,7 @@ To complete this guide, you need:
 - JDK 11+ installed with JAVA_HOME configured appropriately
 - Apache Maven 3.5.3+
 
-Hint: Make sure that Maven uses the correct Java version:
+Make sure that Maven uses the correct Java version:
 ```bash
 $ mvn -version
 ```
@@ -22,7 +22,7 @@ $ mvn -version
 ## Architecture
 
 In this guide, we create a straightforward application serving an *hello*-endpoint.
-The endpoint is backed by a so-called use case - a simple Java class that provides
+The endpoint is bound to a so-called use case - a simple Java class that provides
 the greeting functionality without caring about how it is displayed on the web.
 To demonstrate dependency injection, the endpoint uses a greeting logger.
 
@@ -54,8 +54,8 @@ mvn archetype:generate \
 cd ./my-app
 ```
 
-It will generate a Maven structure in *./my-app*.
-Once generated, look at the pom.xml.
+It will generate a Maven structure in `./my-app`.
+Once generated, look at the `pom.xml` file.
 In order to use QuantumMaid for creating web services, you need to add a dependency to `HttpMaid`:
 
 <!---[CodeSnippet](httpmaiddependency)-->
@@ -66,10 +66,11 @@ In order to use QuantumMaid for creating web services, you need to add a depende
     <version>0.9.20</version>
 </dependency>
 ```
-
+**Explanation**: QuantumMaid consists of several sub-projects. HttpMaid is the sub-project concerned
+with everything related to the web.
 ## The first use case
  
-To start the project, create a `src/main/java/org/acme/quickstart/GreetingUseCase.java` class with the following content:
+To start the project, create a `src/main/java/com/mycompany/app/GreetingUseCase.java` class with the following content:
 
 <!---[CodeSnippet](usecase1)-->
 ```java
@@ -103,18 +104,17 @@ public final class WebService {
     }
 }
 ```
-It’s a very simple configuration, binding the `GreetingUseCase` to requests on `/hello`, which will then be answered with `"hello"`.
+It’s a very simple configuration, binding the `GreetingUseCase` to requests to `/hello`, which will then be answered with `"hello"`.
 
 **Differences to other frameworks**:
-With QuantumMaid, there is no need to add JAX-RS annotations to your classes. They lead to slow application start-up and tend
-to promote less-than-optimal architecture. When done architecturally sane, they tend to come along with a significant amount of boilerplate code.
+With QuantumMaid, there is no need to add JAX-RS annotations to your classes. Their usage decreases application start-up time dramatically and
+promotes less-than-optimal architecture. When done architecturally sane, they tend to come along with significant amounts of boilerplate code.
 You can find an in-depth analysis of this problem [here](todo).
 
 
-# Running the application
+## Running the application
 In order to run our application, we need to tell HttpMaid how to serve the endpoint.
 For the sake of simplicity, the HttpServer shipped with normal Java is sufficient.
-Skip to the bottom of this tutorial for real-world deployments like **Docker** and **AWS Lambda**.
 You can use it by modifying the `WebService` like this:
 
 <!---[CodeSnippet](webservice2)-->
@@ -146,7 +146,9 @@ $ curl http://localhost:8080/hello
 hello
 ```
 
-# Mapping request data
+**Note**: Skip to the bottom of this tutorial for real-world deployments like **Docker** and **AWS Lambda**.
+
+## Mapping request data
 
 Let's make the greeting use case slightly more complex by adding a parameter to its `hello()` method:
 
@@ -159,11 +161,13 @@ public final class GreetingUseCase {
     }
 }
 ```
-
-In traditional application frameworks, we could achieve this by annotating the `name` parameter with the
+Our goal is to map a so-called path parameter to the `name` parameter.
+Requests to `/hello/quantummaid` should result in the method being called as `hello("quantummaid")`,
+requests to `/hello/frodo` as `hello("frodo)`, etc.
+In traditional application frameworks, we achieve this by annotating the `name` parameter with the
 `@PathParam` JAX-RS annotation. Since QuantumMaid guarantees to keep your business logic 100% infrastructure agnostic under
 all circumstances, this not an option. Instead, we will modify the `WebService` class accordingly to tell HttpMaid
-to look into the request's path parameters in order to resolve the `name` parameter:
+to look into the request's path parameters in order to resolve the `name` parameter of the use case method:
 
 <!---[CodeSnippet](webservice3)-->
 ```java
@@ -196,11 +200,11 @@ hello quantummaid
 ```
 
 
-# Using dependency injection
+## Using dependency injection
 
 QuantumMaid supports dependency injection, but does not implement it. Nonetheless, it is very easy to use any dependency injection framework you desire.
 We recommend to use [Guice](https://github.com/google/guice) and will demonstrate its integration in this section.
-First, you need to add the following dependency to you `pom.xml`:
+First, you need to add the following dependency to your `pom.xml`:
 
 <!---[CodeSnippet](guicedependency)-->
 ```xml
@@ -213,7 +217,7 @@ First, you need to add the following dependency to you `pom.xml`:
 
 
 Let’s modify the application and add a `GreetingLogger` to be injected into our `GreetingUseCase`.
-Create the `src/main/java/org/acme/quickstart/GreetingLogger.java` class with the following content:
+Create the `src/main/java/com/mycompany/app/GreetingLogger.java` class with the following content:
 
 <!---[CodeSnippet](logger)-->
 ```java
@@ -284,9 +288,9 @@ hello quantummaid
 ```
 
 
-# Packaging the application
+## Packaging the application
 QuantumMaid applications can be packaged in exactly the same way as every other normal Java
-application. A common way to achieve this would by using the [maven-assembly-plugin](https://maven.apache.org/plugins/maven-assembly-plugin/usage.html).
+application. A common way to achieve this would be to use the [maven-assembly-plugin](https://maven.apache.org/plugins/maven-assembly-plugin/usage.html).
 All you need to do is add the following code to your `pom.xml` and replace `de.quantummaid.tutorials.basic.step4.WebService` with the fully
 qualified domain name of your `WebService` class:
 

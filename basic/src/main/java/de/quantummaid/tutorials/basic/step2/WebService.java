@@ -35,7 +35,6 @@ public final class WebService {
     public static void main(final String[] args) {
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
                 .get("/hello", GreetingUseCase.class)
-                .get("/derp", (request, response) -> response.setBody("foo"))
                 .build();
         PureJavaEndpoint.pureJavaEndpointFor(httpMaid).listeningOnThePort(PORT);
     }
