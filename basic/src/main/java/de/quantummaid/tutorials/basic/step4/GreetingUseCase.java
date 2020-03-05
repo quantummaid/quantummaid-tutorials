@@ -34,7 +34,7 @@ public final class GreetingUseCase {
 
     public String hello(final String name) {
         greetingLogger.logGreeting(name);
-        return "hello" + name;
+        return "hello " + name;
     }
 }
 //Showcase end usecase3
