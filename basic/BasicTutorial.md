@@ -19,14 +19,14 @@ Make sure that Maven uses the correct Java version:
 $ mvn -version
 ```
 
-## Architecture
+## What we are going to do
 
 In this guide, we create a straightforward application serving an *hello*-endpoint.
 The endpoint is bound to a so-called **use case** - a simple Java class that provides
 the greeting functionality without caring about how it is displayed on the web.
 To demonstrate dependency injection, the endpoint uses a greeting logger.
 
-## Solution
+## Skipping the tutorial
 
 We recommend that you follow the instructions from this point onwards to create the application step by step.
 However, you can go right to the complete source code.
