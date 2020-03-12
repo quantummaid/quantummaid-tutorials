@@ -12,6 +12,10 @@
     <version>1.0.0</version>
     <packaging>maven-archetype</packaging>
 
+    <properties>
+        <plugin-update-file-checksum>328f1273553e1cafdce34d8e086f9352</plugin-update-file-checksum>
+    </properties>
+
     <build>
         <extensions>
             <extension>
