@@ -22,6 +22,7 @@
 package de.quantummaid.tutorials.basic.step1;
 
 //Showcase start webservice1
+
 import de.quantummaid.httpmaid.HttpMaid;
 
 public final class WebService {
@@ -30,7 +31,7 @@ public final class WebService {
     }
 
     public static void main(final String[] args) {
-        final HttpMaid httpMaid = HttpMaid.anHttpMaid()
+        HttpMaid.anHttpMaid()
                 .get("/hello", GreetingUseCase.class)
                 .build();
     }

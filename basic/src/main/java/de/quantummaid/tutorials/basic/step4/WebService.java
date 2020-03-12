@@ -22,13 +22,15 @@
 package de.quantummaid.tutorials.basic.step4;
 
 //Showcase start webservice4
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import de.quantummaid.httpmaid.HttpMaid;
-import de.quantummaid.httpmaid.purejavaendpoint.PureJavaEndpoint;
+import de.quantummaid.quantummaid.QuantumMaid;
 
 import static de.quantummaid.httpmaid.events.EventConfigurators.toEnrichTheIntermediateMapWithAllPathParameters;
 import static de.quantummaid.httpmaid.usecases.UseCaseConfigurators.toCreateUseCaseInstancesUsing;
+import static de.quantummaid.quantummaid.integrations.guice.QuantumMaidGuiceBindings.bindToSinglePublicConstructor;
 
 public final class WebService {
     private static final int PORT = 8080;
@@ -36,14 +38,22 @@ public final class WebService {
     private WebService() {
     }
 
-    public static void main(final String[] args) {
-        final Injector injector = Guice.createInjector();
+    public static QuantumMaid createQuantumMaid(final int port) {
+        final Injector injector = Guice.createInjector(
+                bindToSinglePublicConstructor(GreetingUseCase.class)
+        );
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/hello", GreetingUseCase.class)
+                .get("/hello/<name>", GreetingUseCase.class)
                 .configured(toEnrichTheIntermediateMapWithAllPathParameters())
                 .configured(toCreateUseCaseInstancesUsing(injector::getInstance))
                 .build();
-        PureJavaEndpoint.pureJavaEndpointFor(httpMaid).listeningOnThePort(PORT);
+        return QuantumMaid.quantumMaid()
+                .withHttpMaid(httpMaid)
+                .withLocalHostEndpointOnPort(port);
+    }
+
+    public static void main(final String[] args) {
+        createQuantumMaid(PORT).run();
     }
 }
 //Showcase end webservice4

@@ -19,28 +19,34 @@
  * under the License.
  */
 
-package de.quantummaid.tutorials.basic.step2;
+package de.quantummaid.tutorials.basic;
 
-//Showcase start webservice2
+//Showcase start initializedtest
 
-import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.quantummaid.QuantumMaid;
-import de.quantummaid.tutorials.basic.step1.GreetingUseCase;
+import de.quantummaid.quantummaid.integrations.junit5.QuantumMaidProvider;
+import de.quantummaid.quantummaid.integrations.junit5.QuantumMaidTest;
+import org.junit.jupiter.api.Test;
 
-public final class WebService {
-    private static final int PORT = 8080;
+import static de.quantummaid.tutorials.basic.step4.WebService.createQuantumMaid;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.core.Is.is;
 
-    private WebService() {
+@QuantumMaidTest
+public final class GreetingTest implements QuantumMaidProvider {
+
+    @Override
+    public QuantumMaid provide(final int port) {
+        return createQuantumMaid(port);
     }
 
-    public static void main(final String[] args) {
-        final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/hello", GreetingUseCase.class)
-                .build();
-        QuantumMaid.quantumMaid()
-                .withHttpMaid(httpMaid)
-                .withLocalHostEndpointOnPort(PORT)
-                .run();
+    @Test
+    public void testGreeting() {
+        given()
+                .when().get("/hello/quantummaid")
+                .then()
+                .statusCode(200)
+                .body(is("\"hello quantummaid\""));
     }
 }
-//Showcase end webservice2
+//Showcase end initializedtest

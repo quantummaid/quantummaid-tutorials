@@ -24,8 +24,7 @@ package de.quantummaid.tutorials.basic.step3;
 //Showcase start webservice3
 
 import de.quantummaid.httpmaid.HttpMaid;
-import de.quantummaid.httpmaid.purejavaendpoint.PureJavaEndpoint;
-import de.quantummaid.tutorials.basic.step4.GreetingUseCase;
+import de.quantummaid.quantummaid.QuantumMaid;
 
 import static de.quantummaid.httpmaid.events.EventConfigurators.toEnrichTheIntermediateMapWithAllPathParameters;
 
@@ -40,7 +39,10 @@ public final class WebService {
                 .get("/hello/<name>", GreetingUseCase.class)
                 .configured(toEnrichTheIntermediateMapWithAllPathParameters())
                 .build();
-        PureJavaEndpoint.pureJavaEndpointFor(httpMaid).listeningOnThePort(PORT);
+        QuantumMaid.quantumMaid()
+                .withHttpMaid(httpMaid)
+                .withLocalHostEndpointOnPort(PORT)
+                .run();
     }
 }
 //Showcase end webservice3

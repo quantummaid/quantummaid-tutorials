@@ -44,17 +44,24 @@ The full step-by-step source code is located in the ./basic directory.
 QuantumMaid does not require your project to follow a specific format.
 The easiest way to create a new project is to open a terminal and run the following command:
 
-```
+```bash
 mvn archetype:generate \
-    -DgroupId=com.mycompany.app \
-    -DartifactId=my-app \
-    -DarchetypeArtifactId=maven-archetype-quickstart \
-    -DarchetypeVersion=1.4 \
-    -DinteractiveMode=false 
-cd ./my-app
+    --batch-mode \
+    -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
+    -DarchetypeArtifactId=basic-archetype \
+    -DarchetypeVersion=1.0.0 \
+    -DgroupId=de.quantummaid.tutorials \
+    -DartifactId=basic-tutorial \
+    -Dversion=1.0.0 \
+    -Dpackaging=java
+cd ./basic-tutorial
 ```
 
-It will generate a Maven structure in `./my-app`.
+It generates the following in ./basic-tutorial:
+- the Maven structure
+- an `de.quantummaid.tutorials.basic-tutorial.GreetingUseCase` bound to `/hello`
+- an associated integration test
+
 Once generated, look at the `pom.xml` file.
 In order to use QuantumMaid for creating web services, you need to add a dependency to `HttpMaid`:
 
@@ -68,6 +75,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
 ```
 **Explanation**: QuantumMaid consists of several sub-projects. HttpMaid is the sub-project concerned
 with everything related to the web.
+
 ## The first use case
  
 To start the project, create a `src/main/java/com/mycompany/app/GreetingUseCase.java` class with the following content:
@@ -98,7 +106,7 @@ public final class WebService {
     }
 
     public static void main(final String[] args) {
-        final HttpMaid httpMaid = HttpMaid.anHttpMaid()
+        HttpMaid.anHttpMaid()
                 .get("/hello", GreetingUseCase.class)
                 .build();
     }
@@ -120,7 +128,7 @@ You can use it by modifying the `WebService` like this:
 <!---[CodeSnippet](webservice2)-->
 ```java
 import de.quantummaid.httpmaid.HttpMaid;
-import de.quantummaid.httpmaid.purejavaendpoint.PureJavaEndpoint;
+import de.quantummaid.quantummaid.QuantumMaid;
 import de.quantummaid.tutorials.basic.step1.GreetingUseCase;
 
 public final class WebService {
@@ -132,9 +140,11 @@ public final class WebService {
     public static void main(final String[] args) {
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
                 .get("/hello", GreetingUseCase.class)
-                .get("/derp", (request, response) -> response.setBody("foo"))
                 .build();
-        PureJavaEndpoint.pureJavaEndpointFor(httpMaid).listeningOnThePort(PORT);
+        QuantumMaid.quantumMaid()
+                .withHttpMaid(httpMaid)
+                .withLocalHostEndpointOnPort(PORT)
+                .run();
     }
 }
 ```
@@ -172,8 +182,7 @@ to look into the request's path parameters in order to resolve the `name` parame
 <!---[CodeSnippet](webservice3)-->
 ```java
 import de.quantummaid.httpmaid.HttpMaid;
-import de.quantummaid.httpmaid.purejavaendpoint.PureJavaEndpoint;
-import de.quantummaid.tutorials.basic.step4.GreetingUseCase;
+import de.quantummaid.quantummaid.QuantumMaid;
 
 import static de.quantummaid.httpmaid.events.EventConfigurators.toEnrichTheIntermediateMapWithAllPathParameters;
 
@@ -188,7 +197,10 @@ public final class WebService {
                 .get("/hello/<name>", GreetingUseCase.class)
                 .configured(toEnrichTheIntermediateMapWithAllPathParameters())
                 .build();
-        PureJavaEndpoint.pureJavaEndpointFor(httpMaid).listeningOnThePort(PORT);
+        QuantumMaid.quantumMaid()
+                .withHttpMaid(httpMaid)
+                .withLocalHostEndpointOnPort(PORT)
+                .run();
     }
 }
 ```
@@ -237,14 +249,13 @@ Edit the `GreetingUseCase` class to inject the `GreetingLogger`:
 public final class GreetingUseCase {
     private final GreetingLogger greetingLogger;
 
-    @Inject
     public GreetingUseCase(final GreetingLogger greetingLogger) {
         this.greetingLogger = greetingLogger;
     }
 
     public String hello(final String name) {
         greetingLogger.logGreeting(name);
-        return "hello" + name;
+        return "hello " + name;
     }
 }
 ```
@@ -257,10 +268,11 @@ Guice:
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import de.quantummaid.httpmaid.HttpMaid;
-import de.quantummaid.httpmaid.purejavaendpoint.PureJavaEndpoint;
+import de.quantummaid.quantummaid.QuantumMaid;
 
 import static de.quantummaid.httpmaid.events.EventConfigurators.toEnrichTheIntermediateMapWithAllPathParameters;
 import static de.quantummaid.httpmaid.usecases.UseCaseConfigurators.toCreateUseCaseInstancesUsing;
+import static de.quantummaid.quantummaid.integrations.guice.QuantumMaidGuiceBindings.bindToSinglePublicConstructor;
 
 public final class WebService {
     private static final int PORT = 8080;
@@ -268,14 +280,22 @@ public final class WebService {
     private WebService() {
     }
 
-    public static void main(final String[] args) {
-        final Injector injector = Guice.createInjector();
+    public static QuantumMaid createQuantumMaid(final int port) {
+        final Injector injector = Guice.createInjector(
+                bindToSinglePublicConstructor(GreetingUseCase.class)
+        );
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/hello", GreetingUseCase.class)
+                .get("/hello/<name>", GreetingUseCase.class)
                 .configured(toEnrichTheIntermediateMapWithAllPathParameters())
                 .configured(toCreateUseCaseInstancesUsing(injector::getInstance))
                 .build();
-        PureJavaEndpoint.pureJavaEndpointFor(httpMaid).listeningOnThePort(PORT);
+        return QuantumMaid.quantumMaid()
+                .withHttpMaid(httpMaid)
+                .withLocalHostEndpointOnPort(port);
+    }
+
+    public static void main(final String[] args) {
+        createQuantumMaid(PORT).run();
     }
 }
 ```
@@ -286,6 +306,59 @@ Restart the application and check that the endpoint returns the expected output:
 $ curl http://localhost:8080/hello/quantummaid
 hello quantummaid
 ```
+
+## Testing
+
+Tests are an integral component of every application. QuantumMaid supports you in writing them.
+In the generated pom.xml file, you can see one test dependency:
+<!---[CodeSnippet](testdependency)-->
+```xml
+<dependency>
+    <groupId>de.quantummaid.quantummaid.integrations</groupId>
+    <artifactId>quantummaid-junit5</artifactId>
+    <version>1.0.1</version>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>io.rest-assured</groupId>
+    <artifactId>rest-assured</artifactId>
+    <version>4.2.0</version>
+    <scope>test</scope>
+</dependency>
+```
+
+The generated project contains the `de.quantummaid.tutorials.GreetingTest` test class.
+In order to run the test, we need to implement the `provide()` method:
+<!---[CodeSnippet](initializedtest)-->
+```java
+import de.quantummaid.quantummaid.QuantumMaid;
+import de.quantummaid.quantummaid.integrations.junit5.QuantumMaidProvider;
+import de.quantummaid.quantummaid.integrations.junit5.QuantumMaidTest;
+import org.junit.jupiter.api.Test;
+
+import static de.quantummaid.tutorials.basic.step4.WebService.createQuantumMaid;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.core.Is.is;
+
+@QuantumMaidTest
+public final class GreetingTest implements QuantumMaidProvider {
+
+    @Override
+    public QuantumMaid provide(final int port) {
+        return createQuantumMaid(port);
+    }
+
+    @Test
+    public void testGreeting() {
+        given()
+                .when().get("/hello/quantummaid")
+                .then()
+                .statusCode(200)
+                .body(is("\"hello quantummaid\""));
+    }
+}
+```
+Now you can run the test and verify that the application indeed behaves correctly.
 
 
 ## Packaging the application
@@ -338,6 +411,7 @@ one of our advanced tutorials:
 
 [Packaging for AWS Lambda](todo)
 
-[Packaging for Docker](todo)
+[Packaging for Docker/Kubernetes](todo)
 
 [Packaging for Tomcat/JBoss/Glassfish](todo)
+

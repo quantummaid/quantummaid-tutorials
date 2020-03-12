@@ -27,4 +27,7 @@
     <Match>
         <Bug pattern="DLS_DEAD_LOCAL_STORE"/>
     </Match>
+    <Match>
+        <Bug pattern=" ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD"/>
+    </Match>
 </FindBugsFilter>

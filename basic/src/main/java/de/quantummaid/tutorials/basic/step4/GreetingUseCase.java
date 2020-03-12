@@ -21,13 +21,10 @@
 
 package de.quantummaid.tutorials.basic.step4;
 
-import javax.inject.Inject;
-
 //Showcase start usecase3
 public final class GreetingUseCase {
     private final GreetingLogger greetingLogger;
 
-    @Inject
     public GreetingUseCase(final GreetingLogger greetingLogger) {
         this.greetingLogger = greetingLogger;
     }
