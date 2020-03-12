@@ -18,7 +18,7 @@
         <checkstyle.suppressions.location>
             ${project.basedir}/src/test/checkstyle/checkstyle-suppressions.xml
         </checkstyle.suppressions.location>
-        <plugin-update-file-checksum>1f6236823ee9fd5ae99bd33688477161</plugin-update-file-checksum>
+        <plugin-update-file-checksum>a9c106f16f2d959e2db68534062e7623</plugin-update-file-checksum>
     </properties>
 
     <dependencies>
@@ -69,6 +69,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
+                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <phase>package</phase>

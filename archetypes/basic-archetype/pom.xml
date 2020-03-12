@@ -13,10 +13,19 @@
     <packaging>maven-archetype</packaging>
 
     <properties>
-        <plugin-update-file-checksum>328f1273553e1cafdce34d8e086f9352</plugin-update-file-checksum>
+        <plugin-update-file-checksum>a9c106f16f2d959e2db68534062e7623</plugin-update-file-checksum>
     </properties>
 
     <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-archetype-plugin</artifactId>
+                    <version>3.1.2</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
         <extensions>
             <extension>
                 <groupId>org.apache.maven.archetype</groupId>
