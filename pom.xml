@@ -14,7 +14,7 @@
     <packaging>pom</packaging>
 
     <modules>
-        <module>basic</module>
+        <module>basic-tutorial</module>
         <module>archetypes</module>
     </modules>
 
