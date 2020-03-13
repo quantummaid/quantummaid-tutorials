@@ -30,18 +30,18 @@ import static de.quantummaid.httpmaid.events.EventConfigurators.toEnrichTheInter
 public final class WebService {
     private static final int PORT = 8080;
 
-    private WebService() {
-    }
-
-    public static void main(final String[] args) {
+    public static QuantumMaid createQuantumMaid(final int port) {
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
                 .get("/hello/<name>", GreetingUseCase.class)
                 .configured(toEnrichTheIntermediateMapWithAllPathParameters())
                 .build();
-        QuantumMaid.quantumMaid()
+        return QuantumMaid.quantumMaid()
                 .withHttpMaid(httpMaid)
-                .withLocalHostEndpointOnPort(PORT)
-                .run();
+                .withLocalHostEndpointOnPort(port);
+    }
+
+    public static void main(final String[] args) {
+        createQuantumMaid(PORT).run();
     }
 }
 //Showcase end webservice3

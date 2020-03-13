@@ -34,9 +34,6 @@ import static de.quantummaid.quantummaid.integrations.guice.QuantumMaidGuiceBind
 public final class WebService {
     private static final int PORT = 8080;
 
-    private WebService() {
-    }
-
     public static QuantumMaid createQuantumMaid(final int port) {
         final Injector injector = Guice.createInjector(
                 bindToSinglePublicConstructor(GreetingUseCase.class)

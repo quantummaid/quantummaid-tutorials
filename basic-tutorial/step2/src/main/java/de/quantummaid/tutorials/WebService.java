@@ -29,17 +29,17 @@ import de.quantummaid.quantummaid.QuantumMaid;
 public final class WebService {
     private static final int PORT = 8080;
 
-    private WebService() {
-    }
-
-    public static void main(final String[] args) {
+    public static QuantumMaid createQuantumMaid(final int port) {
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
                 .get("/hello", GreetingUseCase.class)
                 .build();
-        QuantumMaid.quantumMaid()
+        return QuantumMaid.quantumMaid()
                 .withHttpMaid(httpMaid)
-                .withLocalHostEndpointOnPort(PORT)
-                .run();
+                .withLocalHostEndpointOnPort(port);
+    }
+
+    public static void main(final String[] args) {
+        createQuantumMaid(PORT).run();
     }
 }
 //Showcase end webservice2

@@ -26,4 +26,5 @@
 <suppressions>
     <suppress checks="Regex" files="GreetingLogger" />
     <suppress checks="MagicNumber" files="GreetingTest" />
+    <suppress checks="HideUtilityClassConstructor" files="WebService" />
 </suppressions>

@@ -28,8 +28,8 @@ To demonstrate dependency injection, the endpoint uses a greeting logger.
 
 ## Skipping the tutorial
 
-We recommend that you follow the instructions from this point onwards to create the application step by step.
-However, you can go right to the complete source code.
+The tutorial is intended to be developed gradually. However, if you don't feel like following every step,
+you can jump to the full source code.
 Download an [archive](https://github.com/quantummaid/quantummaid-tutorials/archive/master.zip) or clone the git repository:
 
 ```bash
@@ -37,7 +37,7 @@ $ git clone https://github.com/quantummaid/quantummaid-tutorials.git
 cd ./quantummaid-tutorials
 ```
 
-The full step-by-step source code is located in the ./basic directory.
+The full step-by-step source code is located in the ./basic-tutorial directory.
 
 
 ## Bootstrapping the project
@@ -49,7 +49,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.0 \
+    -DarchetypeVersion=1.0.1 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -59,29 +59,42 @@ cd ./basic-tutorial
 
 It generates the following in ./basic-tutorial:
 - the Maven structure
-- an `de.quantummaid.tutorials.basic-tutorial.GreetingUseCase` bound to `/hello`
-- an associated integration test
+- a class `de.quantummaid.tutorials.GreetingUseCase`
+- a class `de.quantummaid.tutorials.GreetingLogger`
+- a test class `de.quantummaid.tutorials.GreetingTest`
 
 Once generated, look at the `pom.xml` file.
-In order to use QuantumMaid for creating web services, you need to add a dependency to `HttpMaid`:
+In order to use QuantumMaid for creating web services, you need to add a dependency to it:
 
-<!---[CodeSnippet](httpmaiddependency)-->
+<!---[CodeSnippet](quantummaiddependency)-->
 ```xml
-<dependency>
-    <groupId>de.quantummaid.quantummaid.packagings</groupId>
-    <artifactId>quantummaid-essentials</artifactId>
-    <version>1.0.2</version>
-</dependency>
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>de.quantummaid.quantummaid</groupId>
+            <artifactId>quantummaid-bom</artifactId>
+            <version>1.0.6</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+<dependencies>
+    <dependency>
+        <groupId>de.quantummaid.quantummaid.packagings</groupId>
+        <artifactId>quantummaid-essentials</artifactId>
+    </dependency>
+</dependencies>
 ```
-**Explanation**: QuantumMaid consists of several sub-projects. HttpMaid is the sub-project concerned
-with everything related to the web.
 
 ## The first use case
  
-To start the project, create a `src/main/java/com/mycompany/app/GreetingUseCase.java` class with the following content:
+To start the project, modify the `GreetingUseCase` class to contain the following content:
 
 <!---[CodeSnippet](usecase1)-->
 ```java
+package de.quantummaid.tutorials;
+
 public final class GreetingUseCase {
 
     public String hello() {
@@ -91,19 +104,18 @@ public final class GreetingUseCase {
 ```
  
 It’s a very simple use case, returning `"hello"` to all invocations of `hello()`. Note that it doesn't contain
-any references or imports to actual web technology like JXR-RS annotations. It's completely infrastructure agnostic.
+any references or imports to actual web technology like JXR-RS annotations. It is completely infrastructure agnostic.
 
 ## Exporting the use case
 We can now use HttpMaid to export the use case via HTTP. To do this, create a `WebService` class like this:
 
 <!---[CodeSnippet](webservice1)-->
 ```java
+package de.quantummaid.tutorials;
+
 import de.quantummaid.httpmaid.HttpMaid;
 
 public final class WebService {
-
-    private WebService() {
-    }
 
     public static void main(final String[] args) {
         HttpMaid.anHttpMaid()
@@ -113,6 +125,9 @@ public final class WebService {
 }
 ```
 It’s a very simple configuration, binding the `GreetingUseCase` to requests to `/hello`, which will then be answered with `"hello"`.
+
+**Explanation**: QuantumMaid consists of several sub-projects. HttpMaid is the sub-project concerned
+with everything related to the web.
 
 **Differences to other frameworks**:
 With QuantumMaid, there is no need to add JAX-RS annotations to your classes. Their usage drastically decreases application start-up time and
@@ -127,24 +142,25 @@ You can use it by modifying the `WebService` like this:
 
 <!---[CodeSnippet](webservice2)-->
 ```java
+package de.quantummaid.tutorials;
+
 import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.quantummaid.QuantumMaid;
-import de.quantummaid.tutorials.basic.step1.GreetingUseCase;
 
 public final class WebService {
     private static final int PORT = 8080;
 
-    private WebService() {
-    }
-
-    public static void main(final String[] args) {
+    public static QuantumMaid createQuantumMaid(final int port) {
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
                 .get("/hello", GreetingUseCase.class)
                 .build();
-        QuantumMaid.quantumMaid()
+        return QuantumMaid.quantumMaid()
                 .withHttpMaid(httpMaid)
-                .withLocalHostEndpointOnPort(PORT)
-                .run();
+                .withLocalHostEndpointOnPort(port);
+    }
+
+    public static void main(final String[] args) {
+        createQuantumMaid(PORT).run();
     }
 }
 ```
@@ -164,6 +180,8 @@ Let's make the greeting use case slightly more complex by adding a parameter to 
 
 <!---[CodeSnippet](usecase2)-->
 ```java
+package de.quantummaid.tutorials;
+
 public final class GreetingUseCase {
 
     public String hello(final String name) {
@@ -181,6 +199,8 @@ to look into the request's path parameters in order to resolve the `name` parame
 
 <!---[CodeSnippet](webservice3)-->
 ```java
+package de.quantummaid.tutorials;
+
 import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.quantummaid.QuantumMaid;
 
@@ -189,18 +209,18 @@ import static de.quantummaid.httpmaid.events.EventConfigurators.toEnrichTheInter
 public final class WebService {
     private static final int PORT = 8080;
 
-    private WebService() {
-    }
-
-    public static void main(final String[] args) {
+    public static QuantumMaid createQuantumMaid(final int port) {
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
                 .get("/hello/<name>", GreetingUseCase.class)
                 .configured(toEnrichTheIntermediateMapWithAllPathParameters())
                 .build();
-        QuantumMaid.quantumMaid()
+        return QuantumMaid.quantumMaid()
                 .withHttpMaid(httpMaid)
-                .withLocalHostEndpointOnPort(PORT)
-                .run();
+                .withLocalHostEndpointOnPort(port);
+    }
+
+    public static void main(final String[] args) {
+        createQuantumMaid(PORT).run();
     }
 }
 ```
@@ -216,19 +236,13 @@ $ curl http://localhost:8080/hello/quantummaid
 
 QuantumMaid supports dependency injection, but does not implement it. Nonetheless, it is very easy to use any dependency injection framework you desire.
 We recommend to use [Guice](https://github.com/google/guice) and will demonstrate its integration in this section.
-First, you need to add the following dependency to your `pom.xml`:
+Since it is already included in the `quantummaid-essentials` dependency, there is no need to add another dependency.
 
-<!---[CodeSnippet](guicedependency)-->
-```xml
-
-```
-
-
-Let’s modify the application and add a `GreetingLogger` to be injected into our `GreetingUseCase`.
-Create the `src/main/java/com/mycompany/app/GreetingLogger.java` class with the following content:
-
+Look at the `GreetingLogger` class in the project:
 <!---[CodeSnippet](logger)-->
 ```java
+package de.quantummaid.tutorials;
+
 public final class GreetingLogger {
 
     public void logGreeting(final String name) {
@@ -237,11 +251,13 @@ public final class GreetingLogger {
 }
 ```
 
-
-Edit the `GreetingUseCase` class to inject the `GreetingLogger`:
+Let’s modify the application and inject a `GreetingLogger` into our `GreetingUseCase`.
+Edit the `GreetingUseCase` class to look like this:
 
 <!---[CodeSnippet](usecase3)-->
 ```java
+package de.quantummaid.tutorials;
+
 public final class GreetingUseCase {
     private final GreetingLogger greetingLogger;
 
@@ -261,6 +277,8 @@ Guice:
 
 <!---[CodeSnippet](webservice4)-->
 ```java
+package de.quantummaid.tutorials;
+
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 import de.quantummaid.httpmaid.HttpMaid;
@@ -272,9 +290,6 @@ import static de.quantummaid.quantummaid.integrations.guice.QuantumMaidGuiceBind
 
 public final class WebService {
     private static final int PORT = 8080;
-
-    private WebService() {
-    }
 
     public static QuantumMaid createQuantumMaid(final int port) {
         final Injector injector = Guice.createInjector(
@@ -296,6 +311,8 @@ public final class WebService {
 }
 ```
 
+**Explanation**: Normally, Guice requires you to annotate your classes with the `@Inject` annotation.
+To avoid this, QuantumMaid provides the `bindToSinglePublicConstructor()` Guice module.
 
 Restart the application and check that the endpoint returns the expected output:
 ```
@@ -306,33 +323,34 @@ $ curl http://localhost:8080/hello/quantummaid
 ## Testing
 
 Tests are an integral component of every application. QuantumMaid supports you in writing them.
-In the generated pom.xml file, you can see one test dependency:
+In the generated pom.xml file, you can see two test dependencies:
 <!---[CodeSnippet](testdependency)-->
 ```xml
 <dependency>
     <groupId>de.quantummaid.quantummaid.packagings</groupId>
     <artifactId>quantummaid-test-essentials</artifactId>
-    <version>1.0.2</version>
     <scope>test</scope>
 </dependency>
 <dependency>
     <groupId>io.rest-assured</groupId>
     <artifactId>rest-assured</artifactId>
-    <version>4.2.0</version>
+    <version>4.3.0</version>
     <scope>test</scope>
 </dependency>
 ```
 
 The generated project contains the `de.quantummaid.tutorials.GreetingTest` test class.
-In order to run the test, we need to implement the `provide()` method:
+Implement the test like this:
 <!---[CodeSnippet](initializedtest)-->
 ```java
+package de.quantummaid.tutorials;
+
 import de.quantummaid.quantummaid.QuantumMaid;
 import de.quantummaid.quantummaid.integrations.junit5.QuantumMaidProvider;
 import de.quantummaid.quantummaid.integrations.junit5.QuantumMaidTest;
 import org.junit.jupiter.api.Test;
 
-import static de.quantummaid.tutorials.basic.step4.WebService.createQuantumMaid;
+import static de.quantummaid.tutorials.WebService.createQuantumMaid;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.core.Is.is;
 
@@ -370,6 +388,7 @@ qualified domain name of your `WebService` class:
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-assembly-plugin</artifactId>
+            <version>3.2.0</version>
             <executions>
                 <execution>
                     <phase>package</phase>
