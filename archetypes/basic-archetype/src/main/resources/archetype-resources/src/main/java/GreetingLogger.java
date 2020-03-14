@@ -1,3 +1,5 @@
+package de.quantummaid.tutorials;
+
 public final class GreetingLogger {
 
     public void logGreeting(final String name) {
