@@ -49,7 +49,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.2 \
+    -DarchetypeVersion=1.0.3 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -73,7 +73,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.6</version>
+            <version>1.0.7</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
