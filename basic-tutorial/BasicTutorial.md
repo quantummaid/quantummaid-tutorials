@@ -1,18 +1,15 @@
 # QuantumMaid - Creating Your First Application
 
-Learn how to create a *Hello World* QuantumMaid app. This guide covers:
-- Bootstrapping an application
+This tutorial will teach you how to create a basic QuantumMaid app. It covers:
 - Creating an use case
 - Exporting the use case via HTTP
 - Dependency injection
+- Writing an integration test
 - Packaging of the application
 
-## Prerequisites
-To complete this guide, you need:
-- less than 15 minutes
-- an IDE
-- JDK 11+ installed with JAVA_HOME configured appropriately
-- Apache Maven 3.5.3+
+To follow this tutorial, you need:
+- JDK 11+ installed
+- Apache Maven >3.5.3
 
 Make sure that Maven uses the correct Java version:
 ```bash
@@ -21,10 +18,10 @@ $ mvn -version
 
 ## What we are going to do
 
-In this guide, we create a straightforward application serving an *hello*-endpoint.
-The endpoint is bound to a so-called **use case** - a simple Java class that provides
-the greeting functionality without caring about how it is displayed on the web.
-To demonstrate dependency injection, the endpoint uses a greeting logger.
+In this tutorial, we create a simple application.
+It will serve a so-called **use case** - a simple Java class that provides
+functionality without caring about how it is displayed on the web.
+To demonstrate dependency injection, the use case will use a custom logger.
 
 ## Skipping the tutorial
 
@@ -42,14 +39,14 @@ The full step-by-step source code is located in the ./basic-tutorial directory.
 
 ## Bootstrapping the project
 QuantumMaid does not require your project to follow a specific format.
-The easiest way to start the tutorial is to open a terminal and run the following command:
+To start the tutorial, just run the following command:
 
 ```bash
 mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.3 \
+    -DarchetypeVersion=1.0.4 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -107,38 +104,25 @@ It’s a very simple use case, returning `"hello"` to all invocations of `hello(
 any references or imports to actual web technology like JXR-RS annotations. It is completely infrastructure agnostic.
 
 ## Exporting the use case
-We can now use HttpMaid to export the use case via HTTP. To do this, create a `WebService` class like this:
-
-<!---[CodeSnippet](webservice1)-->
+QuantumMaid consists of several sub-projects. The sub-project concerned
+with everything related to the web is called **HttpMaid**.
+We can use it to export our use case via HTTP.
+It can be configured like this (do not add it to the project yet):
+<!---[CodeSnippet](httpmaid)-->
 ```java
-package de.quantummaid.tutorials;
-
-import de.quantummaid.httpmaid.HttpMaid;
-
-public final class WebService {
-
-    public static void main(final String[] args) {
-        HttpMaid.anHttpMaid()
-                .get("/hello", GreetingUseCase.class)
-                .build();
-    }
-}
+HttpMaid.anHttpMaid()
+        .get("/hello", GreetingUseCase.class)
+        .build();
 ```
 It’s a very simple configuration, binding the `GreetingUseCase` to requests to `/hello`, which will then be answered with `"hello"`.
-
-**Explanation**: QuantumMaid consists of several sub-projects. HttpMaid is the sub-project concerned
-with everything related to the web.
 
 **Differences to other frameworks**:
 With QuantumMaid, there is no need to add JAX-RS annotations to your classes. Their usage drastically decreases application start-up time and
 promotes less-than-optimal architecture. When done architecturally sane, they tend to come along with significant amounts of boilerplate code.
 You can find an in-depth analysis of this problem [here](todo).
 
-
-## Running the application
-In order to run our application, we need to tell HttpMaid how to serve the endpoint.
-For the sake of simplicity, the HttpServer shipped with normal Java is sufficient.
-You can use it by modifying the `WebService` like this:
+In order to run our application, we need to bind HttpMaid to a port.
+This can be done by modifying the `WebService` class like this:
 
 <!---[CodeSnippet](webservice2)-->
 ```java
@@ -165,8 +149,8 @@ public final class WebService {
 }
 ```
 
-Now we are ready to run the application. Just start it normally by running the `main()`-method.
-Once started, you can request the provided endpoint:
+Now we can run the application. Just start it normally by executing the `main()`-method.
+Once started, you can verify that it works as intended like this:
 ```
 $ curl http://localhost:8080/hello
 "hello"
@@ -272,8 +256,7 @@ public final class GreetingUseCase {
 }
 ```
 
-The only thing left to do is to modify our HttpMaid configuration to perform dependency injection using
-Guice:
+The only thing left to do is to modify our HttpMaid configuration to perform dependency injection using Guice:
 
 <!---[CodeSnippet](webservice4)-->
 ```java
@@ -338,6 +321,11 @@ In the generated pom.xml file, you can see two test dependencies:
     <scope>test</scope>
 </dependency>
 ```
+
+**Warning:** This tutorial uses the RESTAssured library because it is well-known and
+allows for very readable test definitions. Despite its widespread use, RESTAssured
+introduces the vulnerabilities [CVE-2016-6497](https://nvd.nist.gov/vuln/detail/CVE-2016-6497), [CVE-2016-5394](https://nvd.nist.gov/vuln/detail/CVE-2016-5394)
+and [CVE-2016-6798](https://nvd.nist.gov/vuln/detail/CVE-2016-6798) to your project.
 
 The generated project contains the `de.quantummaid.tutorials.GreetingTest` test class.
 Implement the test like this:

@@ -19,8 +19,6 @@
  * under the License.
  */
 
-//Showcase start webservice1
-
 package de.quantummaid.tutorials;
 
 import de.quantummaid.httpmaid.HttpMaid;
@@ -28,9 +26,10 @@ import de.quantummaid.httpmaid.HttpMaid;
 public final class WebService {
 
     public static void main(final String[] args) {
+        //Showcase start httpmaid
         HttpMaid.anHttpMaid()
                 .get("/hello", GreetingUseCase.class)
                 .build();
+        //Showcase end httpmaid
     }
 }
-//Showcase end webservice1
