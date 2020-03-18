@@ -27,7 +27,7 @@ import com.google.inject.Injector;
 import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.quantummaid.QuantumMaid;
 
-import static de.quantummaid.httpmaid.events.EventConfigurators.toEnrichTheIntermediateMapWithAllPathParameters;
+import static de.quantummaid.httpmaid.events.EventConfigurators.mappingPathParameter;
 import static de.quantummaid.httpmaid.usecases.UseCaseConfigurators.toCreateUseCaseInstancesUsing;
 import static de.quantummaid.quantummaid.integrations.guice.QuantumMaidGuiceBindings.bindToSinglePublicConstructor;
 
@@ -39,8 +39,7 @@ public final class WebService {
                 bindToSinglePublicConstructor(GreetingUseCase.class)
         );
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/hello/<name>", GreetingUseCase.class)
-                .configured(toEnrichTheIntermediateMapWithAllPathParameters())
+                .get("/hello/<name>", GreetingUseCase.class, mappingPathParameter("name"))
                 .configured(toCreateUseCaseInstancesUsing(injector::getInstance))
                 .build();
         return QuantumMaid.quantumMaid()

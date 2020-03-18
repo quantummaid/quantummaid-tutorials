@@ -46,7 +46,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.4 \
+    -DarchetypeVersion=1.0.5 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -70,7 +70,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.7</version>
+            <version>1.0.8</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -188,15 +188,14 @@ package de.quantummaid.tutorials;
 import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.quantummaid.QuantumMaid;
 
-import static de.quantummaid.httpmaid.events.EventConfigurators.toEnrichTheIntermediateMapWithAllPathParameters;
+import static de.quantummaid.httpmaid.events.EventConfigurators.mappingPathParameter;
 
 public final class WebService {
     private static final int PORT = 8080;
 
     public static QuantumMaid createQuantumMaid(final int port) {
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/hello/<name>", GreetingUseCase.class)
-                .configured(toEnrichTheIntermediateMapWithAllPathParameters())
+                .get("/hello/<name>", GreetingUseCase.class, mappingPathParameter("name"))
                 .build();
         return QuantumMaid.quantumMaid()
                 .withHttpMaid(httpMaid)
@@ -267,7 +266,7 @@ import com.google.inject.Injector;
 import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.quantummaid.QuantumMaid;
 
-import static de.quantummaid.httpmaid.events.EventConfigurators.toEnrichTheIntermediateMapWithAllPathParameters;
+import static de.quantummaid.httpmaid.events.EventConfigurators.mappingPathParameter;
 import static de.quantummaid.httpmaid.usecases.UseCaseConfigurators.toCreateUseCaseInstancesUsing;
 import static de.quantummaid.quantummaid.integrations.guice.QuantumMaidGuiceBindings.bindToSinglePublicConstructor;
 
@@ -279,8 +278,7 @@ public final class WebService {
                 bindToSinglePublicConstructor(GreetingUseCase.class)
         );
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/hello/<name>", GreetingUseCase.class)
-                .configured(toEnrichTheIntermediateMapWithAllPathParameters())
+                .get("/hello/<name>", GreetingUseCase.class, mappingPathParameter("name"))
                 .configured(toCreateUseCaseInstancesUsing(injector::getInstance))
                 .build();
         return QuantumMaid.quantumMaid()

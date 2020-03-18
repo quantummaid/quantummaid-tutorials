@@ -25,15 +25,14 @@ package de.quantummaid.tutorials;
 import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.quantummaid.QuantumMaid;
 
-import static de.quantummaid.httpmaid.events.EventConfigurators.toEnrichTheIntermediateMapWithAllPathParameters;
+import static de.quantummaid.httpmaid.events.EventConfigurators.mappingPathParameter;
 
 public final class WebService {
     private static final int PORT = 8080;
 
     public static QuantumMaid createQuantumMaid(final int port) {
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/hello/<name>", GreetingUseCase.class)
-                .configured(toEnrichTheIntermediateMapWithAllPathParameters())
+                .get("/hello/<name>", GreetingUseCase.class, mappingPathParameter("name"))
                 .build();
         return QuantumMaid.quantumMaid()
                 .withHttpMaid(httpMaid)
