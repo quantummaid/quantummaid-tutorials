@@ -46,7 +46,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.6 \
+    -DarchetypeVersion=1.0.7 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -70,7 +70,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.11</version>
+            <version>1.0.12</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -211,6 +211,10 @@ You can now run the application again and try out the new functionality:
 $ curl http://localhost:8080/hello/quantummaid
 "hello quantummaid"
 ```
+
+**Note:** Mapping the `name` path parameter automatically to the `name` parameter in the `GreetingUseCase`
+is possible because we compiled the application with the `--parameters` compiler option.
+Doing so gives the program [runtime access to parameter names](http://openjdk.java.net/jeps/118).
 
 
 ## Using dependency injection
