@@ -1,3 +1,5 @@
+<img src="quantummaid_logo.png" align="left"/>
+
 # QuantumMaid Tutorials
 
 [Creating your first application](basic-tutorial/README.md) (~15 minutes)
