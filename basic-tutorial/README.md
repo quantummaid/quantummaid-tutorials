@@ -58,9 +58,9 @@ cd ./basic-tutorial
 
 It generates the following in `./basic-tutorial`:
 - the Maven structure
-- a class `de.quantummaid.tutorials.GreetingUseCase`
-- a class `de.quantummaid.tutorials.GreetingLogger`
-- a test class `de.quantummaid.tutorials.GreetingTest`
+- an empty class `de.quantummaid.tutorials.GreetingUseCase`
+- an empty class `de.quantummaid.tutorials.GreetingLogger`
+- an empty test class `de.quantummaid.tutorials.GreetingTest`
 
 Once generated, look at the `pom.xml` file.
 In order to use QuantumMaid for creating web services, you need to add a dependency to it:
