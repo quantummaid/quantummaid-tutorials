@@ -56,7 +56,7 @@ mvn archetype:generate \
 cd ./basic-tutorial
 ```
 
-It generates the following in ./basic-tutorial:
+It generates the following in `./basic-tutorial`:
 - the Maven structure
 - a class `de.quantummaid.tutorials.GreetingUseCase`
 - a class `de.quantummaid.tutorials.GreetingLogger`
