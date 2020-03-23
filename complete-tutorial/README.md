@@ -1,4 +1,4 @@
-# AWS Lambda with QuantumMaid
+# QuantumMaid - Creating a Complete Application
 
 This site is under construction. Contributions are greatly appreciated.
 

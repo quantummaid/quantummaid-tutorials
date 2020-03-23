@@ -1,4 +1,4 @@
-# AWS Lambda with QuantumMaid
+# Packaging a QuantumMaid application as a .war file
 
 This site is under construction. Contributions are greatly appreciated.
 

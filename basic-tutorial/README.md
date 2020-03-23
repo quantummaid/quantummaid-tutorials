@@ -415,7 +415,7 @@ one of our advanced tutorials:
 
 [Packaging for AWS Lambda](../aws-lambda/README.md)
 
-[Packaging for Docker/Kubernetes](todo)
+[Packaging for Docker/Kubernetes](../docker/README.md)
 
-[Packaging for Tomcat/JBoss/Glassfish](todo)
+[Packaging for Tomcat/JBoss/Glassfish](../war/README.md)
 

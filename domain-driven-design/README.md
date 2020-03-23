@@ -1,4 +1,4 @@
-# AWS Lambda with QuantumMaid
+# Domain-Driven Design and QuantumMaid
 
 This site is under construction. Contributions are greatly appreciated.
 
