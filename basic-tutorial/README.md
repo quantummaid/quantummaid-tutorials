@@ -1,8 +1,8 @@
 # QuantumMaid - Creating Your First Application
 
 This tutorial will teach you how to create a basic QuantumMaid app. It covers:
-- Creating an use case
-- Exporting the use case via HTTP
+- Implementing an usecase
+- Exporting the implemented usecase via HTTP
 - Dependency injection
 - Writing an integration test
 - Packaging of the application
@@ -19,9 +19,9 @@ $ mvn -version
 ## What we are going to do
 
 In this tutorial, we create a simple application.
-It will serve a so-called **use case** - a simple Java class that provides
-functionality without caring about how it is displayed on the web.
-To demonstrate dependency injection, the use case will use a custom logger.
+It will offer the usecase of greeting people with a simple `"Hello"` message.
+This usecase will be implemented as a plain Java class and then exported using the `QuantumMaid` framework.
+To demonstrate dependency injection, the usecase implementation will use a custom logger.
 
 ## Skipping the tutorial
 
@@ -34,7 +34,7 @@ $ git clone https://github.com/quantummaid/quantummaid-tutorials.git
 cd ./quantummaid-tutorials
 ```
 
-The full step-by-step source code is located in the ./basic-tutorial directory.
+The full step-by-step source code is located in the `./basic-tutorial` directory.
 
 
 ## Bootstrapping the project
@@ -84,7 +84,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
 </dependencies>
 ```
 
-## The first use case
+## The first usecase
  
 To start the project, modify the `GreetingUseCase` class to contain the following content:
 
@@ -100,13 +100,13 @@ public final class GreetingUseCase {
 }
 ```
  
-It’s a very simple use case, returning `"hello"` to all invocations of `hello()`. Note that it doesn't contain
+It’s a very simple usecase, returning `"hello"` to all invocations of `hello()`. Note that it doesn't contain
 any references or imports to actual web technology like JXR-RS annotations. It is completely infrastructure agnostic.
 
-## Exporting the use case
+## Exporting the usecase
 QuantumMaid consists of several sub-projects. The sub-project concerned
 with everything related to the web is called **HttpMaid**.
-We can use it to export our use case via HTTP.
+We can use it to export our usecase via HTTP.
 It can be configured like this (do not add it to the project yet):
 <!---[CodeSnippet](httpmaid)-->
 ```java
@@ -119,7 +119,7 @@ It’s a very simple configuration, binding the `GreetingUseCase` to requests to
 **Differences to other frameworks**:
 With QuantumMaid, there is no need to add JAX-RS annotations to your classes. Their usage drastically decreases application start-up time and
 promotes less-than-optimal architecture. When done architecturally sane, they tend to come along with significant amounts of boilerplate code.
-You can find an in-depth analysis of this problem [here](todo).
+You can find an in-depth analysis of this problem [here](../annotation-whitepaper/README.md).
 
 In order to run our application, we need to bind HttpMaid to a port.
 This can be done by modifying the `WebService` class like this:
@@ -160,7 +160,7 @@ $ curl http://localhost:8080/hello
 
 ## Mapping request data
 
-Let's make the greeting use case slightly more complex by adding a parameter to its `hello()` method:
+Let's make the greeting usecase slightly more complex by adding a parameter to its `hello()` method:
 
 <!---[CodeSnippet](usecase2)-->
 ```java
@@ -179,7 +179,7 @@ requests to `/hello/frodo` as `hello("frodo)`, etc.
 In traditional application frameworks, we achieve this by annotating the `name` parameter with the
 `@PathParam` JAX-RS annotation. Since QuantumMaid guarantees to keep your business logic 100% infrastructure agnostic under
 all circumstances, this not an option. Instead, we will modify the `WebService` class accordingly to tell HttpMaid
-to look into the request's path parameters in order to resolve the `name` parameter of the use case method:
+to look into the request's path parameters in order to resolve the `name` parameter of the usecase method:
 
 <!---[CodeSnippet](webservice3)-->
 ```java
@@ -413,7 +413,7 @@ $ java -jar target/my-app-jar-with-dependencies.jar
 If you are interested in packaging a QuantumMaid application for specific targets, simply follow
 one of our advanced tutorials:
 
-[Packaging for AWS Lambda](todo)
+[Packaging for AWS Lambda](../aws-lambda/README.md)
 
 [Packaging for Docker/Kubernetes](todo)
 
