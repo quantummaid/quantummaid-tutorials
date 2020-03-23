@@ -60,6 +60,7 @@ It generates the following in `./basic-tutorial`:
 - the Maven structure
 - an empty class `de.quantummaid.tutorials.GreetingUseCase`
 - an empty class `de.quantummaid.tutorials.GreetingLogger`
+- an empty class `de.quantummaid.tutorials.WebService`
 - an empty test class `de.quantummaid.tutorials.GreetingTest`
 
 Once generated, look at the `pom.xml` file.

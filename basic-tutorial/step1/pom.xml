@@ -34,7 +34,6 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
             <groupId>de.quantummaid.quantummaid.packagings</groupId>
