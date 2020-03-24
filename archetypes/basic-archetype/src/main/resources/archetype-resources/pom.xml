@@ -49,7 +49,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        de.quantummaid.tutorials.basic.step2.WebService
+                                        de.quantummaid.tutorials.WebService
                                     </mainClass>
                                 </manifest>
                             </archive>
