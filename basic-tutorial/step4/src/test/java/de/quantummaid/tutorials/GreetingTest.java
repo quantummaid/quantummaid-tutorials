@@ -24,8 +24,8 @@
 package de.quantummaid.tutorials;
 
 import de.quantummaid.quantummaid.QuantumMaid;
-import de.quantummaid.quantummaid.integrations.junit5.QuantumMaidProvider;
 import de.quantummaid.quantummaid.integrations.junit5.QuantumMaidTest;
+import de.quantummaid.quantummaid.integrations.testsupport.QuantumMaidProvider;
 import org.junit.jupiter.api.Test;
 
 import static de.quantummaid.tutorials.WebService.createQuantumMaid;

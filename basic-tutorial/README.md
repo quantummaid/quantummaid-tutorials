@@ -22,7 +22,7 @@ In the next 15 minutes, we will create a simple application.
 It should offer the trivial usecase of greeting the user with a simple `"Hello"` message.
 The usecase will be implemented as a plain Java class by the name `GreetingUseCase`.
 In order to serve the `GreetingUseCase` via the HTTP protocol we will create a `WebService` class.
-Furthermore, we will demonstrate dependency injection and write an integration test.
+Furthermore, we will write an integration test.
 Finally, the application is packaged as an executable `.jar` file.
 
 ## Skipping the tutorial
@@ -59,7 +59,6 @@ cd ./basic-tutorial
 It generates the following in `./basic-tutorial`:
 - the Maven structure
 - an empty class `de.quantummaid.tutorials.GreetingUseCase`
-- an empty class `de.quantummaid.tutorials.GreetingLogger`
 - an empty class `de.quantummaid.tutorials.WebService`
 - an empty test class `de.quantummaid.tutorials.GreetingTest`
 
@@ -73,7 +72,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.15</version>
+            <version>1.0.16</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -223,90 +222,13 @@ Take a look [here](https://www.logicbig.com/how-to/java-command/java-compile-wit
 how to configure this if you didn't start the tutorial from the provided archetype. 
 
 
-## Using dependency injection
+## Dependency Injection
 
-QuantumMaid supports dependency injection, but does not implement it. Nonetheless, it is very easy to use any dependency injection framework you desire.
-We recommend to use [Guice](https://github.com/google/guice) and will demonstrate its integration in this section.
-Since it is already included in the `quantummaid-essentials` dependency, there is no need to add another dependency to the `pom.xml` file.
-
-Open the `GreetingLogger` class in the project and modify it to look like this:
-<!---[CodeSnippet](logger)-->
-```java
-package de.quantummaid.tutorials;
-
-public final class GreetingLogger {
-
-    public void logGreeting(final String name) {
-        System.out.println("New greeting for " + name);
-    }
-}
-```
-
-Let’s modify the application and inject a `GreetingLogger` into our `GreetingUseCase`.
-Edit the `GreetingUseCase` class to look like this:
-
-<!---[CodeSnippet](usecase3)-->
-```java
-package de.quantummaid.tutorials;
-
-public final class GreetingUseCase {
-    private final GreetingLogger greetingLogger;
-
-    public GreetingUseCase(final GreetingLogger greetingLogger) {
-        this.greetingLogger = greetingLogger;
-    }
-
-    public String hello(final String name) {
-        greetingLogger.logGreeting(name);
-        return "hello " + name;
-    }
-}
-```
-
-The only thing left to do is to modify our HttpMaid configuration to perform dependency injection using Guice:
-
-<!---[CodeSnippet](webservice4)-->
-```java
-package de.quantummaid.tutorials;
-
-import com.google.inject.Guice;
-import com.google.inject.Injector;
-import de.quantummaid.httpmaid.HttpMaid;
-import de.quantummaid.quantummaid.QuantumMaid;
-
-import static de.quantummaid.httpmaid.usecases.UseCaseConfigurators.toCreateUseCaseInstancesUsing;
-import static de.quantummaid.quantummaid.integrations.guice.QuantumMaidGuiceBindings.bindToSinglePublicConstructor;
-
-public final class WebService {
-    private static final int PORT = 8080;
-
-    public static QuantumMaid createQuantumMaid(final int port) {
-        final Injector injector = Guice.createInjector(
-                bindToSinglePublicConstructor(GreetingUseCase.class)
-        );
-        final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/hello/<name>", GreetingUseCase.class)
-                .configured(toCreateUseCaseInstancesUsing(injector::getInstance))
-                .build();
-        return QuantumMaid.quantumMaid()
-                .withHttpMaid(httpMaid)
-                .withLocalHostEndpointOnPort(port);
-    }
-
-    public static void main(final String[] args) {
-        createQuantumMaid(PORT).run();
-    }
-}
-```
-
-**Explanation**: Normally, Guice requires you to annotate your classes with the `@Inject` annotation.
-To avoid this, QuantumMaid provides the `bindToSinglePublicConstructor()` Guice module.
-
-Restart the application and check that the endpoint returns the expected output:
-```
-$ curl http://localhost:8080/hello/quantummaid
-"hello quantummaid"
-```
+QuantumMaid supports dependency injection, but does not implement it.
+Out of the box, it is only able to instantiate classes that have a public constructor without any parameters
+(like our `GreetingUseCase`).
+It is recommended to use any existing dependency of choice. Look here for detailed instructions on
+integrating popular dependency injection frameworks like [Guice](https://github.com/google/guice) and [Dagger](https://dagger.dev/).    
 
 ## Testing
 
@@ -317,12 +239,6 @@ In the generated pom.xml file, you can see two test dependencies:
 <dependency>
     <groupId>de.quantummaid.quantummaid.packagings</groupId>
     <artifactId>quantummaid-test-essentials</artifactId>
-    <scope>test</scope>
-</dependency>
-<dependency>
-    <groupId>io.rest-assured</groupId>
-    <artifactId>rest-assured</artifactId>
-    <version>4.3.0</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -339,8 +255,8 @@ Implement the test like this:
 package de.quantummaid.tutorials;
 
 import de.quantummaid.quantummaid.QuantumMaid;
-import de.quantummaid.quantummaid.integrations.junit5.QuantumMaidProvider;
 import de.quantummaid.quantummaid.integrations.junit5.QuantumMaidTest;
+import de.quantummaid.quantummaid.integrations.testsupport.QuantumMaidProvider;
 import org.junit.jupiter.api.Test;
 
 import static de.quantummaid.tutorials.WebService.createQuantumMaid;
@@ -393,7 +309,7 @@ qualified domain name of your `WebService` class:
                         <archive>
                             <manifest>
                                 <mainClass>
-                                    de.quantummaid.tutorials.basic.step2.WebService
+                                    de.quantummaid.tutorials.WebService
                                 </mainClass>
                             </manifest>
                         </archive>

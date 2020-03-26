@@ -23,14 +23,8 @@
 package de.quantummaid.tutorials;
 
 public final class GreetingUseCase {
-    private final GreetingLogger greetingLogger;
-
-    public GreetingUseCase(final GreetingLogger greetingLogger) {
-        this.greetingLogger = greetingLogger;
-    }
 
     public String hello(final String name) {
-        greetingLogger.logGreeting(name);
         return "hello " + name;
     }
 }

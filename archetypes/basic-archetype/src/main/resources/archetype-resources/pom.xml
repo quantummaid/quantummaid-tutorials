@@ -20,19 +20,10 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven-compiler-plugin-version}</version>
                 <configuration>
-                    <showWarnings>true</showWarnings>
-                    <showDeprecation>true</showDeprecation>
-                    <failOnError>true</failOnError>
                     <release>${java.version}</release>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
-                    <debug>true</debug>
                     <parameters>true</parameters>
-                    <compilerArgs>
-                        <arg>-Xlint:all</arg>
-                        <arg>-Xlint:-processing</arg>
-                        <arg>-Xlint:-serial</arg>
-                    </compilerArgs>
                 </configuration>
             </plugin>
             <plugin>
