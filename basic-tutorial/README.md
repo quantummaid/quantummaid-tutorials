@@ -48,7 +48,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.11 \
+    -DarchetypeVersion=1.0.12 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -60,7 +60,7 @@ It generates the following in `./basic-tutorial`:
 - the Maven structure
 - an empty class `de.quantummaid.tutorials.GreetingUseCase`
 - an empty class `de.quantummaid.tutorials.WebService`
-- an empty test class `de.quantummaid.tutorials.GreetingTest`
+- an empty test class `de.quantummaid.tutorials.GreetingTest` (under `/src/main/test`)
 
 Once generated, look at the `pom.xml` file.
 In order to use QuantumMaid for creating web services, you need to add a dependency to it:
@@ -162,6 +162,17 @@ $ curl http://localhost:8080/hello
 
 ## Mapping request data
 
+**Note:** The following step requires your application to be compiled with the `-parameters` compile option.
+Doing so gives the QuantumMaid [runtime access to parameter names](http://openjdk.java.net/jeps/118) and
+enables it to map parameters automatically.
+If you bootstrapped the tutorial from the provided archetype, this option is already set. 
+Take a look [here](https://www.logicbig.com/how-to/java-command/java-compile-with-method-parameter-names.html) to learn
+how to configure this on your own.
+Also make sure that your IDE correctly adopted the `-parameters` option.
+If you need to set it manually, look [here](https://www.jetbrains.com/help/idea/specifying-compilation-settings.html#configure_compiler_settings)
+for IntelliJ IDEA and [here](https://stackoverflow.com/questions/9483315/where-do-you-configure-eclipse-java-compiler-javac-flags) for Eclipse.
+ 
+
 Let's make the `GreetingUseCase` slightly more complex by adding a parameter to its `hello()` method:
 
 <!---[CodeSnippet](usecase2)-->
@@ -208,18 +219,11 @@ public final class WebService {
 }
 ```
 
-You can now run the application again and try out the new functionality:
+Stop the old running application and start it again with the new functionality:
 ```
 $ curl http://localhost:8080/hello/quantummaid
 "hello quantummaid"
 ```
-
-**Note:** Mapping the `name` path parameter automatically to the `name` parameter in the `GreetingUseCase`
-is possible because we compiled the application with the `--parameters` compiler option.
-Doing so gives the QuantumMaid [runtime access to parameter names](http://openjdk.java.net/jeps/118) and
-enables it to determine the appropriate mapping automatically.
-Take a look [here](https://www.logicbig.com/how-to/java-command/java-compile-with-method-parameter-names.html) to learn
-how to configure this if you didn't start the tutorial from the provided archetype. 
 
 
 ## Dependency Injection
@@ -247,6 +251,7 @@ In the generated pom.xml file, you can see two test dependencies:
 allows for very readable test definitions. Despite its widespread use, `REST Assured`
 introduces the vulnerabilities [CVE-2016-6497](https://nvd.nist.gov/vuln/detail/CVE-2016-6497), [CVE-2016-5394](https://nvd.nist.gov/vuln/detail/CVE-2016-5394)
 and [CVE-2016-6798](https://nvd.nist.gov/vuln/detail/CVE-2016-6798) to your project.
+Please check for your project whether these vulnerabilities pose an actual threat.
 
 The generated project contains the `de.quantummaid.tutorials.GreetingTest` test class.
 Implement the test like this:
