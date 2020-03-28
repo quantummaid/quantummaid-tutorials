@@ -48,7 +48,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.12 \
+    -DarchetypeVersion=1.0.13 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -72,7 +72,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.16</version>
+            <version>1.0.17</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -231,7 +231,8 @@ $ curl http://localhost:8080/hello/quantummaid
 QuantumMaid supports dependency injection, but does not implement it.
 Out of the box, it is only able to instantiate classes that have a public constructor without any parameters
 (like our `GreetingUseCase`).
-It is recommended to use any existing dependency of choice. Look here for detailed instructions on
+It is recommended to use any existing dependency of choice. Look [here](https://github.com/quantummaid/httpmaid/blob/master/docs/12_UseCases/5_DependencyInjection.md)
+for detailed instructions on
 integrating popular dependency injection frameworks like [Guice](https://github.com/google/guice) and [Dagger](https://dagger.dev/).    
 
 ## Testing

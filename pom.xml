@@ -10,7 +10,7 @@
 
     <groupId>de.quantummaid.tutorials</groupId>
     <artifactId>parent</artifactId>
-    <version>1.0.12</version>
+    <version>1.0.13</version>
     <packaging>pom</packaging>
 
     <modules>
@@ -23,7 +23,7 @@
             <plugin>
                 <groupId>de.quantummaid</groupId>
                 <artifactId>documaid</artifactId>
-                <version>0.9.13</version>
+                <version>0.9.14</version>
                 <inherited>false</inherited>
                 <executions>
                     <execution>
