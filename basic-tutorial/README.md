@@ -85,7 +85,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
     </dependency>
 </dependencies>
 ```
-We also added a [BOM](https://medium.com/java-user-group-malta/maven-s-bill-of-materials-bom-b430ede60599) so we do not have to specify version numbers.
+We also added a [BOM](https://medium.com/java-user-group-malta/maven-s-bill-of-materials-bom-b430ede60599) so you do not have to specify version numbers.
 
 ## The first usecase
  
