@@ -163,7 +163,7 @@ $ curl http://localhost:8080/hello
 ## Mapping request data
 
 **Note:** The following step requires your application to be compiled with the `-parameters` compile option.
-Doing so gives the QuantumMaid [runtime access to parameter names](http://openjdk.java.net/jeps/118) and
+Doing so gives QuantumMaid [runtime access to parameter names](http://openjdk.java.net/jeps/118) and
 enables it to map parameters automatically.
 If you bootstrapped the tutorial from the provided archetype, this option is already set. 
 Take a look [here](https://www.logicbig.com/how-to/java-command/java-compile-with-method-parameter-names.html) to learn
