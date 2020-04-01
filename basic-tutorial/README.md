@@ -248,8 +248,8 @@ In the generated pom.xml file, you can see two test dependencies:
 </dependency>
 ```
 
-**Warning:** This tutorial uses the `REST Assured` library because it is well-known and
-allows for very readable test definitions. Despite its widespread use, `REST Assured`
+**Warning:** This tutorial uses the **REST Assured** library because it is well-known and
+allows for very readable test definitions. Despite its widespread use, REST Assured
 introduces the vulnerabilities [CVE-2016-6497](https://nvd.nist.gov/vuln/detail/CVE-2016-6497), [CVE-2016-5394](https://nvd.nist.gov/vuln/detail/CVE-2016-5394)
 and [CVE-2016-6798](https://nvd.nist.gov/vuln/detail/CVE-2016-6798) to your project.
 Please check for your project whether these vulnerabilities pose an actual threat.
@@ -289,6 +289,9 @@ public final class GreetingTest implements QuantumMaidProvider {
 ```
 Now you can run the test and verify that the application indeed behaves correctly.
 
+**Explanation:** By declaring the `@QuantumMaidTest` annotation, QuantumMaid will automatically create an application instance
+for every test and configure REST Assured accordingly. This way, you don't have to provide a URL in your tests or worry about port
+allocation and cleanup.
 
 ## Packaging the application
 QuantumMaid applications can be packaged in exactly the same way as every other normal Java
