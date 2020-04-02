@@ -48,7 +48,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.14 \
+    -DarchetypeVersion=1.0.15 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -72,7 +72,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.18</version>
+            <version>1.0.20</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -340,13 +340,20 @@ $ java -jar target/my-app-jar-with-dependencies.jar
 ```
 
 ## What's next?
-
 If you are interested in packaging a QuantumMaid application for specific targets, simply follow
 one of our advanced tutorials:
 
-[Packaging for AWS Lambda](../aws-lambda/README.md)
+Coming soon: [Packaging for AWS Lambda](../aws-lambda/README.md)
 
-[Packaging for Docker/Kubernetes](../docker/README.md)
+Coming soon: [Packaging for Docker/Kubernetes](../docker/README.md)
 
-[Packaging for Tomcat/JBoss/Glassfish](../war/README.md)
+Coming soon: [Packaging for Tomcat/JBoss/Glassfish](../war/README.md)
 
+## Did you like what you just read?
+Please do not hesitate to share your thoughts and criticism with us!
+We are always and directly available on [Slack](https://join.slack.com/t/quantummaid/shared_invite/zt-cx5qd605-vG10I~WazfgH9WOnXMzl3Q)
+and [Gitter](https://gitter.im/quantum-maid-framework/community). Every single piece of feedback will be accepted gratefully
+and receive undivided attention from our entire development team.
+Additionally, anyone who gives feedback will be mentioned in our contributors' list (unless you prefer to stay anonymous, of course). 
+
+Last but not least, please do not forget to follow us on [Twitter](https://twitter.com/quantummaid)!
