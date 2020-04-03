@@ -10,7 +10,6 @@
 
     <properties>
         <java.version>11</java.version>
-        <maven-compiler-plugin-version>3.8.1</maven-compiler-plugin-version>
     </properties>
 
     <build>
@@ -18,7 +17,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-compiler-plugin-version}</version>
+                <version>3.8.1</version>
                 <configuration>
                     <release>${java.version}</release>
                     <source>${java.version}</source>
@@ -28,28 +27,8 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>my-app</finalName>
-                            <archive>
-                                <manifest>
-                                    <mainClass>
-                                        de.quantummaid.tutorials.WebService
-                                    </mainClass>
-                                </manifest>
-                            </archive>
-                            <descriptorRefs>
-                                <descriptorRef>jar-with-dependencies</descriptorRef>
-                            </descriptorRefs>
-                        </configuration>
-                    </execution>
-                </executions>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.0.0-M4</version>
             </plugin>
         </plugins>
     </build>
