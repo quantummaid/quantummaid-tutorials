@@ -5,6 +5,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 
+## [1.0.16](https://github.com/quantummaid/quantummaid-tutorials/blob/master/README.md) - 2020-04-03
+### Changed
+- `pom.xml` of archetype
+- Wording in basic tutorial
+
 ## [1.0.15](https://github.com/quantummaid/quantummaid-tutorials/blob/master/README.md) - 2020-04-02
 ### Added
 - Feedback section.

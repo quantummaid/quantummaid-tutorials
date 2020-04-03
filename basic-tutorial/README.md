@@ -48,7 +48,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.15 \
+    -DarchetypeVersion=1.0.16 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -63,7 +63,7 @@ It generates the following in `./basic-tutorial`:
 - an empty test class `de.quantummaid.tutorials.GreetingTest` (under `/src/main/test`)
 
 Once generated, look at the `pom.xml` file.
-In order to use QuantumMaid for creating web services, you need to add a dependency to it:
+In order to use QuantumMaid for creating web services, you need to add a dependency:
 
 <!---[CodeSnippet](quantummaiddependency)-->
 ```xml
@@ -231,14 +231,14 @@ $ curl http://localhost:8080/hello/quantummaid
 QuantumMaid supports dependency injection, but does not implement it.
 Out of the box, it is only able to instantiate classes that have a public constructor without any parameters
 (like our `GreetingUseCase`).
-It is recommended to use any existing dependency of choice. Look [here](https://github.com/quantummaid/httpmaid/blob/master/docs/12_UseCases/5_DependencyInjection.md)
+It is recommended to use any existing dependency injection framework of your choice. Look [here](https://github.com/quantummaid/httpmaid/blob/master/docs/12_UseCases/5_DependencyInjection.md)
 for detailed instructions on
 integrating popular dependency injection frameworks like [Guice](https://github.com/google/guice) and [Dagger](https://dagger.dev/).    
 
 ## Testing
 
 Tests are an integral component of every application. QuantumMaid supports you in writing them.
-In the generated pom.xml file, you can see two test dependencies:
+Please add the following test dependency to your `pom.xml`:
 <!---[CodeSnippet](testdependency)-->
 ```xml
 <dependency>
@@ -248,14 +248,14 @@ In the generated pom.xml file, you can see two test dependencies:
 </dependency>
 ```
 
-**Warning:** This tutorial uses the **REST Assured** library because it is well-known and
+**Warning:** This tutorial uses the **REST Assured** library because it is well known and
 allows for very readable test definitions. Despite its widespread use, REST Assured
 introduces the vulnerabilities [CVE-2016-6497](https://nvd.nist.gov/vuln/detail/CVE-2016-6497), [CVE-2016-5394](https://nvd.nist.gov/vuln/detail/CVE-2016-5394)
 and [CVE-2016-6798](https://nvd.nist.gov/vuln/detail/CVE-2016-6798) to your project.
 Please check for your project whether these vulnerabilities pose an actual threat.
 
-The generated project contains the `de.quantummaid.tutorials.GreetingTest` test class.
-Implement the test like this:
+The generated project contains the empty `de.quantummaid.tutorials.GreetingTest` test class.
+Implement it like this:
 <!---[CodeSnippet](initializedtest)-->
 ```java
 package de.quantummaid.tutorials;
@@ -296,41 +296,36 @@ allocation and cleanup.
 ## Packaging the application
 QuantumMaid applications can be packaged in exactly the same way as every other normal Java
 application. A common way to achieve this would be to use the [maven-assembly-plugin](https://maven.apache.org/plugins/maven-assembly-plugin/usage.html).
-All you need to do is add the following code to your `pom.xml` and replace `de.quantummaid.tutorials.basic.step4.WebService` with the fully
-qualified domain name of your `WebService` class:
+All you need to do is to insert the following code into the `<plugins>...</plugins>` section of your `pom.xml`:
 
 <!---[CodeSnippet](mavenassemblyplugin)-->
 ```xml
-<build>
-    <plugins>
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-assembly-plugin</artifactId>
-            <version>3.2.0</version>
-            <executions>
-                <execution>
-                    <phase>package</phase>
-                    <goals>
-                        <goal>single</goal>
-                    </goals>
-                    <configuration>
-                        <finalName>my-app</finalName>
-                        <archive>
-                            <manifest>
-                                <mainClass>
-                                    de.quantummaid.tutorials.WebService
-                                </mainClass>
-                            </manifest>
-                        </archive>
-                        <descriptorRefs>
-                            <descriptorRef>jar-with-dependencies</descriptorRef>
-                        </descriptorRefs>
-                    </configuration>
-                </execution>
-            </executions>
-        </plugin>
-    </plugins>
-</build>
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-assembly-plugin</artifactId>
+    <version>3.2.0</version>
+    <executions>
+        <execution>
+            <phase>package</phase>
+            <goals>
+                <goal>single</goal>
+            </goals>
+            <configuration>
+                <finalName>my-app</finalName>
+                <archive>
+                    <manifest>
+                        <mainClass>
+                            de.quantummaid.tutorials.WebService
+                        </mainClass>
+                    </manifest>
+                </archive>
+                <descriptorRefs>
+                    <descriptorRef>jar-with-dependencies</descriptorRef>
+                </descriptorRefs>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
 ```
 
 You can now run `mvn clean package` and then find a fully packaged executable `.jar` file under `target/my-app-jar-with-dependencies.jar`.
