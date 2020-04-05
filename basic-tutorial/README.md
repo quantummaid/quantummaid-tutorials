@@ -1,4 +1,4 @@
-# QuantumMaid - Creating Your First Application
+# QuantumMaid - Creating your first application
 
 This tutorial will teach you how to create a basic QuantumMaid app. It covers:
 - Implementing a usecase
