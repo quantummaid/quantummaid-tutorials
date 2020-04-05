@@ -10,7 +10,7 @@
 
     <groupId>de.quantummaid.tutorials</groupId>
     <artifactId>parent</artifactId>
-    <version>1.0.16</version>
+    <version>1.0.17</version>
     <packaging>pom</packaging>
 
     <modules>
