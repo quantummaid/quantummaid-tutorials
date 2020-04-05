@@ -8,7 +8,7 @@ This tutorial will teach you how to create a basic QuantumMaid app. It covers:
 - Packaging of the application
 
 To follow this tutorial, you need:
-- JDK 11+ installed
+- JDK 11+
 - Apache Maven >3.5.3
 
 Make sure that Maven uses the correct Java version:
@@ -121,7 +121,7 @@ It’s a very simple configuration, binding the `GreetingUseCase` to `GET` reque
 **Differences to other frameworks**:
 With QuantumMaid, there is no need to add framework-specific annotations (JAX-RS, Spring WebMVC, etc.) to your classes. Their usage drastically decreases application start-up time and
 promotes less-than-optimal architecture. When done architecturally sane, they tend to come along with significant amounts of boilerplate code.
-You can find an in-depth analysis of the problem [here](../annotation-whitepaper/README.md).
+Please refer to our [in-depth analysis of the problem](../annotation-whitepaper/README.md) for details.
 
 In order to run our application, we need to bind HttpMaid to a port.
 This can be done by modifying the `WebService` class like this:
@@ -165,13 +165,11 @@ $ curl http://localhost:8080/hello
 **Note:** The following step requires your application to be compiled with the `-parameters` compile option.
 Doing so gives QuantumMaid [runtime access to parameter names](http://openjdk.java.net/jeps/118) and
 enables it to map parameters automatically.
-If you bootstrapped the tutorial from the provided archetype, this option is already set. 
-Take a look [here](https://www.logicbig.com/how-to/java-command/java-compile-with-method-parameter-names.html) to learn
-how to configure this on your own.
+If you bootstrapped the tutorial from the provided archetype, this option is already set.
+Otherwise, you need to [configure it on your own](https://www.logicbig.com/how-to/java-command/java-compile-with-method-parameter-names.html).
 Also make sure that your IDE correctly adopted the `-parameters` option.
-If you need to set it manually, look [here](https://www.jetbrains.com/help/idea/specifying-compilation-settings.html#configure_compiler_settings)
-for IntelliJ IDEA and [here](https://stackoverflow.com/questions/9483315/where-do-you-configure-eclipse-java-compiler-javac-flags) for Eclipse.
- 
+There are straightforward guides for [IntelliJ IDEA](https://www.jetbrains.com/help/idea/specifying-compilation-settings.html#configure_compiler_settings)
+and [Eclipse](https://stackoverflow.com/questions/9483315/where-do-you-configure-eclipse-java-compiler-javac-flag) in case you need to set it manually.
 
 Let's make the `GreetingUseCase` slightly more complex by adding a parameter to its `hello()` method:
 
@@ -191,7 +189,7 @@ Requests to `/hello/quantummaid` should result in the method being called as `he
 requests to `/hello/frodo` as `hello("frodo)`, etc.
 In traditional application frameworks, we achieve this by annotating the `name` parameter with something like the
 JAX-RS `@PathParam` annotation. Since QuantumMaid guarantees to keep your business logic 100% infrastructure agnostic under
-all circumstances, this not an option. Instead, we will modify the `WebService` class accordingly to tell HttpMaid
+all circumstances, this is not an option. Instead, we will modify the `WebService` class accordingly to tell HttpMaid
 to look into the request's path parameters in order to resolve the `name` parameter of the usecase method:
 
 <!---[CodeSnippet](webservice3)-->
@@ -231,9 +229,9 @@ $ curl http://localhost:8080/hello/quantummaid
 QuantumMaid supports dependency injection, but does not implement it.
 Out of the box, it is only able to instantiate classes that have a public constructor without any parameters
 (like our `GreetingUseCase`).
-It is recommended to use any existing dependency injection framework of your choice. Look [here](https://github.com/quantummaid/httpmaid/blob/master/docs/12_UseCases/5_DependencyInjection.md)
-for detailed instructions on
-integrating popular dependency injection frameworks like [Guice](https://github.com/google/guice) and [Dagger](https://dagger.dev/).    
+It is recommended to use any existing dependency injection framework of your choice.
+QuantumMaid provides
+[detailed instructions on integrating popular dependency injection frameworks like Guice and Dagger](https://github.com/quantummaid/httpmaid/blob/master/docs/12_UseCases/5_DependencyInjection.md).
 
 ## Testing
 
