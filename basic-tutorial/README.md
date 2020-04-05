@@ -1,7 +1,7 @@
 # QuantumMaid - Creating Your First Application
 
 This tutorial will teach you how to create a basic QuantumMaid app. It covers:
-- Implementing an usecase
+- Implementing a usecase
 - Exporting the implemented usecase via HTTP
 - Dependency injection
 - Writing an integration test
@@ -48,7 +48,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.16 \
+    -DarchetypeVersion=1.0.17 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -57,10 +57,10 @@ cd ./basic-tutorial
 ```
 
 It generates the following in `./basic-tutorial`:
-- the Maven structure
-- an empty class `de.quantummaid.tutorials.GreetingUseCase`
-- an empty class `de.quantummaid.tutorials.WebService`
-- an empty test class `de.quantummaid.tutorials.GreetingTest` (under `/src/main/test`)
+- The Maven structure
+- An empty class `de.quantummaid.tutorials.GreetingUseCase`
+- An empty class `de.quantummaid.tutorials.WebService`
+- An empty test class `de.quantummaid.tutorials.GreetingTest` (under `/src/main/test`)
 
 Once generated, look at the `pom.xml` file.
 In order to use QuantumMaid for creating web services, you need to add a dependency:
@@ -72,7 +72,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.20</version>
+            <version>1.0.22</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -226,7 +226,7 @@ $ curl http://localhost:8080/hello/quantummaid
 ```
 
 
-## Dependency Injection
+## Dependency injection
 
 QuantumMaid supports dependency injection, but does not implement it.
 Out of the box, it is only able to instantiate classes that have a public constructor without any parameters
