@@ -25,17 +25,6 @@ In order to serve the `GreetingUseCase` via the HTTP protocol we will create a `
 Furthermore, we will write an integration test.
 Finally, the application is packaged as an executable `.jar` file.
 
-## Skipping the tutorial
-
-The tutorial is intended to be developed gradually. However, if you don't feel like following every step,
-you can jump to the full source code.
-Download an [archive](https://github.com/quantummaid/quantummaid-tutorials/archive/master.zip) or clone the git repository:
-
-```bash
-$ git clone https://github.com/quantummaid/quantummaid-tutorials.git
-cd ./quantummaid-tutorials
-```
-
 The full step-by-step source code is located in the `./basic-tutorial` directory.
 
 

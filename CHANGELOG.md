@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Changed
 - Incorporated feedback into basic tutorial.
+### Removed
+- *Skip the tutorial* section.
 
 ## [1.0.17](https://github.com/quantummaid/quantummaid-tutorials/blob/master/README.md) - 2020-04-05
 ### Changed
