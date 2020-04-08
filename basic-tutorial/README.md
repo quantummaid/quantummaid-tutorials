@@ -1,4 +1,4 @@
-# QuantumMaid - Creating your first application
+# QuantumMaid - Create your first application
 
 This tutorial will teach you how to create a basic QuantumMaid application. It covers:
 - Implementing a usecase
@@ -89,7 +89,7 @@ public final class GreetingUseCase {
 }
 ```
  
-It’s a very simple usecase, returning `"hello"` to all invocations of `hello()`.
+It’s a very simple usecase, returning `"hello world"` to all invocations of `hello()`.
  
 **Note:** The usecase class does not contain any references or imports to actual web technology like JXR-RS annotations. It is completely infrastructure agnostic.
 
@@ -103,7 +103,7 @@ HttpMaid.anHttpMaid()
         .get("/helloworld", GreetingUseCase.class)
         .build();
 ```
-The configuration binds the `GreetingUseCase` to `GET` requests to `/helloworld`, which will then be answered with `"hello"`.
+The configuration binds the `GreetingUseCase` to `GET` requests to `/helloworld`, which will then be answered with `"hello world"`.
 
 In order to run our application, we need to bind HttpMaid to a port.
 This can be done by modifying the `WebService` class like this:
@@ -137,7 +137,7 @@ Now we can run the application. Just start it normally by executing the `main()`
 Once started, you can verify that it works as intended like this:
 ```
 $ curl http://localhost:8080/helloworld
-"hello"
+"hello world"
 ```
 
 **Note:** With QuantumMaid, there is no need to add framework-specific annotations (JAX-RS, Spring WebMVC, etc.) to your classes. Their usage drastically decreases application start-up time and
