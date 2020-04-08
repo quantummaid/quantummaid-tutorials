@@ -10,7 +10,7 @@
 
 # QuantumMaid Tutorials
 
-[Creating your first application](basic-tutorial/README.md) (~15 minutes)
+[Create your first application](basic-tutorial/README.md) (~15 minutes)
 
 Coming soon: [Full production-grade application](complete-tutorial/README.md) (~45 minutes)
 
