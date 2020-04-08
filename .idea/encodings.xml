@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/archetypes" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/archetypes/basic-archetype" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/basic" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/basic-tutorial" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/basic-tutorial/step1" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/basic-tutorial/step2" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/basic-tutorial/step3" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/basic-tutorial/step4" charset="UTF-8" />
+  </component>
+</project>
