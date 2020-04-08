@@ -34,7 +34,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.18 \
+    -DarchetypeVersion=1.0.19 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -84,7 +84,7 @@ package de.quantummaid.tutorials;
 public final class GreetingUseCase {
 
     public String hello() {
-        return "hello";
+        return "hello world";
     }
 }
 ```
