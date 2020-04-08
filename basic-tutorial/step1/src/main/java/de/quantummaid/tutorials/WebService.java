@@ -28,7 +28,7 @@ public final class WebService {
     public static void main(final String[] args) {
         //Showcase start httpmaid
         HttpMaid.anHttpMaid()
-                .get("/hello", GreetingUseCase.class)
+                .get("/helloworld", GreetingUseCase.class)
                 .build();
         //Showcase end httpmaid
     }

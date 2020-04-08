@@ -1,6 +1,6 @@
 # QuantumMaid - Creating your first application
 
-This tutorial will teach you how to create a basic QuantumMaid app. It covers:
+This tutorial will teach you how to create a basic QuantumMaid application. It covers:
 - Implementing a usecase
 - Exporting the implemented usecase via HTTP
 - Dependency injection
@@ -37,7 +37,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.17 \
+    -DarchetypeVersion=1.0.18 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -61,7 +61,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.22</version>
+            <version>1.0.23</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -92,8 +92,9 @@ public final class GreetingUseCase {
 }
 ```
  
-It’s a very simple usecase, returning `"hello"` to all invocations of `hello()`. Note that it doesn't contain
-any references or imports to actual web technology like JXR-RS annotations. It is completely infrastructure agnostic.
+It’s a very simple usecase, returning `"hello"` to all invocations of `hello()`.
+ 
+**Note:** The usecase class does not contain any references or imports to actual web technology like JXR-RS annotations. It is completely infrastructure agnostic.
 
 ## Exporting the usecase
 Since the `GreetingUseCase` class does specify how the usecase should be served using HTTP, that particular aspect needs to be configured outside of the class.
@@ -102,15 +103,10 @@ It can be configured like this (do not add it to the project yet):
 <!---[CodeSnippet](httpmaid)-->
 ```java
 HttpMaid.anHttpMaid()
-        .get("/hello", GreetingUseCase.class)
+        .get("/helloworld", GreetingUseCase.class)
         .build();
 ```
-It’s a very simple configuration, binding the `GreetingUseCase` to `GET` requests to `/hello`, which will then be answered with `"hello"`.
-
-**Differences to other frameworks**:
-With QuantumMaid, there is no need to add framework-specific annotations (JAX-RS, Spring WebMVC, etc.) to your classes. Their usage drastically decreases application start-up time and
-promotes less-than-optimal architecture. When done architecturally sane, they tend to come along with significant amounts of boilerplate code.
-Please refer to our [in-depth analysis of the problem](../annotation-whitepaper/README.md) for details.
+The configuration binds the `GreetingUseCase` to `GET` requests to `/helloworld`, which will then be answered with `"hello"`.
 
 In order to run our application, we need to bind HttpMaid to a port.
 This can be done by modifying the `WebService` class like this:
@@ -125,17 +121,17 @@ import de.quantummaid.quantummaid.QuantumMaid;
 public final class WebService {
     private static final int PORT = 8080;
 
+    public static void main(final String[] args) {
+        createQuantumMaid(PORT).run();
+    }
+
     public static QuantumMaid createQuantumMaid(final int port) {
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/hello", GreetingUseCase.class)
+                .get("/helloworld", GreetingUseCase.class)
                 .build();
         return QuantumMaid.quantumMaid()
                 .withHttpMaid(httpMaid)
                 .withLocalHostEndpointOnPort(port);
-    }
-
-    public static void main(final String[] args) {
-        createQuantumMaid(PORT).run();
     }
 }
 ```
@@ -143,22 +139,27 @@ public final class WebService {
 Now we can run the application. Just start it normally by executing the `main()`-method.
 Once started, you can verify that it works as intended like this:
 ```
-$ curl http://localhost:8080/hello
+$ curl http://localhost:8080/helloworld
 "hello"
 ```
+
+**Note:** With QuantumMaid, there is no need to add framework-specific annotations (JAX-RS, Spring WebMVC, etc.) to your classes. Their usage drastically decreases application start-up time and
+promotes less-than-optimal architecture. When done architecturally sane, they tend to come along with significant amounts of boilerplate code.
+Please refer to our [in-depth analysis of the problem](../annotation-whitepaper/README.md) for details.
 
 **Note**: Skip to the bottom of this tutorial for real-world deployments like **Docker** and **AWS Lambda**.
 
 ## Mapping request data
 
-**Note:** The following step requires your application to be compiled with the `-parameters` compile option.
+**Prerequisite (only necessary if you did not use the provided archetype):** The following step requires your application to be compiled with the `-parameters` compile option.
 Doing so gives QuantumMaid [runtime access to parameter names](http://openjdk.java.net/jeps/118) and
 enables it to map parameters automatically.
 If you bootstrapped the tutorial from the provided archetype, this option is already set.
 Otherwise, you need to [configure it on your own](https://www.logicbig.com/how-to/java-command/java-compile-with-method-parameter-names.html).
 Also make sure that your IDE correctly adopted the `-parameters` option.
 There are straightforward guides for [IntelliJ IDEA](https://www.jetbrains.com/help/idea/specifying-compilation-settings.html#configure_compiler_settings)
-and [Eclipse](https://stackoverflow.com/questions/9483315/where-do-you-configure-eclipse-java-compiler-javac-flag) in case you need to set it manually.
+and [Eclipse](https://stackoverflow.com/questions/9483315/where-do-you-configure-eclipse-java-compiler-javac-flag) in case you need to set it manually
+(note that it is a compiler option - not a VM option).
 
 Let's make the `GreetingUseCase` slightly more complex by adding a parameter to its `hello()` method:
 
@@ -173,13 +174,8 @@ public final class GreetingUseCase {
     }
 }
 ```
-Our goal is to map a so-called HTTP path parameter to the `name` parameter.
-Requests to `/hello/quantummaid` should result in the method being called as `hello("quantummaid")`,
-requests to `/hello/frodo` as `hello("frodo)`, etc.
-In traditional application frameworks, we achieve this by annotating the `name` parameter with something like the
-JAX-RS `@PathParam` annotation. Since QuantumMaid guarantees to keep your business logic 100% infrastructure agnostic under
-all circumstances, this is not an option. Instead, we will modify the `WebService` class accordingly to tell HttpMaid
-to look into the request's path parameters in order to resolve the `name` parameter of the usecase method:
+
+Modify the `WebService` class to resolve the `name` parameter:
 
 <!---[CodeSnippet](webservice3)-->
 ```java
@@ -191,6 +187,10 @@ import de.quantummaid.quantummaid.QuantumMaid;
 public final class WebService {
     private static final int PORT = 8080;
 
+    public static void main(final String[] args) {
+        createQuantumMaid(PORT).run();
+    }
+
     public static QuantumMaid createQuantumMaid(final int port) {
         final HttpMaid httpMaid = HttpMaid.anHttpMaid()
                 .get("/hello/<name>", GreetingUseCase.class)
@@ -198,10 +198,6 @@ public final class WebService {
         return QuantumMaid.quantumMaid()
                 .withHttpMaid(httpMaid)
                 .withLocalHostEndpointOnPort(port);
-    }
-
-    public static void main(final String[] args) {
-        createQuantumMaid(PORT).run();
     }
 }
 ```
@@ -212,6 +208,12 @@ $ curl http://localhost:8080/hello/quantummaid
 "hello quantummaid"
 ```
 
+**Explanation:** We configured HttpMaid to map a so-called HTTP path parameter to the `name` parameter.
+Requests to `/hello/quantummaid` should result in the method being called as `hello("quantummaid")`,
+requests to `/hello/frodo` as `hello("frodo)`, etc.
+In traditional application frameworks, we achieve this by annotating the `name` parameter with something like the
+JAX-RS `@PathParam` annotation. Since QuantumMaid guarantees to keep your business logic 100% infrastructure agnostic under
+all circumstances, this is not an option. 
 
 ## Dependency injection
 
@@ -224,7 +226,6 @@ QuantumMaid provides
 
 ## Testing
 
-Tests are an integral component of every application. QuantumMaid supports you in writing them.
 Please add the following test dependency to your `pom.xml`:
 <!---[CodeSnippet](testdependency)-->
 ```xml
@@ -235,14 +236,7 @@ Please add the following test dependency to your `pom.xml`:
 </dependency>
 ```
 
-**Warning:** This tutorial uses the **REST Assured** library because it is well known and
-allows for very readable test definitions. Despite its widespread use, REST Assured
-introduces the vulnerabilities [CVE-2016-6497](https://nvd.nist.gov/vuln/detail/CVE-2016-6497), [CVE-2016-5394](https://nvd.nist.gov/vuln/detail/CVE-2016-5394)
-and [CVE-2016-6798](https://nvd.nist.gov/vuln/detail/CVE-2016-6798) to your project.
-Please check for your project whether these vulnerabilities pose an actual threat.
-
-The generated project contains the empty `de.quantummaid.tutorials.GreetingTest` test class.
-Implement it like this:
+Implement the empty `de.quantummaid.tutorials.GreetingTest` test class like this:
 <!---[CodeSnippet](initializedtest)-->
 ```java
 package de.quantummaid.tutorials;
@@ -280,6 +274,12 @@ Now you can run the test and verify that the application indeed behaves correctl
 for every test and configure REST Assured accordingly. This way, you don't have to provide a URL in your tests or worry about port
 allocation and cleanup.
 
+**Warning:** This tutorial uses the **REST Assured** library because it is well known and
+allows for very readable test definitions. Despite its widespread use, REST Assured
+introduces the vulnerabilities [CVE-2016-6497](https://nvd.nist.gov/vuln/detail/CVE-2016-6497), [CVE-2016-5394](https://nvd.nist.gov/vuln/detail/CVE-2016-5394)
+and [CVE-2016-6798](https://nvd.nist.gov/vuln/detail/CVE-2016-6798) to your project.
+Please check for your project whether these vulnerabilities pose an actual threat.
+
 ## Packaging the application
 QuantumMaid applications can be packaged in exactly the same way as every other normal Java
 application. A common way to achieve this would be to use the [maven-assembly-plugin](https://maven.apache.org/plugins/maven-assembly-plugin/usage.html).
@@ -298,7 +298,8 @@ All you need to do is to insert the following code into the `<plugins>...</plugi
                 <goal>single</goal>
             </goals>
             <configuration>
-                <finalName>my-app</finalName>
+                <finalName>quantummaid-app</finalName>
+                <appendAssemblyId>false</appendAssemblyId>
                 <archive>
                     <manifest>
                         <mainClass>
@@ -315,10 +316,14 @@ All you need to do is to insert the following code into the `<plugins>...</plugi
 </plugin>
 ```
 
-You can now run `mvn clean package` and then find a fully packaged executable `.jar` file under `target/my-app-jar-with-dependencies.jar`.
+You can now tell Maven to package your application:
+```bash
+mvn clean package
+```
+Afterwards, you will find a fully packaged executable `.jar` file under `target/quantummaid-app.jar`.
 To start it, just run:
 ```bash
-$ java -jar target/my-app-jar-with-dependencies.jar
+$ java -jar target/quantummaid-app.jar
 ```
 
 ## What's next?
