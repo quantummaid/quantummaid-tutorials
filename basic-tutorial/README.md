@@ -5,9 +5,9 @@ This tutorial will teach you how to create a basic QuantumMaid application. It c
 - Exporting the implemented usecase via HTTP
 - Dependency injection
 - Writing an integration test
-- Packaging of the application
+- Packaging the application
 
-To follow this tutorial, you need:
+To follow the tutorial, you need:
 - JDK 11+
 - Apache Maven >3.5.3
 
@@ -24,9 +24,6 @@ The usecase will be implemented as a plain Java class by the name `GreetingUseCa
 In order to serve the `GreetingUseCase` via the HTTP protocol we will create a `WebService` class.
 Furthermore, we will write an integration test.
 Finally, the application is packaged as an executable `.jar` file.
-
-The full step-by-step source code is located in the `./basic-tutorial` directory.
-
 
 ## Bootstrapping the project
 QuantumMaid does not require your project to follow a specific format.
@@ -318,7 +315,7 @@ All you need to do is to insert the following code into the `<plugins>...</plugi
 
 You can now tell Maven to package your application:
 ```bash
-mvn clean package
+$ mvn clean package
 ```
 Afterwards, you will find a fully packaged executable `.jar` file under `target/quantummaid-app.jar`.
 To start it, just run:
