@@ -16,7 +16,7 @@ Make sure that Maven uses the correct Java version:
 $ mvn -version
 ```
 
-## What we are going to do
+## 1. What we are going to do
 
 In the next 15 minutes, we will create a simple application.
 It should offer the trivial usecase of greeting the user with a simple `"Hello"` message.
@@ -25,7 +25,7 @@ In order to serve the `GreetingUseCase` via the HTTP protocol we will create a `
 Furthermore, we will write an integration test.
 Finally, the application is packaged as an executable `.jar` file.
 
-## Bootstrapping the project
+## 2. Bootstrapping the project
 QuantumMaid does not require your project to follow a specific format.
 To start the tutorial, just run the following command:
 
@@ -73,7 +73,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
 ```
 We also added a [BOM](https://medium.com/java-user-group-malta/maven-s-bill-of-materials-bom-b430ede60599) so you do not have to specify version numbers.
 
-## The first usecase
+## 3. The first usecase
  
 To start the project, modify the `GreetingUseCase` class to contain the following content:
 
@@ -93,7 +93,7 @@ It’s a very simple usecase, returning `"hello world"` to all invocations of `h
  
 **Note:** The usecase class does not contain any references or imports to actual web technology like JXR-RS annotations. It is completely infrastructure agnostic.
 
-## Exporting the usecase
+## 4. Exporting the usecase
 Since the `GreetingUseCase` class does specify how the usecase should be served using HTTP, that particular aspect needs to be configured outside of the class.
 To achieve this, we will use QuantumMaid's **HttpMaid** sub-project specialized on everything related to the web.
 It can be configured like this (do not add it to the project yet):
@@ -146,7 +146,7 @@ Please refer to our [in-depth analysis of the problem](../annotation-whitepaper/
 
 **Note**: Skip to the bottom of this tutorial for real-world deployments like **Docker** and **AWS Lambda**.
 
-## Mapping request data
+## 5. Mapping request data
 
 **Prerequisite (only necessary if you did not use the provided archetype):** The following step requires your application to be compiled with the `-parameters` compile option.
 Doing so gives QuantumMaid [runtime access to parameter names](http://openjdk.java.net/jeps/118) and
@@ -212,7 +212,7 @@ In traditional application frameworks, we achieve this by annotating the `name` 
 JAX-RS `@PathParam` annotation. Since QuantumMaid guarantees to keep your business logic 100% infrastructure agnostic under
 all circumstances, this is not an option. 
 
-## Dependency injection
+## 6. Dependency injection
 
 QuantumMaid supports dependency injection, but does not implement it.
 Out of the box, it is only able to instantiate classes that have a public constructor without any parameters
@@ -221,7 +221,7 @@ It is recommended to use any existing dependency injection framework of your cho
 QuantumMaid provides
 [detailed instructions on integrating popular dependency injection frameworks like Guice and Dagger](https://github.com/quantummaid/httpmaid/blob/master/docs/12_UseCases/5_DependencyInjection.md).
 
-## Testing
+## 7. Testing
 
 Please add the following test dependency to your `pom.xml`:
 <!---[CodeSnippet](testdependency)-->
@@ -277,7 +277,7 @@ introduces the vulnerabilities [CVE-2016-6497](https://nvd.nist.gov/vuln/detail/
 and [CVE-2016-6798](https://nvd.nist.gov/vuln/detail/CVE-2016-6798) to your project.
 Please check for your project whether these vulnerabilities pose an actual threat.
 
-## Packaging the application
+## 8. Packaging the application
 QuantumMaid applications can be packaged in exactly the same way as every other normal Java
 application. A common way to achieve this would be to use the [maven-assembly-plugin](https://maven.apache.org/plugins/maven-assembly-plugin/usage.html).
 All you need to do is to insert the following code into the `<plugins>...</plugins>` section of your `pom.xml`:
@@ -323,7 +323,7 @@ To start it, just run:
 $ java -jar target/quantummaid-app.jar
 ```
 
-## What's next?
+## 9. What's next?
 If you are interested in packaging a QuantumMaid application for specific targets, simply follow
 one of our advanced tutorials:
 
@@ -333,7 +333,7 @@ Coming soon: [Packaging for Docker/Kubernetes](../docker/README.md)
 
 Coming soon: [Packaging for Tomcat/JBoss/Glassfish](../war/README.md)
 
-## Did you like what you just read?
+## 10. Did you like what you just read?
 Please do not hesitate to share your thoughts and criticism with us!
 We are always and directly available on [Slack](https://join.slack.com/t/quantummaid/shared_invite/zt-cx5qd605-vG10I~WazfgH9WOnXMzl3Q)
 and [Gitter](https://gitter.im/quantum-maid-framework/community). Every single piece of feedback will be accepted gratefully
