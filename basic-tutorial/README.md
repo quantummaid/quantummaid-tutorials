@@ -34,7 +34,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.19 \
+    -DarchetypeVersion=1.0.20 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
