@@ -42,6 +42,21 @@ mvn archetype:generate \
 cd ./basic-tutorial
 ```
 
+If you are following the tutorial on a Windows computer, you can alternatively use this command:
+
+```bash
+mvn archetype:generate ^
+    --batch-mode ^
+    -DarchetypeGroupId=de.quantummaid.tutorials.archetypes ^
+    -DarchetypeArtifactId=basic-archetype ^
+    -DarchetypeVersion=1.0.21 ^
+    -DgroupId=de.quantummaid.tutorials ^
+    -DartifactId=basic-tutorial ^
+    -Dversion=1.0.0 ^
+    -Dpackaging=java
+cd ./basic-tutorial
+```
+
 It generates the following in `./basic-tutorial`:
 - The Maven structure
 - An empty class `de.quantummaid.tutorials.GreetingUseCase`
@@ -58,7 +73,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.26</version>
+            <version>1.0.28</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
