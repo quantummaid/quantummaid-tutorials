@@ -23,6 +23,7 @@
 
 package de.quantummaid.tutorials;
 
+@SuppressWarnings("java:S3400")
 public final class GreetingUseCase {
 
     public String hello() {
