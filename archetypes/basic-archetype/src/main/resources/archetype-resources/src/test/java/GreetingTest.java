@@ -1,4 +1,4 @@
-package de.quantummaid.tutorials;
+package ${groupId};
 
 public final class GreetingTest {
 }
