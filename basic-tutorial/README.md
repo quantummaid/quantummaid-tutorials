@@ -34,7 +34,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.26 \
+    -DarchetypeVersion=1.0.27 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -49,7 +49,7 @@ mvn archetype:generate ^
     --batch-mode ^
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes ^
     -DarchetypeArtifactId=basic-archetype ^
-    -DarchetypeVersion=1.0.26 ^
+    -DarchetypeVersion=1.0.27 ^
     -DgroupId=de.quantummaid.tutorials ^
     -DartifactId=basic-tutorial ^
     -Dversion=1.0.0 ^
@@ -73,7 +73,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.43</version>
+            <version>1.0.46</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -350,7 +350,7 @@ Coming soon: [Packaging for Tomcat/JBoss/Glassfish](../war/README.md)
 
 ## 10. Did you like what you just read?
 Please do not hesitate to share your thoughts and criticism with us!
-We are always and directly available on [Slack](https://join.slack.com/t/quantummaid/shared_invite/zt-cx5qd605-vG10I~WazfgH9WOnXMzl3Q)
+We are always and directly available on [Slack](https://quantummaid.de/community.html)
 and [Gitter](https://gitter.im/quantum-maid-framework/community). Every single piece of feedback will be accepted gratefully
 and receive undivided attention from our entire development team.
 Additionally, anyone who gives feedback will be mentioned in our contributors' list (unless you prefer to stay anonymous, of course). 
