@@ -73,7 +73,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.47</version>
+            <version>1.0.49</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
