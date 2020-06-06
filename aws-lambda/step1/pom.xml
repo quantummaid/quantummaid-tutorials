@@ -1,0 +1,19 @@
+<project>
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.quantummaid.tutorials.aws-lambda</groupId>
+    <artifactId>aws-lambda-step1</artifactId>
+    <version>1.0.0</version>
+    <properties>
+        <java.version>11</java.version>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+    </properties>
+    <dependencies>
+        <dependency>
+            <groupId>de.quantummaid.quantummaid.packagings</groupId>
+            <artifactId>quantummaid-essentials</artifactId>
+            <version>1.0.50</version>
+        </dependency>
+    </dependencies>
+</project>

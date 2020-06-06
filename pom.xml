@@ -16,6 +16,7 @@
     <name>QuantumMaid Tutorials</name>
 
     <modules>
+        <module>aws-lambda</module>
         <module>basic-tutorial</module>
         <module>archetypes</module>
     </modules>
