@@ -7,7 +7,7 @@ This tutorial shows how to deploy your QuantumMaid application to AWS Lambda. Yo
 
 You should be aware that this tutorial may incur costs if you go beyond the usage allowed by the free tier.
 
-## Step 1: Creating a minimal viable function
+## Step 1: Minimal viable function
 
 The simplest function we can deploy says Hello World when you issue a GET request to '/', as described in QuantumMaid's [Getting Started](https://quantummaid.de/docs/01_gettingstarted.html)
 
@@ -72,9 +72,9 @@ public final class Main {
 }
 ```
 
-## Step 2: Adding the Lambda Handler
+## Step 2: Adding the AWS Lambda capability
 
-## Extracting HttpMaid's initialization
+### Extracting HttpMaid's initialization
 
 The HttpMaid initialization code will be exactly the same whether we run the code as a local http endpoint or as an AWS Lambda function.
 
@@ -104,7 +104,7 @@ In order for that initialization code to be shared, we first need to extract it 
 
 ```
 
-## Adding the Lambda dependency
+### Adding the Lambda dependency
 
 Lambda integration is provided through an additional HttpMaid dependency.
 
@@ -116,7 +116,7 @@ Lambda integration is provided through an additional HttpMaid dependency.
 </dependency>
 ```
 
-## Adding the Lambda endpoint adapter
+### Adding the Lambda endpoint adapter
 
 Once the httpmaid-lambda dependency is added, a new class is now available to bridge the HttpMaid world and the AWS Lambda World: `AwsLambdaEndpoint`.
 
@@ -133,7 +133,7 @@ We can initialize it in a static field of the Main class, so that the initializa
 +
 ```
 
-## Implementing the RequestHandler interface
+### Implementing the RequestHandler interface
 
 The AWS Lambda Java runtime expects the entrypoint method to have [one of two possible signatures](https://docs.aws.amazon.com/lambda/latest/dg/java-handler.html#java-handler-interfaces):
 
