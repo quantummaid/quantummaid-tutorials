@@ -162,13 +162,145 @@ The method implementation should forward all calls to the adapter.
 +
 ```
 
-The signature
+## Step 3: Running the AWS Lambda function locally
 
-Handler
+Before we're in a position to deploy the function to AWS Lambda, there are a few preliminary steps we need to go through.
 
-The convention with AWS Lambda is to add a `Handler` class that contains a method whose signature is expected by the AWS Lambda Runtime.
+### Running the function using SAM Local
 
-As it currently stands, we can run the function as a local http server, which greatly helps with local debugging. We want to maintain that ability. So let's split the HttpMaid
+It's easy to get lost in the details of java function packaging for local and remote deployment, as the landscape is constantly changing.
+
+In order to cut down on the discovery time for best practices, we'll leverage the templates created by SAM CLI's `sam init` command.
+
+```shell
+$ sam init --name tmp --runtime java11 --dependency-manager maven --app-template hello-world ➊
+
+Cloning app templates from https://github.com/awslabs/aws-sam-cli-app-templates.git
+$ tree tmp
+tmp/
+├── events
+│   └── event.json
+├── HelloWorldFunction
+│   ├── pom.xml
+│   └── src
+│       ├── main
+│       │   └── java
+│       │       └── helloworld
+│       │           ├── App.java
+│       │           └── GatewayResponse.java
+│       └── test
+│           └── java
+│               └── helloworld
+│                   └── AppTest.java
+├── README.md
+└── template.yaml ➋
+```
+
+➊ Since we'll only use the generated project for reference, the project name (`--name tmp`) does **NOT** matter.
+
+➋ We'll need this, in order to run and deploy the function locally.
+
+The other important fragment is in the generated template.yml (➌):
+
+```yml
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+...
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: HelloWorldFunction
+      Handler: helloworld.App::handleRequest
+      Runtime: java11
+      MemorySize: 512
+      ...
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+```
+
+We need to make a couple modifications to the template.yml before SAM CLI can work with our function.
+
+- First create a template.yml file in the same directory as _our_ pom.xml.
+- Copy and paste the yml fragment above (without the `...` lines!) into the newly created `template.yml`, and make the following modifications:
+
+  ```diff
+  -      CodeUri: HelloWorldFunction
+  -      Handler: helloworld.App::handleRequest
+  +      CodeUri: . # ➍
+  +      Handler: de.quantummaid.tutorials.Main::handleRequest # ➎
+  ```
+
+➍ Indicates to sam cli that the pom.xml is in the same directory as template.yml, not in a HelloWorldFunction subdirectory.
+
+➎ Needs to point to our fully qualified class name and handler method.
+
+We are finally able to try our function locally!
+
+```
+$ sam build
+Building resource 'HelloWorldFunction'
+Running JavaMavenWorkflow:CopySource
+Running JavaMavenWorkflow:MavenBuild
+Running JavaMavenWorkflow:MavenCopyDependency
+Running JavaMavenWorkflow:MavenCopyArtifacts
+
+Build Succeeded
+
+Built Artifacts  : .aws-sam/build
+Built Template   : .aws-sam/build/template.yaml
+
+Commands you can use next
+=========================
+[*] Invoke Function: sam local invoke
+[*] Deploy: sam deploy --guided
+$ sam local invoke
+$ sam local invoke
+Invoking de.quantummaid.tutorials.Main::handleRequest (java11)
+
+Fetching lambci/lambda:java11 Docker container image......
+Mounting /home/lestephane/GitRepos/quantummaid-tutorials/aws-lambda/step3/.aws-sam/build/HelloWorldFunction as /var/task:ro,delegated inside runtime container
+START RequestId: 94dc6c61-db46-10e3-a3a9-8c84352e2ed0 Version: $LATEST
+09:29:53.293 [main] ERROR de.quantummaid.httpmaid.HttpMaid - Exception in endpoint request handling
+java.lang.NullPointerException: null
+	at de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint.lambda$delegate$0(AwsLambdaEndpoint.java:59)
+	at de.quantummaid.httpmaid.HttpMaid.handleRequest(HttpMaid.java:77)
+	at de.quantummaid.httpmaid.HttpMaid.handleRequestSynchronously(HttpMaid.java:66)
+	at de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint.delegate(AwsLambdaEndpoint.java:54)
+	at de.quantummaid.tutorials.Main.handleRequest(Main.java:18)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+	at lambdainternal.EventHandlerLoader$PojoMethodRequestHandler.handleRequest(EventHandlerLoader.java:280)
+	at lambdainternal.EventHandlerLoader$PojoHandlerAsStreamHandler.handleRequest(EventHandlerLoader.java:197)
+	at lambdainternal.EventHandlerLoader$2.call(EventHandlerLoader.java:897)
+	at lambdainternal.AWSLambda.startRuntime(AWSLambda.java:228)
+	at lambdainternal.AWSLambda.startRuntime(AWSLambda.java:162)
+	at lambdainternal.AWSLambda.main(AWSLambda.java:157)
+object must not be null: de.quantummaid.httpmaid.util.CustomTypeValidationException
+de.quantummaid.httpmaid.util.CustomTypeValidationException: object must not be null
+	at de.quantummaid.httpmaid.util.CustomTypeValidationException.customTypeValidationException(CustomTypeValidationException.java:32)
+	at de.quantummaid.httpmaid.util.Validators.validateNotNull(Validators.java:33)
+	at de.quantummaid.httpmaid.endpoint.SynchronizationWrapper.getObject(SynchronizationWrapper.java:42)
+	at de.quantummaid.httpmaid.HttpMaid.handleRequestSynchronously(HttpMaid.java:70)
+	at de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint.delegate(AwsLambdaEndpoint.java:54)
+	at de.quantummaid.tutorials.Main.handleRequest(Main.java:18)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)
+	at java.base/java.lang.reflect.Method.invoke(Unknown Source)
+
+END RequestId: 94dc6c61-db46-10e3-a3a9-8c84352e2ed0
+REPORT RequestId: 94dc6c61-db46-10e3-a3a9-8c84352e2ed0	Init Duration: 1297.73 ms	Duration: 50.08 ms	Billed Duration: 100 ms	Memory Size: 512 MB	Max Memory Used: 85 MB
+
+{"errorType":"de.quantummaid.httpmaid.util.CustomTypeValidationException","errorMessage":"object must not be null","stackTrace":["de.quantummaid.httpmaid.util.CustomTypeValidationException.customTypeValidationException(CustomTypeValidationException.java:32)","de.quantummaid.httpmaid.util.Validators.validateNotNull(Validators.java:33)","de.quantummaid.httpmaid.endpoint.SynchronizationWrapper.getObject(SynchronizationWrapper.java:42)","de.quantummaid.httpmaid.HttpMaid.handleRequestSynchronously(HttpMaid.java:70)","de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint.delegate(AwsLambdaEndpoint.java:54)","de.quantummaid.tutorials.Main.handleRequest(Main.java:18)","java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke0(Native Method)","java.base/jdk.internal.reflect.NativeMethodAccessorImpl.invoke(Unknown Source)","java.base/jdk.internal.reflect.DelegatingMethodAccessorImpl.invoke(Unknown Source)","java.base/java.lang.reflect.Method.invoke(Unknown Source)"]}
+```
+
 
 ---
 
