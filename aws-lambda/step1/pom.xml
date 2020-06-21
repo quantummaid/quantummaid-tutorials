@@ -1,4 +1,3 @@
-<!-- Showcase start initialPomXml -->
 <project>
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.quantummaid.tutorials.aws-lambda</groupId>
@@ -18,4 +17,3 @@
         </dependency>
     </dependencies>
 </project>
-<!-- Showcase end initialPomXml -->

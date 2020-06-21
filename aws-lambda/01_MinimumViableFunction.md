@@ -19,11 +19,12 @@ The simplest function we can deploy says Hello World when you issue a GET reques
 
 ## pom.xml
 
+<!---[CodeSnippet](file=step1/pom.xml)-->
 ```xml
 <project>
     <modelVersion>4.0.0</modelVersion>
-    <groupId>de.quantummaid.tutorials</groupId>
-    <artifactId>aws-lambda</artifactId>
+    <groupId>de.quantummaid.tutorials.aws-lambda</groupId>
+    <artifactId>aws-lambda-step1</artifactId>
     <version>1.0.0</version>
     <properties>
         <java.version>11</java.version>
@@ -43,6 +44,7 @@ The simplest function we can deploy says Hello World when you issue a GET reques
 
 ## Main.java
 
+<!---[CodeSnippet](file=step1/src/main/java/de/quantummaid/tutorials/Main.java)-->
 ```java
 package de.quantummaid.tutorials;
 
@@ -61,6 +63,7 @@ public final class Main {
     quantumMaid.runAsynchronously();
   }
 }
+
 ```
 
 ## Running locally
