@@ -15,4 +15,5 @@ target
 
 # sam cli
 .aws-sam
+samconfig.toml
 

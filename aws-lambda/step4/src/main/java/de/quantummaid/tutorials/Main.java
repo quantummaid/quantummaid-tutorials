@@ -12,12 +12,15 @@ public final class Main {
   private static final AwsLambdaEndpoint ADAPTER = awsLambdaEndpointFor(httpMaidConfig());
 
   public Map<String, Object> handleRequest(Map<String, Object> request) {
+    System.err.println(request.toString());
     return ADAPTER.delegate(request);
   }
 
   private static HttpMaid httpMaidConfig() {
     final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-        .get("/helloworld", (request, response) -> response.setBody("Hello World!"))
+        .get("/hello/<who>", (request, response) -> response.setBody(
+            String.format("Hello %s!",
+                request.pathParameters().getPathParameter("who"))))
         .build();
     return httpMaid;
   }

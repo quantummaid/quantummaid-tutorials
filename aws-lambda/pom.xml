@@ -8,8 +8,8 @@
         <version>1.0.29</version>
     </parent>
 
-    <groupId>de.quantummaid.tutorials.aws-lambda</groupId>
-    <artifactId>parent</artifactId>
+    <groupId>de.quantummaid.tutorials</groupId>
+    <artifactId>aws-lambda-parent</artifactId>
     <version>1.0.29</version>
     <packaging>pom</packaging>
 
@@ -17,6 +17,7 @@
         <module>step1</module>
         <module>step2</module>
         <module>step3</module>
+        <module>step4</module>
     </modules>
 
     <!--<properties>

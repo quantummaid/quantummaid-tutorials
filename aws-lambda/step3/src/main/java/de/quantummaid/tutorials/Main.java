@@ -1,21 +1,26 @@
 package de.quantummaid.tutorials;
 
-import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint;
 import de.quantummaid.quantummaid.QuantumMaid;
 
+import java.util.Map;
+
 import static de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint.awsLambdaEndpointFor;
 
-public final class Main implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public final class Main {
   private static final AwsLambdaEndpoint ADAPTER = awsLambdaEndpointFor(httpMaidConfig());
 
-  @Override
-  public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context ctx) {
-    return ADAPTER.delegate(request, ctx);
+  public Map<String, Object> handleRequest(Map<String, Object> request) {
+    System.err.println(request.toString());
+    return ADAPTER.delegate(request);
+  }
+
+  private static HttpMaid httpMaidConfig() {
+    final HttpMaid httpMaid = HttpMaid.anHttpMaid()
+        .get("/helloworld", (request, response) -> response.setBody("Hello World!"))
+        .build();
+    return httpMaid;
   }
 
   public static void main(String[] args) {
@@ -25,12 +30,5 @@ public final class Main implements RequestHandler<APIGatewayProxyRequestEvent, A
         .withHttpMaid(httpMaid)
         .withLocalHostEndpointOnPort(port);
     quantumMaid.runAsynchronously();
-  }
-
-  private static HttpMaid httpMaidConfig() {
-    final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-        .get("/", (request, response) -> response.setBody("Hello World!"))
-        .build();
-    return httpMaid;
   }
 }
