@@ -16,14 +16,16 @@ public final class Main {
     return ADAPTER.delegate(request);
   }
 
+  //Showcase start step4HttpMaidConfig
   private static HttpMaid httpMaidConfig() {
     final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-        .get("/hello/<who>", (request, response) -> response.setBody(
+        .get("/hello/<whoever-you-are>", (request, response) -> response.setBody(
             String.format("Hello %s!",
-                request.pathParameters().getPathParameter("who"))))
+                request.pathParameters().getPathParameter("whoever-you-are"))))
         .build();
     return httpMaid;
   }
+  //Showcase end step4HttpMaidConfig
 
   public static void main(String[] args) {
     final int port = 8080;

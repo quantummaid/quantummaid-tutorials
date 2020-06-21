@@ -2,22 +2,24 @@
 
 (Full source code: [step4 directory](step4))
 
-A function that returns "Hello World!" is not very useful.
-We'll make the returned `Hello message [vary based on the url path](https://quantummaid.de/docs/2_httpmaid/04_handlingrequests.html#request-route-and-path-parameters).
+## /hello/<whoever-you-are>
 
+A function that returns "Hello World!" is not very useful.
+We'll make the returned Hello message [vary based on the url path](https://quantummaid.de/docs/2_httpmaid/04_handlingrequests.html#request-route-and-path-parameters).
+
+<!---[CodeSnippet](step4HttpMaidConfig)-->
 ```java
-public final class Main {
-  //...
-  private static HttpMaid httpMaidConfig() {
-    final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-        .get("/hello/<who>", (request, response) -> response.setBody(
-            String.format("Hello, %s!",
-                request.pathParameters().getPathParameter("who"))))
-        .build();
-    return httpMaid;
-  }
+private static HttpMaid httpMaidConfig() {
+  final HttpMaid httpMaid = HttpMaid.anHttpMaid()
+      .get("/hello/<whoever-you-are>", (request, response) -> response.setBody(
+          String.format("Hello %s!",
+              request.pathParameters().getPathParameter("whoever-you-are"))))
+      .build();
+  return httpMaid;
 }
 ```
+
+## Updating the function using SAM CLI
 
 To deploy the change, use the same command pair as in step 3.
 This time however, we don't need to answer any questions, because previous answers are saved to `samconfig.toml`
@@ -29,12 +31,16 @@ $ sam deploy
 Successfully created/updated stack - hello-app in us-east-1
 ```
 
+## Viewing logs using SAM CLI
+
 Before we invoke the url, let's tail the logs, which will give us some interesting details on our function execution(s).
 In a separate terminal, run:
 
 ```shell
 $ sam logs --tail --region us-east-1 --stack-name hello-app --name HelloWorldFunction
 ```
+
+## Getting runtime statistics
 
 Back in the terminal where you ran `sam deploy`, run:
 
@@ -77,6 +83,9 @@ Having this log output at hand allows us to immediately draw a few conclusions:
 - The HttpMaid overhead is flat beyond the first invocation (<5ms)
 - The network latency is quite high here (200ms per request). Maybe we can switch to an edge-optimized api.
 - If performance is important, 1100ms is still unaccounted for and needs investigation. It could be TLS negotiation, or something else.
-- The memory configuration of our function could be lowered from 512mb to something much closer to the memory used (101mb), 128mb for example.
+- We can save money by reducing `MemorySize` in `template.yml` from 512mb to something much closer to the maximum reported memory usage (101mb), say, 128mb.
 
-You now have the necessary building blocks to make your HttpMaid code Lambda capable, and to dig deeper into its runtime characteristics in AWS Lambda.
+You now have the necessary building blocks to make your HttpMaid code AWS Lambda capable,
+and to get information about its runtime characteristics, for further tweaking.
+
+Next, we are going to cleanup the resources we created for this tutorial, so as not to incur any unwanted costs.
