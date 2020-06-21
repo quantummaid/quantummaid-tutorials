@@ -5,12 +5,12 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: de.quantummaid.tutorials.Main::handleRequest
+      Handler: de.quantummaid.tutorials.Main::handleRequest # ➊
       Runtime: java11
       MemorySize: 512
       Events:
         HelloWorldHttpApi:
-          Type: HttpApi
+          Type: HttpApi     # ➋
           Properties:
-            Path: /{proxy+}
-            Method: ANY
+            Path: /{proxy+} # ➌
+            Method: ANY     # ➍

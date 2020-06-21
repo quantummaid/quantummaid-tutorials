@@ -8,15 +8,13 @@ The HttpMaid initialization code will be exactly the same whether we run the cod
 
 In order for HttpMaid's initialization code to be shared between the local mode and the lambda mode, we first need to extract it to a new method in the `Main` class:
 
+<!---[CodeSnippet](step2HttpMaidConfig)-->
 ```java
-public final class Main {
-  //...
-  private static HttpMaid httpMaidConfig() {
-    final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-        .get("/", (request, response) -> response.setBody("Hello World!"))
-        .build();
-    return httpMaid;
-  }
+private static HttpMaid httpMaidConfig() {
+  final HttpMaid httpMaid = HttpMaid.anHttpMaid()
+      .get("/helloworld", (request, response) -> response.setBody("Hello World!"))
+      .build();
+  return httpMaid;
 }
 ```
 
@@ -24,11 +22,12 @@ public final class Main {
 
 Lambda integration is provided through an additional HttpMaid dependency:
 
+<!---[CodeSnippet](step2HttpMaidDependency)-->
 ```xml
 <dependency>
-  <groupId>de.quantummaid.httpmaid.integrations</groupId>
-  <artifactId>httpmaid-awslambda</artifactId>
-  <version>0.9.67</version>
+    <groupId>de.quantummaid.httpmaid.integrations</groupId>
+    <artifactId>httpmaid-awslambda</artifactId>
+    <version>0.9.67</version>
 </dependency>
 ```
 
@@ -39,39 +38,42 @@ We should initialize an instance of AwsLambdaEndpoint in a static field of the M
 - The time taken to initialize HttpMaid does not count towards the execution time of the lambda function.
 - The intent to initialize HttpMaid once per VM lifetime is made clear.
 
+<!---[CodeSnippet](step2AdapterDeclaration1)-->
 ```java
 import de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint;
 import static de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint.awsLambdaEndpointFor;
+```
 
+<!---[CodeSnippet](step2AdapterDeclaration2)-->
+```java
 public final class Main {
   private static final AwsLambdaEndpoint ADAPTER = awsLambdaEndpointFor(httpMaidConfig());
   //...
-}
 ```
 
 ## Implementing the request handling method
 
-The request handling method must forward all calls to the `AwsLambdaEndpoint` adapter we just added.
+The request handling method is the method that will be invoked by the AWS Lambda java runtime, and must forward all calls to the `AwsLambdaEndpoint` adapter we just added.
 
+<!---[CodeSnippet](step2RequestHandlingMethod)-->
 ```java
-public final class Main {
-  //...
-  public Map<String, Object> handleRequest(Map<String, Object> request) {
-    return ADAPTER.delegate(request);
-  }
+public Map<String, Object> handleRequest(Map<String, Object> request) {
+  return ADAPTER.delegate(request);
 }
 ```
 
 While the method's parameter type and return type are fixed (both must be `Map<String, Object>`), the method can be named whatever we like.
-Next, we will reference this method name in the SAM template.
+We will reference this method name in the SAM template.
 
 ## Adding the SAM template (template.yml)
 
 Regular CloudFormation templates are rather verbose when deploying AWS Lambda functions, so we will use an AWS Serverless Application Model (SAM) template instead.
 
+<!---[CodeSnippet](file=step3/template.yml)-->
 ```yaml
-AWSTemplateFormatVersion: "2010-09-09"
+AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
+
 Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
@@ -81,10 +83,11 @@ Resources:
       MemorySize: 512
       Events:
         HelloWorldHttpApi:
-          Type: HttpApi # ➋
+          Type: HttpApi     # ➋
           Properties:
             Path: /{proxy+} # ➌
-            Method: ANY # ➍
+            Method: ANY     # ➍
+
 ```
 
 ➊ The `Handler` property is _[fully qualified Main class name]_`::`_[request handling method name]_.
@@ -93,3 +96,4 @@ Resources:
 
 ➌➍ This means that requests to ➌ any path depth (`/`, `/helloworld`, `/hello/...`), using ➍ any method (GET, HEAD, PUT, POST,...), will be handled by our HttpMaid function. These parameters are fixed and required for a so-called [Lambda proxy integration](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html).
 
+Next, we are going to deploy our function to AWS Lambda.
