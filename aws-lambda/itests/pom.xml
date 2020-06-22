@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>de.quantummaid.tutorials</groupId>
+    <artifactId>aws-lambda-itests</artifactId>
+    <version>1.0.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>de.quantummaid.tutorials</groupId>
+            <artifactId>aws-lambda-step4</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>sam-build-and-deploy</id>
+                        <phase>pre-integration-test</phase>
+                        <configuration>
+                            <target><exec executable="src/main/scripts/sam-build-and-deploy.sh"/></target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>run-integration-tests</id>
+                        <phase>integration-test</phase>
+                        <configuration>
+                            <target><exec executable="src/main/scripts/run-integration-tests.sh"/></target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                    <!--<execution>
+                        <id>sam-cleanup</id>
+                        <phase>post-integration-test</phase>
+                        <configuration>
+                            <target><exec executable="src/main/scripts/sam-cleanup.sh"/></target>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>-->
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>
