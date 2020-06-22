@@ -1,16 +1,1 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: AWS::Serverless-2016-10-31
-
-Resources:
-  HelloWorldFunction:
-    Type: AWS::Serverless::Function
-    Properties:
-      Handler: de.quantummaid.tutorials.Main::handleRequest
-      Runtime: java11
-      MemorySize: 512
-      Events:
-        HelloWorldHttpApi:
-          Type: HttpApi
-          Properties:
-            Path: /{proxy+}
-            Method: ANY
+../step3/template.yml
