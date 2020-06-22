@@ -63,4 +63,7 @@ Hello World!
 
 Congratulations, you've now successfully deployed your first HttpMaid function to AWS!
 
-Next, Let's deploy a change to our function.
+Next, we'll deploy a change to our function.
+
+<!---[Nav]-->
+[&larr;](02_AddingLambdaSupport.md)&nbsp;&nbsp;&nbsp;[Overview](README.md)&nbsp;&nbsp;&nbsp;[&rarr;](04_UpdatingOurFunction.md)

@@ -92,3 +92,8 @@ We can convince ourselves that the function is deployed using the curl command:
 $ echo $(curl http://localhost:8080/helloworld)
 Hello World!
 ```
+
+Next, we'll add lambda support to our function.
+
+<!---[Nav]-->
+[Overview](README.md)&nbsp;&nbsp;&nbsp;[&rarr;](02_AddingLambdaSupport.md)

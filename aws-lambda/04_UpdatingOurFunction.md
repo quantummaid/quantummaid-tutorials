@@ -89,3 +89,6 @@ You now have the necessary building blocks to make your HttpMaid code AWS Lambda
 and to get information about its runtime characteristics, for further tweaking.
 
 Next, we are going to cleanup the resources we created for this tutorial, so as not to incur any unwanted costs.
+
+<!---[Nav]-->
+[&larr;](03_DeployingOurFunction.md)&nbsp;&nbsp;&nbsp;[Overview](README.md)&nbsp;&nbsp;&nbsp;[&rarr;](05_CleaningUp.md)

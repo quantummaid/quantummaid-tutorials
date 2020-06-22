@@ -97,3 +97,6 @@ Resources:
 ➌➍ This means that requests to ➌ any path depth (`/`, `/helloworld`, `/hello/...`), using ➍ any method (GET, HEAD, PUT, POST,...), will be handled by our HttpMaid function. These parameters are fixed and required for a so-called [Lambda proxy integration](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html).
 
 Next, we are going to deploy our function to AWS Lambda.
+
+<!---[Nav]-->
+[&larr;](01_MinimumViableFunction.md)&nbsp;&nbsp;&nbsp;[Overview](README.md)&nbsp;&nbsp;&nbsp;[&rarr;](03_DeployingOurFunction.md)
