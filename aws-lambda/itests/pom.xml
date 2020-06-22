@@ -6,6 +6,14 @@
     <groupId>de.quantummaid.tutorials</groupId>
     <artifactId>aws-lambda-itests</artifactId>
     <version>1.0.0</version>
+
+    <properties>
+        <java.version>11</java.version>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>de.quantummaid.tutorials</groupId>
@@ -13,17 +21,57 @@
             <version>${project.version}</version>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <!--
+            The profile used when sam build is invoked (which internally calls 'mvn clean install').
+            If we don't disable this, mvn spawns itself in a recursive fashion, eventually leading
+            to memory exhaustion.
+          -->
+        <profile>
+            <id>sam-cli</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <skip.integration.tests>true</skip.integration.tests>
+            </properties>
+        </profile>
+        <!--
+            The profile used when one invokes 'mvn verify -P integration-tests' in the CI pipeline
+          -->
+        <profile>
+            <id>integration-tests</id>
+            <properties>
+                <skip.integration.tests>false</skip.integration.tests>
+                <skip.infrastructure.cleanup>true</skip.infrastructure.cleanup>
+            </properties>
+        </profile>
+        <profile>
+            <id>clean-integration-tests</id>
+            <properties>
+                <skip.integration.tests>false</skip.integration.tests>
+                <skip.infrastructure.cleanup>false</skip.infrastructure.cleanup>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <plugins>
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>3.0.0</version>
+                <configuration>
+                    <skip>${skip.integration.tests}</skip>
+                </configuration>
                 <executions>
                     <execution>
                         <id>sam-build-and-deploy</id>
                         <phase>pre-integration-test</phase>
                         <configuration>
-                            <target><exec executable="src/main/scripts/sam-build-and-deploy.sh"/></target>
+                            <target>
+                                <exec failonerror="true" executable="src/main/scripts/sam-build-and-deploy.sh"/>
+                            </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
@@ -33,22 +81,26 @@
                         <id>run-integration-tests</id>
                         <phase>integration-test</phase>
                         <configuration>
-                            <target><exec executable="src/main/scripts/run-integration-tests.sh"/></target>
+                            <target>
+                                <exec failonerror="true" executable="src/main/scripts/run-integration-tests.sh"/>
+                            </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
                     </execution>
-                    <!--<execution>
+                    <execution>
                         <id>sam-cleanup</id>
                         <phase>post-integration-test</phase>
                         <configuration>
-                            <target><exec executable="src/main/scripts/sam-cleanup.sh"/></target>
+                            <target unless="${skip.infrastructure.cleanup}">
+                                <exec failonerror="false" executable="src/main/scripts/sam-cleanup.sh"/>
+                            </target>
                         </configuration>
                         <goals>
                             <goal>run</goal>
                         </goals>
-                    </execution>-->
+                    </execution>
                 </executions>
             </plugin>
         </plugins>

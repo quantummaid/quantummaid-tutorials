@@ -3,8 +3,6 @@
 my_dir="$(dirname "$(readlink -e "$0")")"
 source "${my_dir}/common.sh"
 
-exit 0
-
 readonly lambda_file="cf-lambda.yml"
 readonly bucket_file="cf-bucket.yml"
 

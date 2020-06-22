@@ -1,1 +1,23 @@
-../step4/template.yml
+AWSTemplateFormatVersion: 2010-09-09
+Description: quantummaid tutorials lambda function
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: de.quantummaid.tutorials.Main::handleRequest
+      Runtime: java11
+      MemorySize: 512
+      Tracing: Active
+      Events:
+        HelloWorldRestApi:
+          Type: Api
+          Properties:
+            Path: /RestApi/{proxy+}
+            Method: ANY
+        HelloWorldHttpApi:
+          Type: HttpApi
+          Properties:
+            Path: /HttpApi/{proxy+}
+            Method: ANY
