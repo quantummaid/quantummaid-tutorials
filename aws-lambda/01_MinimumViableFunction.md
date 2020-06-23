@@ -21,17 +21,28 @@ The simplest function we can deploy says Hello World when you issue a GET reques
 
 <!---[CodeSnippet](file=step1/pom.xml)-->
 ```xml
-<project>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.quantummaid.tutorials</groupId>
+        <artifactId>aws-lambda-parent</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
     <groupId>de.quantummaid.tutorials.aws-lambda</groupId>
     <artifactId>aws-lambda-step1</artifactId>
     <version>1.0.0</version>
+
     <properties>
         <java.version>11</java.version>
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
+        <plugin-update-file-checksum>35fe547b725ca8e71b0d13c8c21894df</plugin-update-file-checksum>
     </properties>
+
     <dependencies>
         <dependency>
             <groupId>de.quantummaid.quantummaid.packagings</groupId>
@@ -40,6 +51,7 @@ The simplest function we can deploy says Hello World when you issue a GET reques
         </dependency>
     </dependencies>
 </project>
+
 ```
 
 ## Main.java

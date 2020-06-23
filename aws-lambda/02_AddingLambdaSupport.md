@@ -71,7 +71,8 @@ Regular CloudFormation templates are rather verbose when deploying AWS Lambda fu
 
 <!---[CodeSnippet](file=step3/template.yml)-->
 ```yaml
-AWSTemplateFormatVersion: '2010-09-09'
+AWSTemplateFormatVersion: 2010-09-09
+Description: quantummaid tutorials lambda function
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
