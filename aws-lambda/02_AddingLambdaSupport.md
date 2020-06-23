@@ -4,9 +4,9 @@
 
 ## Extracting HttpMaid's initialization code
 
-The HttpMaid initialization code will be exactly the same whether we run the code as a local http endpoint or as an AWS Lambda function.
+The HttpMaid initialization code will be exactly the same whether we run the code as a local HTTP endpoint or as an AWS Lambda function.
 
-In order for HttpMaid's initialization code to be shared between the local mode and the lambda mode, we first need to extract it to a new method in the `Main` class:
+In order for HttpMaid's initialization code to be shared between the local mode and the Lambda mode, we first need to extract it to a new method in the `Main` class:
 
 <!---[CodeSnippet](step2HttpMaidConfig)-->
 ```java
@@ -31,11 +31,11 @@ Lambda integration is provided through an additional HttpMaid dependency:
 </dependency>
 ```
 
-Once the httpmaid-lambda dependency is added, a new class is available to bridge the HttpMaid world and the AWS Lambda world: `AwsLambdaEndpoint`.
+Once the `httpmaid-lambda` dependency is added, a new class is available to bridge the HttpMaid world and the AWS Lambda world: `AwsLambdaEndpoint`.
 
-We should initialize an instance of AwsLambdaEndpoint in a static field of the Main class, so that:
+We should initialize an instance of `AwsLambdaEndpoint` in a static field of the `Main` class, so that:
 
-- The time taken to initialize HttpMaid does not count towards the execution time of the lambda function.
+- The time taken to initialize HttpMaid does not count towards the execution time of the Lambda function.
 - The intent to initialize HttpMaid once per VM lifetime is made clear.
 
 <!---[CodeSnippet](step2AdapterDeclaration1)-->
@@ -53,7 +53,7 @@ public final class Main {
 
 ## Implementing the request handling method
 
-The request handling method is the method that will be invoked by the AWS Lambda java runtime, and must forward all calls to the `AwsLambdaEndpoint` adapter we just added.
+The request handling method is the method that will be invoked by the AWS Lambda Java runtime, and must forward all calls to the `AwsLambdaEndpoint` adapter we just added.
 
 <!---[CodeSnippet](step2RequestHandlingMethod)-->
 ```java
@@ -94,7 +94,7 @@ Resources:
 
 ➋ Use `Type: Api` if you want to use REST API instead of HTTP API. We use HTTP API because it's [_faster, lower cost and simpler to use_](https://aws.amazon.com/blogs/compute/building-better-apis-http-apis-now-generally-available/).
 
-➌➍ This means that requests to ➌ any path depth (`/`, `/helloworld`, `/hello/...`), using ➍ any method (GET, HEAD, PUT, POST,...), will be handled by our HttpMaid function. These parameters are fixed and required for a so-called [Lambda proxy integration](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html).
+➌➍ This means that requests to ➌ any path depth (`/`, `/helloworld`, `/hello/...`), using ➍ any method (`GET`, `HEAD`, `PUT`, `POST`, etc.), will be handled by our HttpMaid function. These parameters are fixed and required for a so-called [Lambda proxy integration](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html).
 
 Next, we are going to deploy our function to AWS Lambda.
 

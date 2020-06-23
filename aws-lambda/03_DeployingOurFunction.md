@@ -8,7 +8,7 @@ SAM CLI takes care of building, packaging, uploading and deploying the function 
 
 But it does need to ask a few questions the first time you deploy the function.
 
-For this tutorial, we only deviate from the defaults for the Stack Name (`hello-app ➎`) and for the confirmation that it is okay for HelloWorldFunction to not have any authorization defined (`Is this okay? [y/N]: y ➏`).
+For this tutorial, we only deviate from the defaults for the Stack Name (`hello-app ➎`) and for the confirmation that it is okay for `HelloWorldFunction` to not have any authorization defined (`Is this okay? [y/N]: y ➏`).
 The function only returns a string, and does not call any AWS API on the server side, so authorization is not needed.
 
 ```shell
@@ -52,7 +52,7 @@ $ apiId=$(aws cloudformation describe-stack-resource \
 $ apiUrl=$(printf "https://%s.execute-api.%s.amazonaws.com" $apiId $region)
 ```
 
-Past this point, `apiUrl` contains the api's invocation URL.
+Past this point, `apiUrl` contains the API's invocation URL.
 
 Let us now invoke the deployed function, to verify that it is working:
 
