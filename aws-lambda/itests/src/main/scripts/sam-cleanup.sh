@@ -7,6 +7,8 @@ function progress() {
   echo -e "\n==>" "$@"
 }
 
+source "${my_dir}/shared.envrc"
+
 progress "removing lambda stack..."
 aws cloudformation delete-stack --region "${region}" --stack-name "${lambda_stack_name}"
 
