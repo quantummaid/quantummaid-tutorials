@@ -21,15 +21,14 @@
 
 package de.quantummaid.tutorials;
 
-import de.quantummaid.httpmaid.HttpMaid;
+import de.quantummaid.quantummaid.QuantumMaid;
 
 public final class WebService {
 
     public static void main(final String[] args) {
         //Showcase start httpmaid
-        HttpMaid.anHttpMaid()
-                .get("/helloworld", GreetingUseCase.class)
-                .build();
+        QuantumMaid.quantumMaid()
+                .get("/helloworld", GreetingUseCase.class);
         //Showcase end httpmaid
     }
 }
