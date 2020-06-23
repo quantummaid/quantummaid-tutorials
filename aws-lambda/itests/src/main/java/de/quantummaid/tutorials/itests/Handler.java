@@ -16,6 +16,7 @@ public class Handler {
 
   private static HttpMaid httpMaidConfig() {
     final HttpMaid httpMaid = HttpMaid.anHttpMaid()
+        .get("/helloworld", (request, response) -> response.setBody("Hello world!"))
         .get("/hello/<whoever-you-are>", (request, response) -> response.setBody(
             String.format("Hello %s!",
                 request.pathParameters().getPathParameter("whoever-you-are"))))

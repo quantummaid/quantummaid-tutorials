@@ -1,10 +1,22 @@
 #!/usr/bin/env bash
 
+set -euo pipefail
 my_dir="$(dirname "$(readlink -e "$0")")"
-source "${my_dir}/common.sh"
 
-banner "removing lambda stack..."
+function progress() {
+  echo -e "\n==>" "$@"
+}
+
+progress "removing lambda stack..."
 aws cloudformation delete-stack --region "${region}" --stack-name "${lambda_stack_name}"
 
-banner "removing bucket stack..."
+progress "emptying source bucket..."
+python3 -c "
+import boto3
+s3 = boto3.resource('s3')
+bucket = s3.Bucket('${bucket_name}')
+bucket.object_versions.delete()
+"
+
+progress "removing source bucket stack..."
 aws cloudformation delete-stack --region "${region}" --stack-name "${bucket_stack_name}"
