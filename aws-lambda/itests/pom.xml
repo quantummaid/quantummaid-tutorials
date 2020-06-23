@@ -35,6 +35,8 @@
             </activation>
             <properties>
                 <skip.integration.tests>true</skip.integration.tests>
+                <skip.infrastructure.cleanup>N/A</skip.infrastructure.cleanup>
+                <sam.deploy.args/>
             </properties>
         </profile>
         <!--
@@ -45,6 +47,7 @@
             <properties>
                 <skip.integration.tests>false</skip.integration.tests>
                 <skip.infrastructure.cleanup>true</skip.infrastructure.cleanup>
+                <sam.deploy.args/>
             </properties>
         </profile>
         <profile>
@@ -52,6 +55,7 @@
             <properties>
                 <skip.integration.tests>false</skip.integration.tests>
                 <skip.infrastructure.cleanup>false</skip.infrastructure.cleanup>
+                <sam.deploy.args>--force-upload</sam.deploy.args>
             </properties>
         </profile>
     </profiles>
@@ -70,7 +74,9 @@
                         <phase>pre-integration-test</phase>
                         <configuration>
                             <target>
-                                <exec failonerror="true" executable="src/main/scripts/sam-build-and-deploy.sh"/>
+                                <exec failonerror="true" executable="src/main/scripts/sam-build-and-deploy.sh">
+                                    <env key="SAM_DEPLOY_ARGS" value="${sam.deploy.args}"/>
+                                </exec>
                             </target>
                         </configuration>
                         <goals>

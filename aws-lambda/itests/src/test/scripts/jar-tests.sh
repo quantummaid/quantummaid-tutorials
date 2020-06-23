@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 my_dir="$(dirname "$(readlink -e "$0")")"
-source "${my_dir}/.envrc"
+source "${my_dir}/shared.envrc"
 
 testThatLambdaCodeSizeIsLessThanOnePointFiveMegs() {
     readonly local function_name="$(aws cloudformation describe-stack-resource \

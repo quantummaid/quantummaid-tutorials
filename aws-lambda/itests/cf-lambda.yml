@@ -3,6 +3,12 @@ Description: quantummaid tutorials lambda function
 Transform: AWS::Serverless-2016-10-31
 
 Resources:
+  HelloWorldRestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      TracingEnabled: true
+
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -14,6 +20,7 @@ Resources:
         HelloWorldRestApi:
           Type: Api
           Properties:
+            RestApiId: !Ref HelloWorldRestApi
             Path: /{proxy+}
             Method: ANY
         HelloWorldHttpApi:
