@@ -23,7 +23,6 @@
 
 package de.quantummaid.tutorials;
 
-import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.quantummaid.QuantumMaid;
 
 public final class WebService {
@@ -34,11 +33,8 @@ public final class WebService {
     }
 
     public static QuantumMaid createQuantumMaid(final int port) {
-        final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/helloworld", GreetingUseCase.class)
-                .build();
         return QuantumMaid.quantumMaid()
-                .withHttpMaid(httpMaid)
+                .get("/helloworld", GreetingUseCase.class)
                 .withLocalHostEndpointOnPort(port);
     }
 }
