@@ -34,7 +34,7 @@ mvn archetype:generate \
     --batch-mode \
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes \
     -DarchetypeArtifactId=basic-archetype \
-    -DarchetypeVersion=1.0.27 \
+    -DarchetypeVersion=1.0.31 \
     -DgroupId=de.quantummaid.tutorials \
     -DartifactId=basic-tutorial \
     -Dversion=1.0.0 \
@@ -49,7 +49,7 @@ mvn archetype:generate ^
     --batch-mode ^
     -DarchetypeGroupId=de.quantummaid.tutorials.archetypes ^
     -DarchetypeArtifactId=basic-archetype ^
-    -DarchetypeVersion=1.0.27 ^
+    -DarchetypeVersion=1.0.31 ^
     -DgroupId=de.quantummaid.tutorials ^
     -DartifactId=basic-tutorial ^
     -Dversion=1.0.0 ^
@@ -73,7 +73,7 @@ In order to use QuantumMaid for creating web services, you need to add a depende
         <dependency>
             <groupId>de.quantummaid.quantummaid</groupId>
             <artifactId>quantummaid-bom</artifactId>
-            <version>1.0.49</version>
+            <version>1.0.51</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -110,24 +110,22 @@ It’s a very simple usecase, returning `"hello world"` to all invocations of `h
 
 ## 4. Exporting the usecase
 Since the `GreetingUseCase` class does specify how the usecase should be served using HTTP, that particular aspect needs to be configured outside of the class.
-To achieve this, we will use QuantumMaid's **HttpMaid** sub-project specialized on everything related to the web.
-It can be configured like this (do not add it to the project yet):
+Since the `GreetingUseCase` class does not specify how the usecase should be served using HTTP,
+that particular aspect needs to be configured outside of the class (do not add it to the project yet):
 <!---[CodeSnippet](httpmaid)-->
 ```java
-HttpMaid.anHttpMaid()
-        .get("/helloworld", GreetingUseCase.class)
-        .build();
+QuantumMaid.quantumMaid()
+        .get("/helloworld", GreetingUseCase.class);
 ```
 The configuration binds the `GreetingUseCase` to `GET` requests to `/helloworld`, which will then be answered with `"hello world"`.
 
-In order to run our application, we need to bind HttpMaid to a port.
+In order to run our application, we need to bind QuantumMaid to a port.
 This can be done by modifying the `WebService` class like this:
 
 <!---[CodeSnippet](webservice2)-->
 ```java
 package de.quantummaid.tutorials;
 
-import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.quantummaid.QuantumMaid;
 
 public final class WebService {
@@ -138,11 +136,8 @@ public final class WebService {
     }
 
     public static QuantumMaid createQuantumMaid(final int port) {
-        final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/helloworld", GreetingUseCase.class)
-                .build();
         return QuantumMaid.quantumMaid()
-                .withHttpMaid(httpMaid)
+                .get("/helloworld", GreetingUseCase.class)
                 .withLocalHostEndpointOnPort(port);
     }
 }
@@ -193,7 +188,6 @@ Modify the `WebService` class to resolve the `name` parameter:
 ```java
 package de.quantummaid.tutorials;
 
-import de.quantummaid.httpmaid.HttpMaid;
 import de.quantummaid.quantummaid.QuantumMaid;
 
 public final class WebService {
@@ -204,11 +198,8 @@ public final class WebService {
     }
 
     public static QuantumMaid createQuantumMaid(final int port) {
-        final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-                .get("/hello/<name>", GreetingUseCase.class)
-                .build();
         return QuantumMaid.quantumMaid()
-                .withHttpMaid(httpMaid)
+                .get("/hello/<name>", GreetingUseCase.class)
                 .withLocalHostEndpointOnPort(port);
     }
 }
@@ -220,7 +211,7 @@ $ curl http://localhost:8080/hello/quantummaid
 "hello quantummaid"
 ```
 
-**Explanation:** We configured HttpMaid to map a so-called HTTP path parameter to the `name` parameter.
+**Explanation:** We configured QuantumMaid to map a so-called HTTP path parameter to the `name` parameter.
 Requests to `/hello/quantummaid` should result in the method being called as `hello("quantummaid")`,
 requests to `/hello/frodo` as `hello("frodo)`, etc.
 In traditional application frameworks, we achieve this by annotating the `name` parameter with something like the
@@ -231,9 +222,8 @@ all circumstances, this is not an option.
 
 QuantumMaid supports dependency injection, but does not implement it.
 Out of the box, it is only able to instantiate classes that have a public constructor without any parameters
-(like our `GreetingUseCase`).
-It is recommended to use any existing dependency injection framework of your choice.
-QuantumMaid provides
+(like our `GreetingUseCase`). QuantumMaid is not prescriptive regarding your choice of dependency injection framework,
+and provides
 [detailed instructions on integrating popular dependency injection frameworks like Guice and Dagger](https://github.com/quantummaid/httpmaid/blob/master/docs/12_UseCases/5_DependencyInjection.md).
 
 ## 7. Testing

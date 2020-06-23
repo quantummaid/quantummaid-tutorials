@@ -5,12 +5,12 @@
     <parent>
         <groupId>de.quantummaid.tutorials</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.29</version>
+        <version>1.0.31</version>
     </parent>
 
     <groupId>de.quantummaid.tutorials.basic-tutorial</groupId>
     <artifactId>parent</artifactId>
-    <version>1.0.29</version>
+    <version>1.0.31</version>
     <packaging>pom</packaging>
 
     <modules>
