@@ -72,11 +72,11 @@ The logs display something similar to the following simplified output:
 
 Important statistics:
 
-- Time spent in Lambda = Init Duration: 870.58 ms + Duration: 398.08 ms + Duration: 3.32 ms + Duration: 3.32 ms = 1275.3ms
-- Time spent overall = 2.990s = 2990ms
-- Unaccounted time = 2990ms - 1275.3ms = 1714,7ms, of which
-  - approx. 600ms is probably due to network latency (100ms each way x 3 requests)
-  - approx. 1100ms is as yet unexplained
+- Time spent in Lambda = Init Duration: 870.58 ms + Duration: 398.08 ms + Duration: 3.32 ms + Duration: 3.32 ms = 1275.3 ms
+- Time spent overall = 2.990 s = 2990 ms
+- Unaccounted time = 2990 ms - 1275.3 ms = 1714,7 ms, of which
+  - approx. 600 ms is probably due to network latency (100 ms each way x 3 requests)
+  - approx. 1100 ms is as yet unexplained
 
 Having this log output at hand allows us to immediately draw a few conclusions:
 
