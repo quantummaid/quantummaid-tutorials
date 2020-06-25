@@ -4,8 +4,14 @@ my_dir="$(dirname "$(readlink -e "$0")")"
 source "${my_dir}/shared.envrc"
 
 function log() {
-    local msg="$1" && shift
-    printf "\n  - $msg\n" "$@"
+    if [ "$#" -gt 0 ]; then
+        local msg="$1" && shift
+        printf "\n  - $msg\n" "$@"
+    else
+        printf "\n    ---\n" "$@"
+        while read line; do printf "    %s\n" "${line}"; done;
+        printf "\n    ---\n" "$@"
+    fi
 }
 
 function oneTimeSetUp() {
@@ -19,19 +25,33 @@ function oneTimeSetUp() {
     declare -gr api_url=$(printf "https://%s.execute-api.%s.amazonaws.com/Prod" "${api_id}" "${region}")
 }
 
-function testFirstRequestDurationIsLessThan1500Milliseconds() {
+function testFirstLambdaRequestDoesNotExceedTheMaximumAllowed() {
     readonly local uuid=$(uuid)
-    invokeApiAndSaveTraceId "/helloworld" 'Hello world!'
-    readonly local get_trace_cmd="aws xray batch-get-traces --trace-ids ${trace_id} --query Traces[0].Duration"
+    _invokeApiAndSaveTraceId "/helloworld" 'Hello world!'
+    readonly local get_trace_cmd="aws xray batch-get-traces --trace-ids ${trace_id} --output json"
     log "get_trace_cmd: ${get_trace_cmd}"
-    timeout 5s bash -c "while [ \"\$($get_trace_cmd)\" == \"null\" ]; do echo \"    Waiting for trace...\"; sleep 0.1; done"
-    readonly local duration_secs=$(eval "${get_trace_cmd}")
-    readonly local duration_ms=$(bc <<< "$duration_secs * 1000")
-    log "trace_duration: $(printf "%sms" "${duration_ms}")"
-    assertTrue "the first request must take no more than 1.5s (actual: ${duration_secs}s)" "[ "${duration_ms}" -lt 1500 ]"
+
+    timeout 5s bash -c "\
+        while [ \"\$(${get_trace_cmd} | jq .Traces[0].Duration)\" == \"null\" ]; do\
+            echo \"    Waiting for trace...\";\
+            sleep 0.1;\
+        done"
+
+    readonly local xray_trace_json=$(${get_trace_cmd})
+    readonly local actual_duration_secs=$(jq .Traces[0].Duration <<<"${xray_trace_json}")
+    readonly local actual_duration_ms=$(bc <<<"scale=0; ${actual_duration_secs} * 1000 / 1")
+
+    log "X-Ray Summary:"
+    echo "${xray_trace_json}" | _traceSummaryOfTraceId "${trace_id}" | log
+
+    readonly local max_duration_ms="${TEST_LAMBDA_MAX_DURATION_MS:-1500}"
+    assertTrue "The first request took too long
+        Expected: <$(bc <<<"scale=2; ${max_duration_ms} / 1000")s
+        Actual: ${actual_duration_secs}s" \
+        "[ "${actual_duration_ms}" -lt ${max_duration_ms} ]"
 }
 
-function invokeApiAndSaveTraceId() {
+function _invokeApiAndSaveTraceId() {
     readonly local path="$1"
     readonly local expect_response="$2"
     readonly local url="${api_url}${path}"
@@ -43,6 +63,29 @@ function invokeApiAndSaveTraceId() {
     assertTrue "response has an X-Amzn-Trace-Id (url:$url, X-Amzn-Trace-Id:$xray_header)" "[[ '$xray_header' != '' ]]"
     assertEquals "response is '${expect_response}' (url:$url)" "${expect_response}" "${actual_response}"
     declare -gr trace_id=$(echo "${xray_header}" | sed "s/Root=\([^;]\+\).*/\1/1")
+}
+
+#
+# Inspiration: https://github.com/ONSdigital/es-lambda-perf-stats/blob/master/gather-stats-for-one-xray-trace.sh
+# Found using: https://github.com/search?q=%22aws+xray+batch-get-traces%22+language%3Ashell&type=Code
+#
+function _traceSummaryOfTraceId() {
+    readonly local _trace_id="$1"
+    jq -r '
+        .Traces[0].Segments[].Document |
+        fromjson | (.start_time | strftime("%Y-%m-%d %H:%M:%S")) +
+                   (.start_time | @text | scan("[.][0-9]{2}")) +
+        "," + .origin +
+        ",\((.end_time - .start_time) * 1000 | @text |
+            scan("^[^.]+.[0-9][0-9]"))ms",
+        if (.subsegments | length ) !=0 then
+          [.subsegments | sort_by(.start_time) | .[] |
+            "\(.name) : \((.end_time - .start_time) * 1000 | @text |
+              scan("^[^.]+.[0-9][0-9]"))ms"]
+        else
+          []
+        end
+    '
 }
 
 # Load shUnit2.

@@ -40,7 +40,6 @@ The simplest function we can deploy says `"Hello World"` when you issue a `GET` 
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
-        <plugin-update-file-checksum>35fe547b725ca8e71b0d13c8c21894df</plugin-update-file-checksum>
     </properties>
 
     <dependencies>
