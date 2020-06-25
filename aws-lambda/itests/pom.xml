@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <parent>
         <groupId>de.quantummaid.tutorials</groupId>
         <artifactId>aws-lambda-parent</artifactId>
         <version>1.0.0</version>
     </parent>
+
     <groupId>de.quantummaid.tutorials</groupId>
     <artifactId>aws-lambda-itests</artifactId>
     <version>1.0.0</version>
@@ -15,7 +17,8 @@
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
-        <plugin-update-file-checksum>35fe547b725ca8e71b0d13c8c21894df</plugin-update-file-checksum>
+        <dependency-update-file-checksum>a949b51c3f94b8f3e02a109cd954d9a5</dependency-update-file-checksum>
+        <plugin-update-file-checksum>a9c106f16f2d959e2db68534062e7623</plugin-update-file-checksum>
     </properties>
 
     <dependencies>
@@ -32,7 +35,7 @@
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>3.0.0</version>
                 <configuration>
-                    <skip>${skip.integration.tests}</skip>
+                    <skip>${skipTests}</skip>
                 </configuration>
                 <executions>
                     <execution>
@@ -40,79 +43,42 @@
                         <phase>pre-integration-test</phase>
                         <configuration>
                             <target>
+                                <exec failonerror="true" executable="src/main/scripts/setup.sh">
+                                    <env key="TEST_MODE" value="${testMode}"/>
+                                </exec>
                                 <exec failonerror="true" executable="src/main/scripts/sam-build-and-deploy.sh">
-                                    <env key="SAM_DEPLOY_ARGS" value="${sam.deploy.args}"/>
+                                    <env key="TEST_MODE" value="${testMode}"/>
                                 </exec>
                             </target>
                         </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
+                        <goals><goal>run</goal></goals>
                     </execution>
                     <execution>
                         <id>run-integration-tests</id>
                         <phase>integration-test</phase>
                         <configuration>
                             <target>
-                                <exec failonerror="true" executable="src/main/scripts/run-integration-tests.sh"/>
+                                <exec failonerror="true" executable="src/main/scripts/run-integration-tests.sh">
+                                    <env key="TEST_MODE" value="${testMode}"/>
+                                </exec>
                             </target>
                         </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
+                        <goals><goal>run</goal></goals>
                     </execution>
                     <execution>
                         <id>sam-cleanup</id>
                         <phase>post-integration-test</phase>
                         <configuration>
-                            <target unless="${skip.infrastructure.cleanup}">
-                                <exec failonerror="false" executable="src/main/scripts/sam-cleanup.sh"/>
+                            <target>
+                                <exec failonerror="false" executable="src/main/scripts/teardown.sh">
+                                    <env key="TEST_MODE" value="${testMode}"/>
+                                </exec>
                             </target>
                         </configuration>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
+                        <goals><goal>run</goal></goals>
                     </execution>
                 </executions>
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <!--
-            The profile used when sam build is invoked (which internally calls 'mvn clean install').
-            If we don't disable this, mvn spawns itself in a recursive fashion, eventually leading
-            to memory exhaustion.
-          -->
-        <profile>
-            <id>sam-cli</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <skip.integration.tests>true</skip.integration.tests>
-                <skip.infrastructure.cleanup>N/A</skip.infrastructure.cleanup>
-                <sam.deploy.args/>
-            </properties>
-        </profile>
-        <!--
-            The profile used when one invokes 'mvn verify -P integration-tests' in the CI pipeline
-          -->
-        <profile>
-            <id>integration-tests</id>
-            <properties>
-                <skip.integration.tests>false</skip.integration.tests>
-                <skip.infrastructure.cleanup>true</skip.infrastructure.cleanup>
-                <sam.deploy.args/>
-            </properties>
-        </profile>
-        <profile>
-            <id>clean-integration-tests</id>
-            <properties>
-                <skip.integration.tests>false</skip.integration.tests>
-                <skip.infrastructure.cleanup>false</skip.infrastructure.cleanup>
-                <sam.deploy.args>--force-upload</sam.deploy.args>
-            </properties>
-        </profile>
-    </profiles>
 </project>

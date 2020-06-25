@@ -2,12 +2,15 @@
 
 set -euo pipefail
 my_dir="$(dirname "$(readlink -e "$0")")"
+source "${my_dir}/shared.envrc"
 
 function progress() {
   echo -e "\n==>" "$@"
 }
 
-source "${my_dir}/shared.envrc"
+if ${skip_teardown:-false}; then
+  progress "skip_teardown is true, skipping..."
+fi
 
 progress "removing lambda stack..."
 aws cloudformation delete-stack --region "${region}" --stack-name "${lambda_stack_name}"

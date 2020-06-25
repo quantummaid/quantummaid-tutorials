@@ -25,9 +25,10 @@ function testFirstRequestDurationIsLessThan1500Milliseconds() {
     readonly local get_trace_cmd="aws xray batch-get-traces --trace-ids ${trace_id} --query Traces[0].Duration"
     log "get_trace_cmd: ${get_trace_cmd}"
     timeout 5s bash -c "while [ \"\$($get_trace_cmd)\" == \"null\" ]; do echo \"    Waiting for trace...\"; sleep 0.1; done"
-    readonly local trace_duration=$(eval "${get_trace_cmd} | tr -d '.'")
-    log "trace_duration: $(printf "%sms" $((10#${trace_duration})))"
-    assertTrue "the first request must take no more than 1.5s (actual_ms:$((10#${trace_duration})))" "[ $((10#${trace_duration})) -lt 1500 ]"
+    readonly local duration_secs=$(eval "${get_trace_cmd}")
+    readonly local duration_ms=$(bc <<< "$duration_secs * 1000")
+    log "trace_duration: $(printf "%sms" "${duration_ms}")"
+    assertTrue "the first request must take no more than 1.5s (actual: ${duration_secs}s)" "[ "${duration_ms}" -lt 1500 ]"
 }
 
 function invokeApiAndSaveTraceId() {

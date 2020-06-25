@@ -10,11 +10,10 @@ In order for HttpMaid's initialization code to be shared between the local mode 
 
 <!---[CodeSnippet](step2HttpMaidConfig)-->
 ```java
-private static HttpMaid httpMaidConfig() {
-  final HttpMaid httpMaid = HttpMaid.anHttpMaid()
-      .get("/helloworld", (request, response) -> response.setBody("Hello World!"))
-      .build();
-  return httpMaid;
+private static QuantumMaid quantumMaidConfig() {
+  final QuantumMaid quantumMaid = QuantumMaid.quantumMaid()
+      .get("/helloworld", (request, response) -> response.setBody("Hello World!"));
+  return quantumMaid;
 }
 ```
 
@@ -27,7 +26,7 @@ Lambda integration is provided through an additional HttpMaid dependency:
 <dependency>
     <groupId>de.quantummaid.httpmaid.integrations</groupId>
     <artifactId>httpmaid-awslambda</artifactId>
-    <version>0.9.67</version>
+    <version>0.9.71</version>
 </dependency>
 ```
 
@@ -47,7 +46,7 @@ import static de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint.awsLambdaEndpo
 <!---[CodeSnippet](step2AdapterDeclaration2)-->
 ```java
 public final class Main {
-  private static final AwsLambdaEndpoint ADAPTER = awsLambdaEndpointFor(httpMaidConfig());
+  private static final AwsLambdaEndpoint ADAPTER = awsLambdaEndpointFor(quantumMaidConfig().httpMaid());
   //...
 ```
 
@@ -57,7 +56,7 @@ The request handling method is the method that will be invoked by the AWS Lambda
 
 <!---[CodeSnippet](step2RequestHandlingMethod)-->
 ```java
-public Map<String, Object> handleRequest(Map<String, Object> request) {
+public Map<String, Object> handleRequest(final Map<String, Object> request) {
   return ADAPTER.delegate(request);
 }
 ```
@@ -70,7 +69,7 @@ We will reference this method name in the SAM template.
 Regular CloudFormation templates are rather verbose when deploying AWS Lambda functions, so we will use an AWS Serverless Application Model (SAM) template instead.
 
 <!---[CodeSnippet](file=step3/template.yml)-->
-```yaml
+```
 AWSTemplateFormatVersion: 2010-09-09
 Description: quantummaid tutorials lambda function
 Transform: AWS::Serverless-2016-10-31

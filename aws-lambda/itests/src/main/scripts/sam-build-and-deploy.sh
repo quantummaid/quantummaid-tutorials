@@ -2,34 +2,26 @@
 
 set -euo pipefail
 my_dir="$(dirname "$(readlink -e "$0")")"
+source "${my_dir}/shared.envrc"
 
 function progress() {
   echo -e "\n==>" "$@"
 }
 
-function define_shared_readonlies() {
-    progress "defining shared variables..."
-    declare -r   stack_identifier="${QMAIDTUTS_AWSLAMBDA_ITESTS_STACK_IDENTIFIER:-qmaidtuts-awslambda-itests}"
-    declare -grx  account_id=$(aws sts get-caller-identity --query Account --output text)
-    declare -grx  region=$(python -c 'import boto3; print(boto3.Session().region_name)')
-    declare -grx  lambda_stack_name="${stack_identifier}-lambda"
-    declare -grx  bucket_stack_name="${stack_identifier}-bucket-${account_id}-${region}"
-    declare -gnrx bucket_name=bucket_stack_name
-    declare -p account_id region lambda_stack_name bucket_stack_name bucket_name | tee "${my_dir}/shared.envrc"
-}
+if ${skip_sam_build_and_deploy:-false}; then
+  progress "skip_sam_build_and_deploy is true, skipping..."
+fi
 
-
-define_shared_readonlies
 declare -r lambda_file="cf-lambda.yml"
 declare -r bucket_file="cf-bucket.yml"
 
-if ${SAM_SKIP:-false}; then
-    progress "SAM_SKIP is true, skipping..."
-    exit 0
-fi
-
-progress "building..."
-sam build --template-file "${lambda_file}"
+#
+# sam build calls mvn clean install.
+# so we need to make sure it is passed the extra -DskipTests option
+# so as to avoid infinite spawning of mvn processes.
+#
+progress "building function..."
+MAVEN_OPTS="-DskipTests=true" sam build --template-file "${lambda_file}"
 
 progress "listing jar sizes..."
 du -sch .aws-sam/build/HelloWorldFunction/{de,lib/*}
@@ -39,8 +31,7 @@ aws cloudformation deploy \
   --no-fail-on-empty-changeset \
   --region "${region}" \
   --stack-name "${bucket_stack_name}" \
-  --template-file "${bucket_file}" \
-  ${SAM_DEPLOY_ARGS:-}
+  --template-file "${bucket_file}"
 
 progress "deploying lambda stack (${lambda_stack_name})..."
 sam deploy \
@@ -48,4 +39,5 @@ sam deploy \
   --no-fail-on-empty-changeset \
   --region "${region}" \
   --stack-name "${lambda_stack_name}" \
-  --s3-bucket "${bucket_name}"
+  --s3-bucket "${bucket_name}" \
+  ${sam_deploy_opts:-}

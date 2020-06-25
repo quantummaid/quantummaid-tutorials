@@ -9,13 +9,12 @@ We'll make the returned Hello message [vary based on the url path](https://quant
 
 <!---[CodeSnippet](step4HttpMaidConfig)-->
 ```java
-private static HttpMaid httpMaidConfig() {
-  final HttpMaid httpMaid = HttpMaid.anHttpMaid()
+private static QuantumMaid quantumMaidConfig() {
+  final QuantumMaid quantumMaid = QuantumMaid.quantumMaid()
       .get("/hello/<whoever-you-are>", (request, response) -> response.setBody(
           String.format("Hello %s!",
-              request.pathParameters().getPathParameter("whoever-you-are"))))
-      .build();
-  return httpMaid;
+              request.pathParameters().getPathParameter("whoever-you-are"))));
+  return quantumMaid;
 }
 ```
 
