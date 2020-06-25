@@ -2,7 +2,7 @@
 
 (Full source code: [step1 directory](step1))
 
-The simplest function we can deploy says Hello World when you issue a GET request to '/helloworld', similar to what is described in QuantumMaid's [Getting Started](https://quantummaid.de/docs/01_gettingstarted.html) page.
+The simplest function we can deploy says `"Hello World"` when you issue a `GET` request to `/helloworld`, similar to what is described in QuantumMaid's [Getting Started](https://quantummaid.de/docs/01_gettingstarted.html) page.
 
 ## File structure
 
@@ -99,7 +99,7 @@ public final class Main {
 
 ## Running locally
 
-As it stands, the minimum viable function can run as a local http server endpoint:
+As it stands, the minimum viable function can run as a local HTTP server endpoint:
 
 ```shell
 $ mvn exec:java -Dexec.mainClass=de.quantummaid.tutorials.Main
@@ -117,14 +117,14 @@ $ mvn exec:java -Dexec.mainClass=de.quantummaid.tutorials.Main
 [Thread-2] INFO de.quantummaid.quantummaid.QuantumMaid - Ready.
 ```
 
-We can convince ourselves that the function is deployed using the curl command:
+We can convince ourselves that the function is deployed using the `curl` command:
 
 ```shell
 $ echo $(curl http://localhost:8080/helloworld)
 Hello World!
 ```
 
-Next, we'll add lambda support to our function.
+Next, we'll add AWS Lambda support to our function.
 
 <!---[Nav]-->
 [Overview](README.md)&nbsp;&nbsp;&nbsp;[&rarr;](02_AddingLambdaSupport.md)

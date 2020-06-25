@@ -3,13 +3,13 @@
 This tutorial may incur costs if you go beyond the usage allowed by the AWS free tier.
 Although this is very unlikely, it's not impossible.
 
-After all, your api is publicly accessible on the internet,
+After all, your API is publicly accessible on the internet,
 and anyone could hit it with millions of requests, forcing you over the free tier limit. It's better to avoid surprises.
 
 When running through the steps in this tutorial we created:
 
-- one cloudformation stack called `hello-app`. This is ours.
-- one cloudformation stack called `aws-sam-cli-managed-default`. This is SAM CLI's.
+- One cloudformation stack called `hello-app`. This is ours.
+- One cloudformation stack called `aws-sam-cli-managed-default`. This is SAM CLI's.
 
 To remove all traces of our tutorial, we must remove both.
 
@@ -23,7 +23,7 @@ $ aws cloudformation delete-stack --stack-name hello-app --region us-east-1
 
 ## Removing the aws-sam-cli-managed-default stack
 
-SAM CLI uses `aws-sam-cli-managed-default` to manage the s3 bucket for the upload of java serverless function artifacts.
+SAM CLI uses `aws-sam-cli-managed-default` to manage the S3 bucket for the upload of Java serverless function artifacts.
 It is created behind the scene for you. But it will not be cleaned up for us, that's our responsibility.
 
 First we need to delete the S3 bucket ourselves, otherwise deleting the `aws-sam-cli-managed-default` stack will fail, because the bucket is not empty.

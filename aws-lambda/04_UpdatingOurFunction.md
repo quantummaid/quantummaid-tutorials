@@ -4,8 +4,8 @@
 
 ## /hello/<whoever-you-are>
 
-A function that returns "Hello World!" is not very useful.
-We'll make the returned Hello message [vary based on the url path](https://quantummaid.de/docs/2_httpmaid/04_handlingrequests.html#request-route-and-path-parameters).
+A function that returns `"Hello World!"` is not very useful.
+We'll make the returned Hello message [vary based on the URL path](https://quantummaid.de/docs/2_httpmaid/04_handlingrequests.html#request-route-and-path-parameters).
 
 <!---[CodeSnippet](step4HttpMaidConfig)-->
 ```java
@@ -32,7 +32,7 @@ Successfully created/updated stack - hello-app in us-east-1
 
 ## Viewing logs using SAM CLI
 
-Before we invoke the url, let's tail the logs, which will give us some interesting details on our function execution(s).
+Before we invoke the URL, let's tail the logs, which will give us some interesting details on our function execution(s).
 In a separate terminal, run:
 
 ```shell
@@ -71,23 +71,23 @@ The logs display something similar to the following simplified output:
 
 Important statistics:
 
-- Time spent in lambda = Init Duration: 870.58 ms + Duration: 398.08 ms + Duration: 3.32 ms + Duration: 3.32 ms = 1275.3ms
-- Time spent overall = 2.990s = 2990ms
-- Unaccounted time = 2990ms - 1275.3ms = 1714,7ms, of which
-  - approx. 600ms is probably due to network latency (100ms each way x 3 requests)
-  - approx. 1100ms is as yet unexplained
+- Time spent in Lambda = Init Duration: 870.58 ms + Duration: 398.08 ms + Duration: 3.32 ms + Duration: 3.32 ms = 1275.3 ms
+- Time spent overall = 2.990 s = 2990 ms
+- Unaccounted time = 2990 ms - 1275.3 ms = 1714,7 ms, of which
+  - approx. 600 ms is probably due to network latency (100 ms each way x 3 requests)
+  - approx. 1100 ms is as yet unexplained
 
 Having this log output at hand allows us to immediately draw a few conclusions:
 
-- The HttpMaid overhead is flat beyond the first invocation (<5ms)
-- The network latency is quite high here (200ms per request). Maybe we can switch to an edge-optimized api.
-- If performance is important, 1100ms is still unaccounted for and needs investigation. It could be TLS negotiation, or something else.
-- We can save money by reducing `MemorySize` in `template.yml` from 512mb to something much closer to the maximum reported memory usage (101mb), say, 128mb.
+- The HttpMaid overhead is flat beyond the first invocation (<5 ms)
+- The network latency is quite high here (200 ms per request). Maybe we can switch to an edge-optimized API.
+- If performance is important, 1100 ms is still unaccounted for and needs investigation. It could be TLS negotiation, or something else.
+- We can save money by reducing `MemorySize` in `template.yml` from 512 MB to something much closer to the maximum reported memory usage (101 MB), say, 128 MB.
 
 You now have the necessary building blocks to make your HttpMaid code AWS Lambda capable,
 and to get information about its runtime characteristics, for further tweaking.
 
-Next, we are going to cleanup the resources we created for this tutorial, so as not to incur any unwanted costs.
+Next, we are going to clean up the resources we created for this tutorial, so as not to incur any unwanted costs.
 
 <!---[Nav]-->
 [&larr;](03_DeployingOurFunction.md)&nbsp;&nbsp;&nbsp;[Overview](README.md)&nbsp;&nbsp;&nbsp;[&rarr;](05_CleaningUp.md)
