@@ -25,9 +25,9 @@ function oneTimeSetUp() {
     declare -gr api_url=$(printf "https://%s.execute-api.%s.amazonaws.com/Prod" "${api_id}" "${region}")
 }
 
-function testFirstLambdaRequestDoesNotExceedTheMaximumAllowed() {
+function testFirstFunctionInvocationDoesNotExceedMaxDuration() {
     readonly local uuid=$(uuid)
-    _invokeApiAndSaveTraceId "/helloworld" 'Hello world!'
+    _invokeApiAndSaveTraceId "/hello/one" 'Hello one!'
     readonly local get_trace_cmd="aws xray batch-get-traces --trace-ids ${trace_id} --output json"
     log "get_trace_cmd: ${get_trace_cmd}"
 
@@ -44,11 +44,14 @@ function testFirstLambdaRequestDoesNotExceedTheMaximumAllowed() {
     log "X-Ray Summary:"
     echo "${xray_trace_json}" | _traceSummaryOfTraceId "${trace_id}" | log
 
-    readonly local max_duration_ms="${TEST_LAMBDA_MAX_DURATION_MS:-1500}"
+    #Showcase start maxCodeSize
+    readonly local max_first_invocation_duration_ms=1600
+    #Showcase end maxCodeSize
+
     assertTrue "The first request took too long
-        Expected: <$(bc <<<"scale=2; ${max_duration_ms} / 1000")s
+        Expected: <$(bc <<<"scale=2; ${max_first_invocation_duration_ms} / 1000")s
         Actual: ${actual_duration_secs}s" \
-        "[ "${actual_duration_ms}" -lt ${max_duration_ms} ]"
+        "[ "${actual_duration_ms}" -lt ${max_first_invocation_duration_ms} ]"
 }
 
 function _invokeApiAndSaveTraceId() {

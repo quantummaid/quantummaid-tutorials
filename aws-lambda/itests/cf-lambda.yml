@@ -12,7 +12,7 @@ Resources:
   HelloWorldFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Handler: de.quantummaid.tutorials.itests.Handler::handleRequest
+      Handler: de.quantummaid.tutorials.Main::handleRequest
       Runtime: java11
       MemorySize: 512
       Tracing: Active

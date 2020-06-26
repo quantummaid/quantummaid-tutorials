@@ -2,7 +2,7 @@
 
 (Full source code: [step4 directory](step4))
 
-## /hello/<whoever-you-are>
+## /hello/`<whoever-you-are>`
 
 A function that returns `"Hello World!"` is not very useful.
 We'll make the returned Hello message [vary based on the URL path](https://quantummaid.de/docs/2_httpmaid/04_handlingrequests.html#request-route-and-path-parameters).
@@ -73,11 +73,11 @@ Important statistics:
 
 - Time spent in Lambda = Init Duration: 870.58 ms + Duration: 398.08 ms + Duration: 3.32 ms + Duration: 3.32 ms = 1275.3 ms
 - Time spent overall = 2.990 s = 2990 ms
-- Unaccounted time = 2990 ms - 1275.3 ms = 1714,7 ms, of which
+- Unaccounted time = 2990 ms - 1275.3 ms = 1714.7 ms, of which
   - approx. 600 ms is probably due to network latency (100 ms each way x 3 requests)
   - approx. 1100 ms is as yet unexplained
 
-Having this log output at hand allows us to immediately draw a few conclusions:
+Having this log output at hand allows us to draw a few conclusions:
 
 - The HttpMaid overhead is flat beyond the first invocation (<5 ms)
 - The network latency is quite high here (200 ms per request). Maybe we can switch to an edge-optimized API.
@@ -87,7 +87,9 @@ Having this log output at hand allows us to immediately draw a few conclusions:
 You now have the necessary building blocks to make your HttpMaid code AWS Lambda capable,
 and to get information about its runtime characteristics, for further tweaking.
 
-Next, we are going to clean up the resources we created for this tutorial, so as not to incur any unwanted costs.
+
+
+Next, we are going to clean up the resources we created for this tutorial, so as not to incur any additional (unwanted) costs.
 
 <!---[Nav]-->
-[&larr;](03_DeployingOurFunction.md)&nbsp;&nbsp;&nbsp;[Overview](README.md)&nbsp;&nbsp;&nbsp;[&rarr;](05_CleaningUp.md)
+[&larr;](04_DeployingOurFunction.md)&nbsp;&nbsp;&nbsp;[Overview](README.md)&nbsp;&nbsp;&nbsp;[&rarr;](06_CleaningUp.md)

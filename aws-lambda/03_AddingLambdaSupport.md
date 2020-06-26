@@ -34,14 +34,18 @@ Once the `httpmaid-lambda` dependency is added, a new class is available to brid
 
 We should initialize an instance of `AwsLambdaEndpoint` in a static field of the `Main` class, so that:
 
-- The time taken to initialize HttpMaid does not count towards the execution time of the Lambda function.
-- The intent to initialize HttpMaid once per VM lifetime is made clear.
+- The time taken to initialize HttpMaid does not count towards the execution time of the Lambda function. In plain english, it will not be billed by AWS.
+- The HttpMaid initialization delay is experienced only once per Lambda instance. For our purpose, a Lambda instance is a Java Virtual Machine (JVM) process, [with some notable differences](https://docs.aws.amazon.com/lambda/latest/dg/runtimes-context.html).
+
+Here are the imports required:
 
 <!---[CodeSnippet](step2AdapterDeclaration1)-->
 ```java
 import de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint;
 import static de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint.awsLambdaEndpointFor;
 ```
+
+And the `AwsLambdaEndpoint` static initialization code:
 
 <!---[CodeSnippet](step2AdapterDeclaration2)-->
 ```java
@@ -61,8 +65,7 @@ public Map<String, Object> handleRequest(final Map<String, Object> request) {
 }
 ```
 
-While the method's parameter type and return type are fixed (both must be `Map<String, Object>`), the method can be named whatever we like.
-We will reference this method name in the SAM template.
+While the method's parameter type and return type are fixed (both must be `Map<String, Object>`), the method can be named whatever we like. We will reference this method name in the SAM template (➊).
 
 ## Adding the SAM template (template.yml)
 
@@ -99,4 +102,4 @@ Resources:
 Next, we are going to deploy our function to AWS Lambda.
 
 <!---[Nav]-->
-[&larr;](01_MinimumViableFunction.md)&nbsp;&nbsp;&nbsp;[Overview](README.md)&nbsp;&nbsp;&nbsp;[&rarr;](03_DeployingOurFunction.md)
+[&larr;](02_MinimumViableFunction.md)&nbsp;&nbsp;&nbsp;[Overview](README.md)&nbsp;&nbsp;&nbsp;[&rarr;](04_DeployingOurFunction.md)

@@ -60,7 +60,7 @@ Finally, we can delete the SAM CLI stack, now that the bucket is **really** empt
 $ aws cloudformation delete-stack --stack-name aws-sam-cli-managed-default  --region us-east-1
 ```
 
-This is the end of this tutorial.
+This is the end of this tutorial. The QuantumMaid team hopes you found it useful.
 
 <!---[Nav]-->
-[&larr;](04_UpdatingOurFunction.md)&nbsp;&nbsp;&nbsp;[Overview](README.md)
+[&larr;](05_UpdatingOurFunction.md)&nbsp;&nbsp;&nbsp;[Overview](README.md)

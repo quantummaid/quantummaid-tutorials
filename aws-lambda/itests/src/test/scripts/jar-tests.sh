@@ -3,7 +3,7 @@
 my_dir="$(dirname "$(readlink -e "$0")")"
 source "${my_dir}/shared.envrc"
 
-testThatLambdaCodeSizeIsLessThanOnePointFiveMegs() {
+testThatLambdaCodeSizeDoesNotExceedMaxCodeSize() {
     readonly local function_name="$(aws cloudformation describe-stack-resource \
         --stack-name "${lambda_stack_name}" \
         --logical-resource-id HelloWorldFunction \
@@ -15,12 +15,14 @@ testThatLambdaCodeSizeIsLessThanOnePointFiveMegs() {
          --function-name "${function_name}" \
          --query Configuration.CodeSize)"
 
-    readonly local kb_code_size_max=$((3 * 1024 / 2))
-    readonly local kb_code_size_actual=$((function_code_size / 1024))
+    #Showcase start maxCodeSize
+    readonly local max_code_size_kb=$(bc <<<"1024 * 1.5 / 1")
+    #Showcase end maxCodeSize
+    readonly local actual_code_size_kb=$((function_code_size / 1024))
 
     assertTrue \
-        "$(printf "lambda code size (%sKB) > max allowed code size (%sKB)" $kb_code_size_actual $kb_code_size_max)" \
-        "[ ${kb_code_size_actual} -le ${kb_code_size_max} ]"
+        "$(printf "lambda code size (%sKB) > max allowed code size (%sKB)" $actual_code_size_kb $max_code_size_kb)" \
+        "[ ${actual_code_size_kb} -le ${max_code_size_kb} ]"
 }
 
 # Load shUnit2.
