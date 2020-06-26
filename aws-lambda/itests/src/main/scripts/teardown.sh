@@ -10,6 +10,7 @@ function progress() {
 
 if ${skip_teardown:-false}; then
   progress "skip_teardown is true, skipping..."
+  exit 0
 fi
 
 progress "removing lambda stack..."

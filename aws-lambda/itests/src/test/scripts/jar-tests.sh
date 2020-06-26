@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 my_dir="$(dirname "$(readlink -e "$0")")"
+source "${my_dir}/common.sh"
 source "${my_dir}/shared.envrc"
 
 testThatLambdaCodeSizeDoesNotExceedMaxCodeSize() {
@@ -16,9 +17,12 @@ testThatLambdaCodeSizeDoesNotExceedMaxCodeSize() {
          --query Configuration.CodeSize)"
 
     #Showcase start maxCodeSize
-    readonly local max_code_size_kb=$(bc <<<"1024 * 1.5 / 1")
+    # 2020-06-26: actual_code_size_kb: 1293
+    readonly local max_code_size_kb=1400
     #Showcase end maxCodeSize
     readonly local actual_code_size_kb=$((function_code_size / 1024))
+
+    log "actual_code_size_kb: ${actual_code_size_kb}"
 
     assertTrue \
         "$(printf "lambda code size (%sKB) > max allowed code size (%sKB)" $actual_code_size_kb $max_code_size_kb)" \

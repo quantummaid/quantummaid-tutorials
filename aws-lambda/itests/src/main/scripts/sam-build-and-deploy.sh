@@ -10,6 +10,7 @@ function progress() {
 
 if ${skip_sam_build_and_deploy:-false}; then
   progress "skip_sam_build_and_deploy is true, skipping..."
+  exit 0
 fi
 
 declare -r lambda_file="cf-lambda.yml"
@@ -39,5 +40,4 @@ sam deploy \
   --no-fail-on-empty-changeset \
   --region "${region}" \
   --stack-name "${lambda_stack_name}" \
-  --s3-bucket "${bucket_name}" \
-  ${sam_deploy_opts:-}
+  --s3-bucket "${bucket_name}"

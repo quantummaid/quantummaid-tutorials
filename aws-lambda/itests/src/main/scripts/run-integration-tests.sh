@@ -11,6 +11,7 @@ function progress() {
 
 if ${skip_run_integration_tests:-false}; then
   progress "skip_run_integration_tests is true, skipping..."
+  exit 0
 fi
 
 cd "${test_dir}"

@@ -26,11 +26,12 @@ Regressions on size and performance characteristics are therefore caught and rem
 
 This means that QuantumMaid users can rely on those characteristics, knowing that they will hold true, or even improve, but not regress, in future. At present, the following holds true for the Lambda function we'll create in this tutorial:
 
-- It has a code size of less than 1.5 M (<!---[Link](itests/src/test/scripts/jar-tests.sh "source")-->
+- It has a code size of less than 1.4 M (<!---[Link](itests/src/test/scripts/jar-tests.sh "source")-->
 [source](itests/src/test/scripts/jar-tests.sh))
-- Its first (cold) invocation duration is less than 1.6 s (<!---[Link](itests/src/test/scripts/restapi-tests.sh  "source")-->
+- Its first (cold) invocation duration is less than 1.55 s (<!---[Link](itests/src/test/scripts/restapi-tests.sh  "source")-->
 [source](itests/src/test/scripts/restapi-tests.sh))
-
+- From the second invocation onwards, the invocation duration is less than 14 ms (<!---[Link](itests/src/test/scripts/restapi-tests.sh  "source")-->
+[source](itests/src/test/scripts/restapi-tests.sh))
 Next, we'll create the basic function.
 
 <!---[Nav]-->

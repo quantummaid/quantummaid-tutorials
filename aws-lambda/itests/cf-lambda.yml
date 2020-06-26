@@ -23,8 +23,9 @@ Resources:
             RestApiId: !Ref HelloWorldRestApi
             Path: /{proxy+}
             Method: ANY
-        HelloWorldHttpApi:
-          Type: HttpApi
-          Properties:
-            Path: /{proxy+}
-            Method: ANY
+        # HTTP Api does not support X-Ray (yet)
+        #HelloWorldHttpApi:
+        #  Type: HttpApi
+        #  Properties:
+        #    Path: /{proxy+}
+        #    Method: ANY
