@@ -31,7 +31,7 @@ import static de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint.awsLambdaEndpo
 public final class Main {
   private static final AwsLambdaEndpoint ADAPTER = awsLambdaEndpointFor(quantumMaidConfig().httpMaid());
 
-  private Main() {}
+  public Main() {}
 
   public Map<String, Object> handleRequest(final Map<String, Object> request) {
     System.err.println(request.toString());

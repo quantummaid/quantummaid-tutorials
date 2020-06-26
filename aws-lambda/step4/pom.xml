@@ -13,10 +13,13 @@
     <version>1.0.0</version>
 
     <properties>
+        <checkstyle.suppressions.location>
+            ${project.basedir}/src/test/checkstyle/checkstyle-suppressions.xml
+        </checkstyle.suppressions.location>
         <java.version>11</java.version>
-        <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.parameters>true</maven.compiler.parameters>
     </properties>
 
     <dependencies>

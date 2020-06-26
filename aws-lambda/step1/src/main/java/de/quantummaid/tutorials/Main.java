@@ -25,8 +25,6 @@ package de.quantummaid.tutorials;
 import de.quantummaid.quantummaid.QuantumMaid;
 
 public final class Main {
-  private Main() {}
-
   public static void main(final String[] args) {
     final int port = 8080;
     final QuantumMaid quantumMaid = QuantumMaid.quantumMaid()

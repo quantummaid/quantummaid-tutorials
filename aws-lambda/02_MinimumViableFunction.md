@@ -1,6 +1,5 @@
 # Step 1: Minimal viable function
-
-(Full source code: [step1 directory](step1))
+*(Full source code: [`step1`](step1) directory)*
 
 The simplest function we can deploy says `"Hello World"` when you issue a `GET` request to `/helloworld`, similar to what is described in QuantumMaid's [Getting Started](https://quantummaid.de/docs/01_gettingstarted.html) page.
 
@@ -17,34 +16,31 @@ The simplest function we can deploy says `"Hello World"` when you issue a `GET` 
                         └── Main.java
 ```
 
-## [pom.xml](step1/pom.xml)
+## [`pom.xml`](step1/pom.xml)
 
-The most important pom.xml sections are
+The most important `pom.xml` part is
 
 <!---[CodeSnippet](step1PomXml)-->
 ```xml
-<properties>
-    <java.version>11</java.version>
-    <maven.compiler.parameters>true<!--➊--></maven.compiler.parameters>
-    <maven.compiler.target>${java.version}</maven.compiler.target>
-    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <maven.compiler.parameters>true</maven.compiler.parameters><!-- ➊ -->
 </properties>
 
 <dependencies>
+    <!--➋-->
     <dependency>
-        <!--➋-->
         <groupId>de.quantummaid.quantummaid.packagings</groupId>
         <artifactId>quantummaid-essentials</artifactId>
-        <version>1.0.53</version>
+        <version>1.0.54</version>
     </dependency>
+    <!--➋-->
 </dependencies>
 ```
 
 ➊ This is required to provide HttpMaid with method parameter name information through reflection. It's not enabled by default, so this must be explicitly enabled here.
 
-➋ This contains QuantumMaid reasonable dependency defaults, including minimal footprint alternatives to Jackson (minimal-json) and Logback (slf4j-simple). Because size matters.
+➋ This contains QuantumMaid reasonable defaults for dependencies, including minimal footprint alternatives to Jackson (minimal-json) and Logback (slf4j-simple). Because size matters.
 
-## [Main.java](step1/src/main/java/de/quantummaid/tutorials/Main.java)
+## [`Main.java`](step1/src/main/java/de/quantummaid/tutorials/Main.java)
 
 Our starting point is the proverbial hello world from the [*"Getting Started"* guide](https://quantummaid.de/docs/01_gettingstarted.html)
 
@@ -55,8 +51,6 @@ package de.quantummaid.tutorials;
 import de.quantummaid.quantummaid.QuantumMaid;
 
 public final class Main {
-  private Main() {}
-
   public static void main(final String[] args) {
     final int port = 8080;
     final QuantumMaid quantumMaid = QuantumMaid.quantumMaid()

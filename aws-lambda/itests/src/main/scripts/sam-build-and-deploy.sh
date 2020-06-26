@@ -24,7 +24,7 @@ progress "building function..."
 MAVEN_OPTS="-DskipTests=true" sam build --template-file "${lambda_file}"
 
 progress "listing jar sizes..."
-du -sch .aws-sam/build/HelloWorldFunction/{de,lib/*}
+du -sch .aws-sam/build/HelloWorldFunction/lib/*
 
 progress "deploying source bucket stack (${bucket_stack_name})..."
 aws cloudformation deploy \

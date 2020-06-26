@@ -12,20 +12,25 @@
     <artifactId>aws-lambda-step1</artifactId>
     <version>1.0.0</version>
 
-    <!-- Showcase start step1PomXml -->
     <properties>
+        <checkstyle.suppressions.location>
+            ${project.basedir}/src/test/checkstyle/checkstyle-suppressions.xml
+        </checkstyle.suppressions.location>
         <java.version>11</java.version>
-        <maven.compiler.parameters>true<!--➊--></maven.compiler.parameters>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.source>${java.version}</maven.compiler.source>
+        <!-- Showcase start step1PomXml -->
+        <maven.compiler.parameters>true</maven.compiler.parameters><!-- ➊ -->
     </properties>
 
     <dependencies>
-        <dependency><!--➋-->
+        <!--➋-->
+        <dependency>
             <groupId>de.quantummaid.quantummaid.packagings</groupId>
             <artifactId>quantummaid-essentials</artifactId>
             <version>1.0.54</version>
         </dependency>
+        <!--➋-->
     </dependencies>
     <!-- Showcase end step1PomXml-->
 </project>

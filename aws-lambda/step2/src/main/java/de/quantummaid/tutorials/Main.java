@@ -35,7 +35,9 @@ public final class Main {
   //...
   //Showcase end step2AdapterDeclaration2
 
-  private Main() {}
+  //Showcase start step2PublicNoArgsConstructor
+  public Main() {}
+  //Showcase end step2PublicNoArgsConstructor
 
   //Showcase start step2RequestHandlingMethod
   public Map<String, Object> handleRequest(final Map<String, Object> request) {

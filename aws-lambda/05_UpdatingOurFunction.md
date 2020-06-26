@@ -1,6 +1,5 @@
 # Step 4: Updating our function
-
-(Full source code: [step4 directory](step4))
+*(Full source code: [`step4`](step4) directory)*
 
 ## /hello/`<whoever-you-are>`
 

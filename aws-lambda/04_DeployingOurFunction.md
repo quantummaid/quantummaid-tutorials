@@ -1,6 +1,5 @@
 # Step 3: Deploying to AWS Lambda
-
-(Full source code: [step3 directory](step3))
+*(Full source code: [`step3`](step3) directory)*
 
 ## Deploying with SAM CLI
 
