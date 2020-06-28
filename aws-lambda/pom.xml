@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>de.quantummaid.tutorials</groupId>
+        <artifactId>parent</artifactId>
+        <version>1.0.31</version>
+    </parent>
+
+    <groupId>de.quantummaid.tutorials</groupId>
+    <artifactId>aws-lambda-parent</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>step1</module>
+        <module>step2</module>
+        <module>step3</module>
+        <module>step4</module>
+        <module>itests</module>
+    </modules>
+
+    <properties>
+        <dependency-update-file-checksum>a949b51c3f94b8f3e02a109cd954d9a5</dependency-update-file-checksum>
+        <plugin-update-file-checksum>35fe547b725ca8e71b0d13c8c21894df</plugin-update-file-checksum>
+    </properties>
+</project>

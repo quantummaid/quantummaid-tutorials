@@ -27,7 +27,7 @@
             <dependency>
                 <groupId>de.quantummaid.quantummaid</groupId>
                 <artifactId>quantummaid-bom</artifactId>
-                <version>1.0.51</version>
+                <version>1.0.56</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

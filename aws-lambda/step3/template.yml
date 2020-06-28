@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: quantummaid tutorials lambda function
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: de.quantummaid.tutorials.Main::handleRequest # ➊
+      Runtime: java11
+      MemorySize: 512
+      Events:
+        HelloWorldHttpApi:
+          Type: HttpApi     # ➋
+          Properties:
+            Path: /{proxy+} # ➌
+            Method: ANY     # ➍

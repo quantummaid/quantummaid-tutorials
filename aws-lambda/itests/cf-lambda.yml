@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: quantummaid tutorials lambda function
+Transform: AWS::Serverless-2016-10-31
+
+Resources:
+  HelloWorldRestApi:
+    Type: AWS::Serverless::Api
+    Properties:
+      StageName: Prod
+      TracingEnabled: true
+
+  HelloWorldFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: de.quantummaid.tutorials.Main::handleRequest
+      Runtime: java11
+      MemorySize: 512
+      Tracing: Active
+      Events:
+        # HTTP Api does not support X-Ray (yet),
+        # so we have to use Rest API for the integration test.
+        HelloWorldRestApi:
+          Type: Api
+          Properties:
+            RestApiId: !Ref HelloWorldRestApi
+            Path: /{proxy+}
+            Method: ANY
