@@ -21,6 +21,7 @@ The simplest function we can deploy says `"Hello World"` when you issue a `GET` 
 The most important `pom.xml` part is
 
 <!---[CodeSnippet](step1PomXml)-->
+
 ```xml
     <maven.compiler.parameters>true</maven.compiler.parameters><!-- ➊ -->
 </properties>
@@ -36,15 +37,16 @@ The most important `pom.xml` part is
 </dependencies>
 ```
 
-➊ This is required to provide HttpMaid with method parameter name information through reflection. It's not enabled by default, so this must be explicitly enabled here.
+➊ This is required to provide QuantumMaid with method parameter name information through reflection. It's not enabled by default, so this must be explicitly enabled here.
 
 ➋ This contains QuantumMaid reasonable defaults for dependencies, including minimal footprint alternatives to Jackson (minimal-json) and Logback (slf4j-simple). Because size matters.
 
 ## [`Main.java`](step1/src/main/java/de/quantummaid/tutorials/Main.java)
 
-Our starting point is the proverbial hello world from the [*"Getting Started"* guide](https://quantummaid.de/docs/01_gettingstarted.html)
+Our starting point is the proverbial *Hello World* from the [_"Getting Started"_ guide](https://quantummaid.de/docs/01_gettingstarted.html)
 
 <!---[CodeSnippet](step1MainClass)-->
+
 ```java
 package de.quantummaid.tutorials;
 

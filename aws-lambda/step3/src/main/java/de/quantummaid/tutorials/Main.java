@@ -34,7 +34,6 @@ public final class Main {
   public Main() {}
 
   public Map<String, Object> handleRequest(final Map<String, Object> request) {
-    System.err.println(request.toString());
     return ADAPTER.delegate(request);
   }
 

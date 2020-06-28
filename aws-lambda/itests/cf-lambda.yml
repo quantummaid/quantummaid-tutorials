@@ -17,15 +17,11 @@ Resources:
       MemorySize: 512
       Tracing: Active
       Events:
+        # HTTP Api does not support X-Ray (yet),
+        # so we have to use Rest API for the integration test.
         HelloWorldRestApi:
           Type: Api
           Properties:
             RestApiId: !Ref HelloWorldRestApi
             Path: /{proxy+}
             Method: ANY
-        # HTTP Api does not support X-Ray (yet)
-        #HelloWorldHttpApi:
-        #  Type: HttpApi
-        #  Properties:
-        #    Path: /{proxy+}
-        #    Method: ANY

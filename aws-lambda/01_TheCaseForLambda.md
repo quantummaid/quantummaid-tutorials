@@ -3,7 +3,7 @@
 ## Why AWS Lambda?
 
 AWS Lambda has been a big deal since it was introduced back in 2014. With Lamba, there is no need to provision stateful
-servers such as docker containers or virtual machines instances. These incur hourly
+servers such as Docker containers or virtual machine instances. These incur hourly
 charges whether they serve requests or not.
 
 Lambda only incurs charges when requests are served, if at all.
