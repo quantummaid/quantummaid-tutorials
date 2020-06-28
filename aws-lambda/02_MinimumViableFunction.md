@@ -21,7 +21,6 @@ The simplest function we can deploy says `"Hello World"` when you issue a `GET` 
 The most important `pom.xml` part is
 
 <!---[CodeSnippet](step1PomXml)-->
-
 ```xml
     <maven.compiler.parameters>true</maven.compiler.parameters><!-- ➊ -->
 </properties>
@@ -46,7 +45,6 @@ The most important `pom.xml` part is
 Our starting point is the proverbial *Hello World* from the [_"Getting Started"_ guide](https://quantummaid.de/docs/01_gettingstarted.html)
 
 <!---[CodeSnippet](step1MainClass)-->
-
 ```java
 package de.quantummaid.tutorials;
 
