@@ -4,7 +4,7 @@
 ## /hello/`<whoever-you-are>`
 
 A function that returns `"Hello World!"` is not very useful.
-We'll make the returned Hello message [vary based on the URL path](https://quantummaid.de/docs/2_httpmaid/04_handlingrequests.html#request-route-and-path-parameters).
+We'll make the returned *Hello* message [vary based on the URL path](https://quantummaid.de/docs/2_httpmaid/04_handlingrequests.html#request-route-and-path-parameters).
 
 <!---[CodeSnippet](step4HttpMaidConfig)-->
 ```java
@@ -32,7 +32,8 @@ Successfully created/updated stack - hello-app in us-east-1
 ## Viewing logs using SAM CLI
 
 Before we invoke the URL, let's tail the logs, which will give us some interesting details on our function execution(s).
-In a separate terminal, run:
+
+In a **separate** terminal, run:
 
 ```shell
 $ sam logs --tail --region us-east-1 --stack-name hello-app --name HelloWorldFunction
@@ -51,7 +52,7 @@ user	0m0.077s
 sys	0m0.005s
 ```
 
-The logs display something similar to the following simplified output:
+The logs display – possibly after a few seconds - something similar to the following simplified output:
 
 ```text
 ... 2020-06-21T09:22:07.659000 START RequestId: ... Version: $LATEST
@@ -78,7 +79,7 @@ Important statistics:
 
 Having this log output at hand allows us to draw a few conclusions:
 
-- The HttpMaid overhead is flat beyond the first invocation (<5 ms)
+- The QuantumMaid overhead is flat beyond the first invocation (<5 ms).
 - The network latency is quite high here (200 ms per request). Maybe we can switch to an edge-optimized API.
 - If performance is important, 1100 ms is still unaccounted for and needs investigation. It could be TLS negotiation, or something else.
 - We can save money by reducing `MemorySize` in `template.yml` from 512 MB to something much closer to the maximum reported memory usage (101 MB), say, 128 MB.

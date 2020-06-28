@@ -1,11 +1,10 @@
 # Step 2: Adding AWS Lambda support
 *(Full source code: [`step2`](step2) directory)*
 
-## Extracting HttpMaid's initialization code
+## Extracting the QuantumMaid initialization code
 
-The HttpMaid initialization code will be exactly the same whether we run the code as a local HTTP endpoint or as an AWS Lambda function.
-
-In order for HttpMaid's initialization code to be shared between the local mode and the Lambda mode, we first need to extract it to a new method in the `Main` class:
+The QuantumMaid initialization code will be exactly the same whether we run the code as a local HTTP endpoint or as an AWS Lambda function.
+To share code between the local mode and the Lambda mode, we extract it to a new method in the `Main` class:
 
 <!---[CodeSnippet](step2HttpMaidConfig)-->
 ```java
@@ -29,12 +28,12 @@ Lambda integration is provided through an additional HttpMaid dependency:
 </dependency>
 ```
 
-Once the `httpmaid-lambda` dependency is added, a new class is available to bridge the HttpMaid world and the AWS Lambda world: `AwsLambdaEndpoint`.
+Once the `httpmaid-lambda` dependency is added, a new class is available to bridge the QuantumMaid world and the AWS Lambda world: `AwsLambdaEndpoint`.
 
 We should initialize an instance of `AwsLambdaEndpoint` in a static field of the `Main` class, so that:
 
-- The time taken to initialize HttpMaid does not count towards the execution time of the Lambda function. In plain english, it will not be billed by AWS.
-- The HttpMaid initialization delay is experienced only once per Lambda instance. For our purpose, a Lambda instance is a Java Virtual Machine (JVM) process, [with some notable differences](https://docs.aws.amazon.com/lambda/latest/dg/runtimes-context.html).
+- The time taken to initialize QuantumMaid does not count towards the execution time of the Lambda function. In plain English, it will not be billed by AWS.
+- The QuantumMaid initialization delay is experienced only once per Lambda instance. For our purpose, a Lambda instance is a Java Virtual Machine (JVM) process, [with some notable differences](https://docs.aws.amazon.com/lambda/latest/dg/runtimes-context.html).
 
 Here are the imports required:
 
@@ -102,7 +101,7 @@ Are we there yet? Almost.
 
 ## Adding a public zero-argument constructor
 
-The AWS Lambda Java runtime instantiates the request handler class (`Main`) by calling it's default constructor,
+The AWS Lambda Java runtime instantiates the request handler class (`Main`) by calling its default constructor,
 which must be public and take no arguments:
 
 <!---[CodeSnippet](step2PublicNoArgsConstructor)-->
