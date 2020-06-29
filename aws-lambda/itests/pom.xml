@@ -5,12 +5,11 @@
     <parent>
         <groupId>de.quantummaid.tutorials</groupId>
         <artifactId>aws-lambda-parent</artifactId>
-        <version>1.0.0</version>
+        <version>1.0.32</version>
     </parent>
 
     <groupId>de.quantummaid.tutorials</groupId>
     <artifactId>aws-lambda-itests</artifactId>
-    <version>1.0.0</version>
 
     <properties>
         <java.version>11</java.version>
