@@ -12,11 +12,11 @@
 
 [Create your first application](basic-tutorial/README.md) (~15 minutes)
 
+🆕 [Serverless AWS with Lambda & API Gateway](aws-lambda/README.md) (~25 minutes)
+
 Coming soon: [Full production-grade application](complete-tutorial/README.md) (~45 minutes)
 
 Coming soon: [Domain-Driven Design with QuantumMaid](domain-driven-design/README.md) (~30 minutes)
-
-Coming soon: [Creating an AWS Lambda endpoint](aws-lambda/README.md) (~15 minutes)
 
 Coming soon: [Creating a Docker/Kubernetes container](docker/README.md) (~15 minutes)
 
