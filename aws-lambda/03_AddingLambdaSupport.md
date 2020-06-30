@@ -9,9 +9,8 @@ To share code between the local mode and the Lambda mode, we extract it to a new
 <!---[CodeSnippet](step2HttpMaidConfig)-->
 ```java
 private static QuantumMaid quantumMaidConfig() {
-  final QuantumMaid quantumMaid = QuantumMaid.quantumMaid()
+  return QuantumMaid.quantumMaid()
       .get("/helloworld", (request, response) -> response.setBody("Hello World!"));
-  return quantumMaid;
 }
 ```
 
@@ -106,7 +105,9 @@ which must be public and take no arguments:
 
 <!---[CodeSnippet](step2PublicNoArgsConstructor)-->
 ```java
-public Main() {}
+public Main() {
+  // the AWS Lambda Java runtime requires a public no-args constructor
+}
 ```
 
 If you don't, the AWS Lambda Java runtime will fail while looking up the constructor:

@@ -7,14 +7,12 @@ A function that returns `"Hello World!"` is not very useful.
 We'll make the returned *Hello* message [vary based on the URL path](https://quantummaid.de/docs/2_httpmaid/04_handlingrequests.html#request-route-and-path-parameters).
 
 <!---[CodeSnippet](step4HttpMaidConfig)-->
-
 ```java
 private static QuantumMaid quantumMaidConfig() {
-  final QuantumMaid quantumMaid = QuantumMaid.quantumMaid()
+  return QuantumMaid.quantumMaid()
       .get("/hello/<whoever-you-are>", (request, response) -> response.setBody(
           String.format("Hello %s!",
               request.pathParameters().getPathParameter("whoever-you-are"))));
-  return quantumMaid;
 }
 ```
 

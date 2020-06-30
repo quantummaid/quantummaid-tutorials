@@ -36,7 +36,9 @@ public final class Main {
   //Showcase end step2AdapterDeclaration2
 
   //Showcase start step2PublicNoArgsConstructor
-  public Main() {}
+  public Main() {
+    // the AWS Lambda Java runtime requires a public no-args constructor
+  }
   //Showcase end step2PublicNoArgsConstructor
 
   //Showcase start step2RequestHandlingMethod
@@ -47,9 +49,8 @@ public final class Main {
 
   //Showcase start step2HttpMaidConfig
   private static QuantumMaid quantumMaidConfig() {
-    final QuantumMaid quantumMaid = QuantumMaid.quantumMaid()
+    return QuantumMaid.quantumMaid()
         .get("/helloworld", (request, response) -> response.setBody("Hello World!"));
-    return quantumMaid;
   }
   //Showcase end step2HttpMaidConfig
 

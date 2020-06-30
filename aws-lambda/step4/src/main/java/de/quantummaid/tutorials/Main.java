@@ -31,7 +31,9 @@ import static de.quantummaid.httpmaid.awslambda.AwsLambdaEndpoint.awsLambdaEndpo
 public final class Main {
   private static final AwsLambdaEndpoint ADAPTER = awsLambdaEndpointFor(quantumMaidConfig().httpMaid());
 
-  public Main() {}
+  public Main() {
+    // the AWS Lambda Java runtime requires a public no-args constructor
+  }
 
   public Map<String, Object> handleRequest(final Map<String, Object> request) {
     return ADAPTER.delegate(request);
@@ -39,11 +41,10 @@ public final class Main {
 
   //Showcase start step4HttpMaidConfig
   private static QuantumMaid quantumMaidConfig() {
-    final QuantumMaid quantumMaid = QuantumMaid.quantumMaid()
+    return QuantumMaid.quantumMaid()
         .get("/hello/<whoever-you-are>", (request, response) -> response.setBody(
             String.format("Hello %s!",
                 request.pathParameters().getPathParameter("whoever-you-are"))));
-    return quantumMaid;
   }
   //Showcase end step4HttpMaidConfig
 
