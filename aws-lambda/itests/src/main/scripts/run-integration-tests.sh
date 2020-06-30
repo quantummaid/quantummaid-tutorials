@@ -15,6 +15,7 @@ if ${skip_run_integration_tests:-false}; then
 fi
 
 cd "${test_dir}"
+cp "${my_dir}/shared.envrc" "${test_dir}/shared.envrc"
 for test_script in *-tests.sh; do
     progress "running ${test_script}..."
     bash "${test_script}"

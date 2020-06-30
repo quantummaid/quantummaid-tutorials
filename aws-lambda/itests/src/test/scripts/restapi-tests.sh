@@ -21,7 +21,7 @@ function testFirstFunctionInvocationDoesNotExceedMaxDuration() {
     #[INFO]      [exec]     [
     #[INFO]      [exec]     "Lambda : 1450.00ms"
     #[INFO]      [exec]     ]
-    _test_api_limit "/hello/first" 'Hello first!' 2000 "AWS::ApiGateway::Stage" "Lambda"
+    _test_api_limit "/hello/first" 'Hello first!' 2500 "AWS::ApiGateway::Stage" "Lambda"
 }
 
 function testSecondFunctionInvocationDoesNotExceedMaxDuration() {
@@ -32,7 +32,7 @@ function testSecondFunctionInvocationDoesNotExceedMaxDuration() {
     #[INFO]      [exec]     "Overhead : 0.27ms"
     #[INFO]      [exec]     ]
     sleep 1.1 # to make sure we get an x-ray sample (it samples by default once per second)
-    _test_api_limit "/hello/second" 'Hello second!' 14 "AWS::Lambda::Function" "Invocation"
+    _test_api_limit "/hello/second" 'Hello second!' 30 "AWS::Lambda::Function" "Invocation"
 }
 
 function testThirdFunctionInvocationDoesNotExceedMaxDuration() {
@@ -43,7 +43,7 @@ function testThirdFunctionInvocationDoesNotExceedMaxDuration() {
     #[INFO]      [exec]     "Overhead : 4.52ms"
     #[INFO]      [exec]     ]
     sleep 1.1 # to make sure we get an x-ray sample (it samples by default once per second)
-    _test_api_limit "/hello/third" 'Hello third!' 14 "AWS::Lambda::Function" "Invocation"
+    _test_api_limit "/hello/third" 'Hello third!' 30 "AWS::Lambda::Function" "Invocation"
 }
 
 function _test_api_limit() {

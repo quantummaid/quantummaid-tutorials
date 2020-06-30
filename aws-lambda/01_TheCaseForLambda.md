@@ -28,9 +28,9 @@ This means that QuantumMaid users can rely on those characteristics, knowing tha
 
 - It has a code size of less than 1.4 M (<!---[Link](itests/src/test/scripts/jar-tests.sh "source")-->
 [source](itests/src/test/scripts/jar-tests.sh))
-- Its first (cold) invocation duration is less than 2.0 s (<!---[Link](itests/src/test/scripts/restapi-tests.sh  "source")-->
+- Its first (cold) invocation duration is less than 2.5 s (<!---[Link](itests/src/test/scripts/restapi-tests.sh  "source")-->
 [source](itests/src/test/scripts/restapi-tests.sh))
-- From the second invocation onwards, the invocation duration is less than 14 ms (<!---[Link](itests/src/test/scripts/restapi-tests.sh  "source")-->
+- From the second invocation onwards, the invocation duration is less than 30 ms (<!---[Link](itests/src/test/scripts/restapi-tests.sh  "source")-->
 [source](itests/src/test/scripts/restapi-tests.sh))
 Next, we'll create the basic function.
 
