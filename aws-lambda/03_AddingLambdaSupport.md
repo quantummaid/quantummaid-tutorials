@@ -81,7 +81,7 @@ Resources:
     Properties:
       Handler: de.quantummaid.tutorials.Main::handleRequest # ➊
       Runtime: java11
-      MemorySize: 512
+      MemorySize: 256
       Events:
         HelloWorldHttpApi:
           Type: HttpApi     # ➋

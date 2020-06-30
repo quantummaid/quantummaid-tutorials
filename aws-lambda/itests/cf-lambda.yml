@@ -14,7 +14,7 @@ Resources:
     Properties:
       Handler: de.quantummaid.tutorials.Main::handleRequest
       Runtime: java11
-      MemorySize: 512
+      MemorySize: 256
       Tracing: Active
       Events:
         # HTTP Api does not support X-Ray (yet),
