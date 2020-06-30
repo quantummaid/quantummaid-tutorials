@@ -21,7 +21,7 @@ function testFirstFunctionInvocationDoesNotExceedMaxDuration() {
     #[INFO]      [exec]     [
     #[INFO]      [exec]     "Lambda : 1450.00ms"
     #[INFO]      [exec]     ]
-    _test_api_limit "/hello/first" 'Hello first!' 1550 "AWS::ApiGateway::Stage" "Lambda"
+    _test_api_limit "/hello/first" 'Hello first!' 2000 "AWS::ApiGateway::Stage" "Lambda"
 }
 
 function testSecondFunctionInvocationDoesNotExceedMaxDuration() {
@@ -84,6 +84,15 @@ function _extract_trace_json_for_trace_id() {
     local _trace_cmd="aws xray batch-get-traces --trace-ids ${_trace_id} --output json"
     log "get_trace_cmd: ${_trace_cmd}"
 
+    local _attempts_left=5
+    until ${_trace_cmd} 2>/dev/null | _trace_json_summary &> /dev/null; do
+        sleep 1s
+        _attempts_left=$((_attempts_left - 1))
+        if [ ${_attempts_left} -eq 0 ]; then
+            return 1
+        fi
+    done
+
     timeout 5s bash -c "\
         while [ \"\$(${_trace_cmd} | jq .Traces[0].Duration)\" == \"null\" ]; do\
             echo \"     waiting for trace...\";\
@@ -113,7 +122,6 @@ function _invocation_duration_in_seconds() {
 # Found using: https://github.com/search?q=%22aws+xray+batch-get-traces%22+language%3Ashell&type=Code
 #
 function _trace_json_summary() {
-    local _trace_id="$1"
     jq -r '
         .Traces[0].Segments[].Document |
         fromjson | (.start_time | strftime("%Y-%m-%d %H:%M:%S")) +
