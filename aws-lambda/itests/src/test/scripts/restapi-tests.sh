@@ -69,14 +69,14 @@ function _invoke_api_and_save_trace_id() {
     local _path="$1"
     local _expect_response="$2"
     local _url="${api_url}${_path}"
-    local _curl_cmd="curl -Ssv \"${_url}\""
+    local _curl_cmd="curl -Ssi \"${_url}\""
     log "curl_cmd: ${_curl_cmd}"
-    read -a http_response <<<$(eval "${_curl_cmd} 2>&1 | grep -E 'X-Amzn-Trace-Id|Hello'")
-    local _xray_header="$(echo ${http_response[2]} | tr -d '\r')"
-    local _actual_response="${http_response[3]} ${http_response[4]}"
-    assertTrue "response has an X-Amzn-Trace-Id (url:$_url, X-Amzn-Trace-Id:$_xray_header)" "[[ '$_xray_header' != '' ]]"
+    read -a http_response <<<$(eval ${_curl_cmd} 2>&1 | grep -iE '^(X-Amzn-Trace-Id|Hello )' | tr -d '\r'  | tr '\n' ' ')
+    local _trace_id="$(echo ${http_response[1]})"
+    local _actual_response="${http_response[2]} ${http_response[3]}"
+    assertTrue "response has an X-Amzn-Trace-Id (url:$_url, X-Amzn-Trace-Id:$_trace_id)" "[[ '$_trace_id' != '' ]]"
     assertEquals "response is '${_expect_response}' (url:$_url)" "${_expect_response}" "${_actual_response}"
-    declare -g saved_trace_id=$(echo "${_xray_header}" | sed "s/Root=\([^;]\+\).*/\1/1")
+    declare -g saved_trace_id=$(echo "${_trace_id}" | sed "s/Root=\([^;]\+\).*/\1/1")
 }
 
 function _extract_trace_json_for_trace_id() {
