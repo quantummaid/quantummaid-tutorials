@@ -9,7 +9,7 @@ function progress() {
 
 function define_shared_readonlies() {
     progress "defining shared variables..."
-    declare -r   stack_identifier="${QMAIDTUTS_AWSLAMBDA_ITESTS_STACK_IDENTIFIER:-qmaidtuts-awslambda-itests}"
+    declare -r   stack_identifier="${STACK_IDENTIFIER:-qmaidtuts-awslambda-itests}"
     declare -grx  account_id=$(aws sts get-caller-identity --query Account --output text)
     declare -grx  region=$(python -c 'import boto3; print(boto3.Session().region_name)')
     declare -grx  lambda_stack_name="${stack_identifier}-lambda"
