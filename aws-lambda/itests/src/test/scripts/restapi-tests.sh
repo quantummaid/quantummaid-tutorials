@@ -21,7 +21,7 @@ function testFirstFunctionInvocationDoesNotExceedMaxDuration() {
     #[INFO]      [exec]     [
     #[INFO]      [exec]     "Lambda : 1450.00ms"
     #[INFO]      [exec]     ]
-    _test_api_limit "/hello/first" 'Hello first!' 2500 "AWS::ApiGateway::Stage" "Lambda"
+    _test_api_limit "/hello/first" 'Hello first!' 2500
 }
 
 function testSecondFunctionInvocationDoesNotExceedMaxDuration() {
@@ -32,7 +32,7 @@ function testSecondFunctionInvocationDoesNotExceedMaxDuration() {
     #[INFO]      [exec]     "Overhead : 0.27ms"
     #[INFO]      [exec]     ]
     sleep 1.1 # to make sure we get an x-ray sample (it samples by default once per second)
-    _test_api_limit "/hello/second" 'Hello second!' 30 "AWS::Lambda::Function" "Invocation"
+    _test_api_limit "/hello/second" 'Hello second!' 30
 }
 
 function testThirdFunctionInvocationDoesNotExceedMaxDuration() {
@@ -43,7 +43,7 @@ function testThirdFunctionInvocationDoesNotExceedMaxDuration() {
     #[INFO]      [exec]     "Overhead : 4.52ms"
     #[INFO]      [exec]     ]
     sleep 1.1 # to make sure we get an x-ray sample (it samples by default once per second)
-    _test_api_limit "/hello/third" 'Hello third!' 30 "AWS::Lambda::Function" "Invocation"
+    _test_api_limit "/hello/third" 'Hello third!' 30
 }
 
 function _test_api_limit() {
@@ -56,7 +56,7 @@ function _test_api_limit() {
     _invoke_api_and_save_trace_id "${_path}" "${_expected_response}"
     _extract_trace_json_for_trace_id "${saved_trace_id}"
 
-    local actual_duration_secs=$(_invocation_duration_in_seconds "${_origin}" "${_subsegment}" <<<"${extracted_trace_json}")
+    local actual_duration_secs=$(_initialization_and_invocation_duration_in_seconds <<<"${extracted_trace_json}")
     local actual_duration_ms=$(bc <<<"scale=0; ${actual_duration_secs} * 1000 / 1")
 
     log "actual_duration_ms: ${actual_duration_ms}"
@@ -84,20 +84,18 @@ function _extract_trace_json_for_trace_id() {
     local _trace_cmd="aws xray batch-get-traces --trace-ids ${_trace_id} --output json"
     log "get_trace_cmd: ${_trace_cmd}"
 
-    local _attempts_left=5
+    local _retry_delay_secs=1
+    local _retry_max=10
+    local _retry_left=${_retry_max}
     until ${_trace_cmd} 2>/dev/null | _trace_json_summary &> /dev/null; do
-        sleep 1s
-        _attempts_left=$((_attempts_left - 1))
-        if [ ${_attempts_left} -eq 0 ]; then
+        echo "     waiting ${_retry_delay_secs} s for full trace..."
+        sleep ${_retry_delay_secs}s
+        _retry_left=$((_retry_left - 1))
+        if [ ${_retry_left} -eq 0 ]; then
+            echo "     giving up waiting for full trace after ${_retry_max} retries..."
             return 1
         fi
     done
-
-    timeout 5s bash -c "\
-        while [ \"\$(${_trace_cmd} | jq .Traces[0].Duration)\" == \"null\" ]; do\
-            echo \"     waiting for trace...\";\
-            sleep 0.1;\
-        done"
 
     log "X-Ray Summary for trace ${_trace_id}:"
     local _trace_json="$(eval "${_trace_cmd}")"
@@ -105,16 +103,13 @@ function _extract_trace_json_for_trace_id() {
     declare -g extracted_trace_json="${_trace_json}"
 }
 
-function _invocation_duration_in_seconds() {
-    local _origin="$1"
-    local _subsegment="$2"
-    jq -r \
-        --arg origin "${_origin}" \
-        --arg subsegment "${_subsegment}" \
-            '.Traces[0].Segments[].Document | fromjson |
-                select(.origin == $origin) | .subsegments[] |
-                    select(.name == $subsegment) |
-                        (.end_time - .start_time) | @text'
+function _initialization_and_invocation_duration_in_seconds() {
+    jq -r '[.Traces[0].Segments[].Document | fromjson |
+         select(.origin == "AWS::Lambda::Function") |
+            .subsegments[] |
+                select(.name | match("Invocation|Initialization")) |
+                    (.end_time - .start_time) ] | add
+    '
 }
 
 #
