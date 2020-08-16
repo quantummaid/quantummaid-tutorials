@@ -8,12 +8,12 @@
         <version>1.0.35</version>
     </parent>
 
-    <groupId>de.quantummaid.tutorials.archetypes</groupId>
+    <groupId>de.quantummaid.tutorials.websockets-kotlin</groupId>
     <artifactId>parent</artifactId>
     <packaging>pom</packaging>
 
     <modules>
-        <module>basic-archetype</module>
+        <module>step1</module>
     </modules>
 
     <properties>
