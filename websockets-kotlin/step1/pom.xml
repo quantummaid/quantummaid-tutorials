@@ -5,21 +5,15 @@
     <parent>
         <groupId>de.quantummaid.tutorials.websockets-kotlin</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.35</version>
+        <version>1.0.36</version>
     </parent>
 
     <artifactId>step1</artifactId>
 
     <properties>
-        <spotbugs.excludeFilterFile>
-            ${project.basedir}/src/test/spotbugs/spotbugs-exclude.xml
-        </spotbugs.excludeFilterFile>
-        <checkstyle.suppressions.location>
-            ${project.basedir}/src/test/checkstyle/checkstyle-suppressions.xml
-        </checkstyle.suppressions.location>
-        <dependency-update-file-checksum>8f6ea182969b0fcce9fae1bb13579713</dependency-update-file-checksum>
-        <plugin-update-file-checksum>35fe547b725ca8e71b0d13c8c21894df</plugin-update-file-checksum>
-        <kotlin.version>1.3.72</kotlin.version>
+        <dependency-update-file-checksum>42f33b16b7099885cd5becc23c104f35</dependency-update-file-checksum>
+        <plugin-update-file-checksum>d25694f9d0674135a9b37b909e84d640</plugin-update-file-checksum>
+        <kotlin.version>1.4.0</kotlin.version>
     </properties>
 
     <dependencyManagement>
@@ -27,7 +21,7 @@
             <dependency>
                 <groupId>de.quantummaid.quantummaid</groupId>
                 <artifactId>quantummaid-bom</artifactId>
-                <version>1.0.63</version>
+                <version>1.0.68</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -61,6 +55,7 @@
     </dependencies>
 
     <build>
+        <sourceDirectory>${project.basedir}/src/main/kotlin</sourceDirectory>
         <plugins>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>

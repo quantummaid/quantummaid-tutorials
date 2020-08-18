@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.quantummaid.tutorials.archetypes</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.35</version>
+        <version>1.0.36</version>
     </parent>
 
     <artifactId>basic-archetype</artifactId>
@@ -21,7 +21,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-archetype-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.2.0</version>
                 </plugin>
             </plugins>
         </pluginManagement>
