@@ -10,7 +10,7 @@
 
     <groupId>de.quantummaid.tutorials</groupId>
     <artifactId>parent</artifactId>
-    <version>1.0.37</version>
+    <version>1.0.38</version>
     <packaging>pom</packaging>
 
     <name>QuantumMaid Tutorials</name>
@@ -18,7 +18,6 @@
     <modules>
         <module>aws-lambda</module>
         <module>basic-tutorial</module>
-        <module>websockets-kotlin</module>
         <module>archetypes</module>
     </modules>
 
