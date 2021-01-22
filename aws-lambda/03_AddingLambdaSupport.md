@@ -23,7 +23,7 @@ Lambda integration is provided through an additional HttpMaid dependency:
 <dependency>
     <groupId>de.quantummaid.httpmaid.integrations</groupId>
     <artifactId>httpmaid-awslambda</artifactId>
-    <version>0.9.114</version>
+    <version>0.9.116</version>
 </dependency>
 ```
 
