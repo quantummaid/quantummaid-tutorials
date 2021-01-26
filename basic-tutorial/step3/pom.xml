@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.quantummaid.tutorials.basic-tutorial</groupId>
         <artifactId>parent</artifactId>
-        <version>1.0.41</version>
+        <version>1.0.42</version>
     </parent>
 
     <artifactId>step3</artifactId>
@@ -26,7 +26,7 @@
             <dependency>
                 <groupId>de.quantummaid.quantummaid</groupId>
                 <artifactId>quantummaid-bom</artifactId>
-                <version>1.0.90</version>
+                <version>1.0.91</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
