@@ -5,7 +5,6 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
-
 .idea/**/contentModel.xml
 
 ## Sensitive or high-churn files
@@ -31,4 +30,11 @@
 # Others
 .envrc
 
+# Eclipse
+
+.classpath
+.project
+.settings/
+
+# Maven
 target/

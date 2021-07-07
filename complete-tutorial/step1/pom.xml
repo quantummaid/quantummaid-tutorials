@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>todomaid</groupId>
+  <artifactId>todomaid-api</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <java.version>11</java.version>
+    <maven.compiler.parameters>true<!--⓵--></maven.compiler.parameters>
+    <maven.compiler.target>${java.version}</maven.compiler.target>
+    <maven.compiler.source>${java.version}</maven.compiler.source>
+    <quantummaid.version>1.0.48</quantummaid.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>de.quantummaid.quantummaid</groupId>
+        <artifactId>quantummaid-bom<!--⓶--></artifactId>
+        <version>${quantummaid.version}</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>de.quantummaid.quantummaid.packagings</groupId>
+      <artifactId>quantummaid-essentials<!--⓷--></artifactId>
+    </dependency>
+  </dependencies>
+</project>
