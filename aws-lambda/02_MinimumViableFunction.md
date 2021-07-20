@@ -30,7 +30,7 @@ The most important `pom.xml` part is
     <dependency>
         <groupId>de.quantummaid.quantummaid.packagings</groupId>
         <artifactId>quantummaid-essentials</artifactId>
-        <version>1.0.92</version>
+        <version>1.1.0</version>
     </dependency>
     <!--➋-->
 </dependencies>
