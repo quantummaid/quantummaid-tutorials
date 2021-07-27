@@ -29,6 +29,6 @@
 *.ipr
 
 # Others
+.aws-sam/
 .envrc
-
 target/
