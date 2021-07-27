@@ -33,5 +33,6 @@ testThatLambdaCodeSizeDoesNotExceedMaxCodeSize() {
 echo "jar-tests.sh:\$0: ${0}"
 echo "jar-tests.sh:\$my_dir: ${my_dir}"
 echo "jar-tests.sh:pwd: $(pwd)"
+echo "steph was here"
 
 . "${my_dir}/shunit2"
