@@ -135,4 +135,4 @@ function _trace_json_summary() {
 }
 
 # Load shUnit2.
-. "${my_dir}/shunit2"
+. "${my_dir}/shunit2-2.1.8"
