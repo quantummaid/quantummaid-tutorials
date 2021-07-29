@@ -30,9 +30,4 @@ testThatLambdaCodeSizeDoesNotExceedMaxCodeSize() {
 }
 
 # Load shUnit2.
-echo "> jar-tests.sh:pwd: $(pwd)"
-echo "> jar-tests.sh:\$0: ${0}"
-echo "> jar-tests.sh:\$my_dir: ${my_dir}"
-ls -la "${my_dir}"
-
 . "${my_dir}/shunit2-2.1.8"
