@@ -8,7 +8,7 @@
         <version>1.0.44</version>
     </parent>
 
-    <artifactId>step4</artifactId>
+    <artifactId>step5</artifactId>
 
     <properties>
         <spotbugs.excludeFilterFile>
@@ -42,18 +42,15 @@
             <groupId>de.quantummaid.quantummaid.packagings</groupId>
             <artifactId>quantummaid-essentials</artifactId>
         </dependency>
-        <!-- Showcase start testdependency -->
         <dependency>
             <groupId>de.quantummaid.quantummaid.packagings</groupId>
             <artifactId>quantummaid-test-essentials</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Showcase end testdependency -->
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Showcase start mavenassemblyplugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-assembly-plugin</artifactId>
@@ -81,7 +78,6 @@
                     </execution>
                 </executions>
             </plugin>
-            <!-- Showcase end mavenassemblyplugin -->
         </plugins>
     </build>
 </project>

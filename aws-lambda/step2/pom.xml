@@ -5,7 +5,7 @@
     <parent>
         <groupId>de.quantummaid.tutorials</groupId>
         <artifactId>aws-lambda-parent</artifactId>
-        <version>1.0.43</version>
+        <version>1.0.44</version>
     </parent>
 
     <groupId>de.quantummaid.tutorials</groupId>
@@ -26,7 +26,7 @@
         <dependency>
             <groupId>de.quantummaid.quantummaid.packagings</groupId>
             <artifactId>quantummaid-essentials</artifactId>
-            <version>1.1.0</version>
+            <version>1.1.1</version>
         </dependency>
         <!-- Showcase start step2HttpMaidDependency -->
         <dependency>
