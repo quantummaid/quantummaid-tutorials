@@ -3,7 +3,6 @@
 This tutorial will teach you how to create a basic QuantumMaid application. It covers:
 - Implementing a usecase
 - Exporting the implemented usecase via HTTP
-- Dependency injection
 - Writing an integration test
 - Packaging the application
 
