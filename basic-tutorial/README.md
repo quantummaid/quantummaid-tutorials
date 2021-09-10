@@ -68,6 +68,17 @@ In order to use QuantumMaid for creating web services, you need to add a depende
 
 <!---[CodeSnippet](quantummaiddependency)-->
 ```xml
+<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>de.quantummaid.quantummaid</groupId>
+            <artifactId>quantummaid-bom</artifactId>
+            <version>1.1.1</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
 <dependencies>
     <dependency>
         <groupId>de.quantummaid.quantummaid.packagings</groupId>
@@ -207,15 +218,7 @@ In traditional application frameworks, we achieve this by annotating the `name` 
 JAX-RS `@PathParam` annotation. Since QuantumMaid guarantees to keep your business logic 100% infrastructure agnostic under
 all circumstances, this is not an option. 
 
-## 6. Dependency injection
-
-QuantumMaid supports dependency injection, but does not implement it.
-Out of the box, it is only able to instantiate classes that have a public constructor without any parameters
-(like our `GreetingUseCase`). QuantumMaid is not prescriptive regarding your choice of dependency injection framework,
-and provides
-[detailed instructions on integrating popular dependency injection frameworks like Guice and Dagger](https://github.com/quantummaid/httpmaid/blob/master/docs/12_UseCases/5_DependencyInjection.md).
-
-## 7. Testing
+## 6. Testing
 
 Please add the following test dependency to your `pom.xml`:
 <!---[CodeSnippet](testdependency)-->
@@ -271,7 +274,7 @@ introduces the vulnerabilities [CVE-2016-6497](https://nvd.nist.gov/vuln/detail/
 and [CVE-2016-6798](https://nvd.nist.gov/vuln/detail/CVE-2016-6798) to your project.
 Please check for your project whether these vulnerabilities pose an actual threat.
 
-## 8. Packaging the application
+## 7. Packaging the application
 QuantumMaid applications can be packaged in exactly the same way as every other normal Java
 application. A common way to achieve this would be to use the [maven-assembly-plugin](https://maven.apache.org/plugins/maven-assembly-plugin/usage.html).
 All you need to do is to insert the following code into the `<plugins>...</plugins>` section of your `pom.xml`:
@@ -316,6 +319,57 @@ To start it, just run:
 ```bash
 $ java -jar target/quantummaid-app.jar
 ```
+
+## 8. Bonus: Adding a POST route
+In order to serve the `GreetingUseCase` via the `POST` HTTP method, you would have to modify the
+`WebService` class like this:
+
+<!---[CodeSnippet](webservice5)-->
+```java
+package de.quantummaid.tutorials;
+
+import de.quantummaid.quantummaid.QuantumMaid;
+
+public final class WebService {
+    private static final int PORT = 8080;
+
+    public static void main(final String[] args) {
+        createQuantumMaid(PORT).run();
+    }
+
+    public static QuantumMaid createQuantumMaid(final int port) {
+        return QuantumMaid.quantumMaid()
+                .get("/hello/<name>", GreetingUseCase.class)
+                .post("/hello", GreetingUseCase.class)
+                .withLocalHostEndpointOnPort(port);
+    }
+}
+```
+
+Try it out with the `curl` command (don't forget to restart the application to reflect the new changes):
+```
+$ curl -X POST -H "Content-Type: application/json" --data '{"name": "quantummaid"}'  http://localhost:8080/hello/
+"hello quantummaid"
+```
+
+Note how the `name` parameter is now sent in a JSON body. Also note that we did not modify anything
+in the `GreetingUseCase`, we only changed how it is served.
+
+You can add a test for the new route in `GreetingTest` like this:
+
+<!---[CodeSnippet](postTest)-->
+```java
+@Test
+public void testGreetingPost() {
+    given()
+            .when()
+            .body("{ \"name\": \"quantummaid\" }").post("/hello")
+            .then()
+            .statusCode(200)
+            .body(is("\"hello quantummaid\""));
+}
+```
+
 
 ## 9. What's next?
 If you are interested in packaging a QuantumMaid application for specific targets, simply follow
